@@ -1,0 +1,181 @@
+9시부터 9시까지 하기
+수업이 9시 반이지만, 어쨌든 일찍 와서 미리 준비하자.
+
+텐서플로우 2.0
+
+자격증
+
+2주-플젝-2주-플젝
+
+
+
+목표:중소기업/스타트업
+
+
+(레거시)머신러닝 / 딥러닝
+
+
+
+
+
+
+1. 아나콘다 다운로드
+https://repo.anaconda.com/archive/Anaconda3-2020.07-Windows-x86_64.exe
+
+2. 그래픽 드라이버 최신버전 다운로드 ( RTX 2080 ) (457.09)
+https://kr.download.nvidia.com/Windows/456.71/456.71-desktop-win10-64bit-international-nsd-dch-whql.exe
+
+3. Cuba 10.1 다운로드
+https://developer.nvidia.com/cuda-10.1-download-archive-update2?target_os=Windows&target_arch=x86_64&target_version=10&target_type=exelocal
+
+4. Cudnn v7.6.5 for CUDA 10.1 다운로드
+회원 가입 필수. daumhch@naver.com / 마이클1!
+
+5. Visual Studio Code 다운로드
+
+
+
+
+장비빨이 필요하다.
+1060이상. GPU 필수.
+
+발표: 나이, 이름, 개발스킬, 했던 일
+
+선생님:윤영선
+
+회사 = 시간을 돈으로 바꾸는 곳
+
+
+
+
+https://www.tensorflow.org/
+
+
+링크드인 계정 만들기
+
+
+파이썬에서 리스트는 완벽하게 이해해야 한다.
+
+조건문/반복문
+
+함수와 클래스
+
+이정도는 마스터 하자.
+
+
+
+케라스 강좌
+https://www.youtube.com/channel/UCvjXlZjlyAp2uZusgDn8lxA/videos
+
+인공지능 블로그
+https://blog.naver.com/gema0000
+
+
+
+1. 아나콘다 설치하기
+
+아나콘다 설치하면 파이썬+API들이 자동 설치된다.
+왠만하면 아나콘다를 설치하자.
+설치 폴더는 C:\Anaconda3
+Path까지 추가하는거 체크하고 설치하자.
+
+
+파이썬 3.8.3 사용
+
+
+2/3/4 -> GPU를 사용하기 위해서.
+
+2. 그래픽카드 설치 -> 사용자 정의 -> 그래픽 드라이버만 설치
+
+3. CUDA 설치 -> 첫번째거 '+'눌러서 Visual Studio Integration 체크 해제
+
+4. cudnn 압축 풀고 
+-> C:\Program Files\NVIDIA GPU Computing Toolkit\CUDA\v10.1 에 덮어쓰기
+
+
+###숙제 : 설치하고 스크린샷 찍어서 보내기
+nvida를 쓰지 않으면 2,3,4를 빼고.
+
+
+conda env list
+설치된 리스트 확인
+
+
+텐서플로우 설치하기
+pip install tensorflow-gpu==2.3.0
+
+cpu gpu 두 버전이 있지만, 2.3.0에서는 tensorflow로만 설치하면 둘 다 설치.
+
+
+python에서,
+import tensorflow as tf 하면 에러가 날 것이다.
+
+https://support.microsoft.com/en-us/help/2977003/the-latest-supported-visual-c-downloads
+에서 x64 버전을 설치하면, 정상 실행이 될 것이다.
+(Successfully opened dynamic library cudart64_101.dll)
+
+
+텐서플로우 1.0이 어려워서 나온 게 케라스(keras) API
+
+1.0 -> 2.0 
+텐서플로우 안에 keras 포함.
+내부 포함이니 속도가 더 빨라짐.
+
+
+케라스 설치하기
+pip install keras==2.4.3
+
+텐서플로우 확인하기
+import tensorflow as tf
+import keras
+
+###숙제: numpy ..?
+
+
+###숙제: 케글 가입하고 반장에게 전달.
+가입하기
+1. kaggle  https://www.kaggle.com/BaeHyunChul
+2. DACON
+3. github -> bit_seoul 저장소 만들어서 Study와 같게
+
+
+==이론수업
+인공지능 >= 머신러닝 > 딥러닝
+
+
+뇌의 신경망
+
+머신러닝+인공신경망 = 딥러닝
+
+노드 = 신경망 안에 하나의 지점
+레이어 = 신경망 세로 한 줄의 단계
+
+신경망 구성하는 거 = 모델링
+
+y=ax+b
+
+lost / cost
+
+훈련구간 = '정제된 데이터' x와 y를 넣는다
+
+y=ax+b -> y=wx+b (w=weight)
+
+머신은 '최적의' w를 구한다. (b는 영향이 작다)
+
+또한 머신은 '최소의' loss가 되는 계산을 한다.
+
+
+숙제 : acc가 왜 0.2일까, 1로 맞춰보자.
+
+
+딥러닝에서,
+노드의 개수와 레이어 깊이,
+epochs, batch_size 등은
+개발자가 정한다.
+
+하이퍼 파라미터 튜닝 = 노드와 레이어, epochs, batch_size 조정
+
+
+
+
+
