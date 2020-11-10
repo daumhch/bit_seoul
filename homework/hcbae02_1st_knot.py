@@ -1,6 +1,7 @@
 # 다차원 행렬 들어가기 전 까지 모든 파트를 반영한 소스
 
-
+import timeit
+start_time = timeit.default_timer() # 시작 시간 체크
 
 # 1.데이터
 import numpy as np # numpy를 불러오고 앞으로 이름을 np로 쓴다
@@ -78,5 +79,7 @@ print("R2:", r2)
 # print("x_test.size", x_test.size)
 
 
+terminate_time = timeit.default_timer() # 종료 시간 체크  
+print("%f초 걸렸습니다." % (terminate_time - start_time)) 
 
 
