@@ -12,14 +12,16 @@ print("before x.shape:", x.shape) # 출력: (3,) array에 range만 3개 저장�
 # (100, 3)의 형태로 만들어야 한다
 
 # x = x.reshape(3,100).T
-x = np.transpose(x, axes=None)
-print("after x.shape:", x.shape)
+# x = np.transpose(x)
+x = x.T
 print(x)
+print("after x.shape row:", x.shape[0]) # n-dimension
+print("after x.shape column:", x.shape[1]) # size of array
 
-y = y.reshape(3,100).T
-print("after y.shape:", y.shape)
-print(y)
 
+# y = y.reshape(3,100).T
+# print(y)
+# print("after y.shape:", y.shape)
 
 
 
