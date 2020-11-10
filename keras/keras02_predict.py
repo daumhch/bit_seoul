@@ -4,16 +4,17 @@ from tensorflow.keras.layers import Dense # Dense = DNN구성
 import numpy as np
 
 # 1. 데이터 준비
-x = np.array([1,2,3,4,5,6])
-y = np.array([1,2,3,4,5,6])
-x2 = np.array([1,2,3,4,5,6])
+x = np.array([1,2,3,4,5,6,7,8,9,10])
+y = np.array([1,2,3,4,5,6,7,8,9,10])
+x2 = np.array([11,12,13,14,15])
 
 
 # 2. 모델 구성
 model = Sequential()
-model.add(Dense(30, input_dim=1))
-model.add(Dense(500))
-model.add(Dense(300))
+model.add(Dense(300, input_dim=1))
+model.add(Dense(5000))
+model.add(Dense(30))
+model.add(Dense(7))
 model.add(Dense(1)) # node=1 last_layer=output
 
 
@@ -43,4 +44,7 @@ print("categorical_accuracy : ", categorical_accuracy)
 
 
 y_predict = model.predict(x2)
-print("y_predict:", y_predict)
+print("y_predict:\n", y_predict)
+
+
+
