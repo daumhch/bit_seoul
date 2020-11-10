@@ -5,7 +5,7 @@ y = np.array(range(101, 201))
 
 from sklearn.model_selection import train_test_split
 x_train, x_rest, y_train, y_rest = train_test_split(
-    x, y, train_size=0.6, test_size=0.1)
+    x, y, train_size=0.6, test_size=0.4)
 
 x_test, x_val, y_test, y_val = train_test_split(
     x_rest, y_rest, train_size=0.5, test_size=0.5)
@@ -31,7 +31,9 @@ model.compile(
     optimizer='adam',
     metrics=['mae'])
 
-model.fit(x_train, y_train, epochs=256, batch_size=32)
+model.fit(x_train, y_train, epochs=256, batch_size=32,
+    validation_data=(x_val, y_val))
+
 
 
 

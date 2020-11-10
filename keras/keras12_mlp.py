@@ -11,7 +11,8 @@ print("before x.shape:", x.shape) # 출력: (3,) array에 range만 3개 저장�
 
 # (100, 3)의 형태로 만들어야 한다
 
-x = x.reshape(3,100).T
+# x = x.reshape(3,100).T
+x = np.transpose(x, axes=None)
 print("after x.shape:", x.shape)
 print(x)
 

@@ -347,6 +347,10 @@ array 객체 하나하나 = 스칼라
 
 
 
+위키독스
+딥 러닝을 이용한 자연어 처리 입문 08. 딥 러닝(Deep Learnin ... 6) 케라스(Keras) 훑어보기
+
+https://wikidocs.net/32105
 
 
 
