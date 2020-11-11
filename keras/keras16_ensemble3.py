@@ -140,8 +140,9 @@ print("R2:", r2)
 x1_demo = np.full((1,3),[1,711,0])
 x2_demo = np.full((1,3),[4,761,0])
 y1_val_predict = model.predict([x1_demo,x2_demo]) # 평가 데이터 다시 넣어 예측값 만들기
-print("y1[0]:\n", y1[0])
-print("y1_val_predict:\n", y1_val_predict)
+print("fix x1_demo, x2_demo:\n", x1_demo, x2_demo)
+print("fix y1[0]:\n", y1[0])
+print("predict y1_predict:\n", y1_val_predict)
 
 
 
