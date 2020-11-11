@@ -3,11 +3,12 @@
 # 1.데이터
 import numpy as np
 x = np.array([range(1,101),range(711,811), range(100)])
-y = np.array([range(101,201), range(311,411), range(100)])
+y = np.array(range(101,201))
 
 # x = 100행 3열, 데이터 종류 3가지
 # print(x)
 print("before x.shape:", x.shape) # 출력: (3,) array에 range만 3개 저장되어 있다는 뜻
+print("before y.shape:", y.shape) # 출력: (3,) array에 range만 3개 저장되어 있다는 뜻
 
 # (100, 3)의 형태로 만들어야 한다
 
@@ -17,9 +18,10 @@ print("before x.shape:", x.shape) # 출력: (3,) array에 range만 3개 저장�
 x = x.T
 print("x.shape:", x.shape)
 
-y = y.T
-# print(y.shape)
-# print("after y.shape:", y.shape)
+y = y.transpose()
+print(y.shape)
+print("after y.shape:", y.shape)
+
 
 # 사이킷런의 model_selection에서 train_test_split을 불러온다
 from sklearn.model_selection import train_test_split 
@@ -41,10 +43,14 @@ from tensorflow.keras.models import Sequential # 순차적인분석
 from tensorflow.keras.layers import Dense # Dense layer를 사용
 
 model = Sequential() # Sequential 클래스 불러와서 객체 생성
-model.add(Dense(256, input_dim=3)) 
+# model.add(Dense(256, input_dim=3)) 
+model.add(Dense(256, input_shape=(3,) )) #위와 동일한 표현
+
+# (100, 10, 3)의 input_shape = (10,3) #행무시 = 30열 3면 포함
+
 model.add(Dense(512))
 model.add(Dense(256))
-model.add(Dense(3)) # 입력이 3개니까 출력도 3개
+model.add(Dense(1))
 
 
 
@@ -69,7 +75,9 @@ print("loss : ", loss) # 이건 기본으로 나오고
 print("mae : ", mae) # 이건 metrics에 추가한 것
 
 y_predict = model.predict(x_test) # 평가 데이터 다시 넣어 예측값 만들기
-# print("y_predict:\n", y_predict)
+print("y_test", y_test)
+print("y_predict:\n", y_predict)
+
 
 
 
@@ -92,10 +100,5 @@ print("R2:", r2)
 # print("x_train.size", x_train.size)
 # print("x_val.size", x_val.size)
 # print("x_test.size", x_test.size)
-
-
-
-
-
 
 

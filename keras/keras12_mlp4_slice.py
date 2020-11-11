@@ -1,3 +1,4 @@
+# train_test_splite을 사용하지 않고 변환하기 = 슬라이싱
 # multi layer perceptron
 
 # 1.데이터
@@ -21,15 +22,18 @@ y = y.T
 # print(y.shape)
 # print("after y.shape:", y.shape)
 
-# 사이킷런의 model_selection에서 train_test_split을 불러온다
-from sklearn.model_selection import train_test_split 
+x_train = x[:60]
+x_val = x[60:80]
+x_test = x[80:]
 
-# 데이터는 train / val / test로 나뉘고 비율은 6:2:2를 보통 쓴다
-# train_test_split를 사용하면 랜덤하게 뽑아서 나눠준다
-x_train, x_rest, y_train, y_rest = train_test_split(
-    x, y, train_size=0.6, test_size=0.4) # 6:4로 먼저 나누고
-x_test, x_val, y_test, y_val = train_test_split(
-    x_rest, y_rest, train_size=0.5, test_size=0.5) # 남은 4를 5:5로 나눔
+# print("x_train.size", x_train.size)
+# print("x_val.size", x_val.size)
+# print("x_test.size", x_test.size)
+
+
+y_train = y[:60]
+y_val = y[60:80]
+y_test = y[80:]
 
 
 
@@ -92,7 +96,6 @@ print("R2:", r2)
 # print("x_train.size", x_train.size)
 # print("x_val.size", x_val.size)
 # print("x_test.size", x_test.size)
-
 
 
 

@@ -2,7 +2,7 @@
 
 # 1.데이터
 import numpy as np
-x = np.array([range(1,101),range(711,811), range(100)])
+x = np.array(range(711,811))
 y = np.array([range(101,201), range(311,411), range(100)])
 
 # x = 100행 3열, 데이터 종류 3가지
@@ -41,7 +41,13 @@ from tensorflow.keras.models import Sequential # 순차적인분석
 from tensorflow.keras.layers import Dense # Dense layer를 사용
 
 model = Sequential() # Sequential 클래스 불러와서 객체 생성
-model.add(Dense(256, input_dim=3)) 
+model.add(Dense(256, input_dim=1)) 
+model.add(Dense(512))
+model.add(Dense(1024))
+model.add(Dense(2048))
+model.add(Dense(4096))
+model.add(Dense(2048))
+model.add(Dense(1024))
 model.add(Dense(512))
 model.add(Dense(256))
 model.add(Dense(3)) # 입력이 3개니까 출력도 3개
