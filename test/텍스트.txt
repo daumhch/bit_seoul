@@ -486,10 +486,37 @@ Model: "functional_1"
 모델을 합친다 = concatenate
 
 
+input model 2
+
+middle 1
+
+output model 2
+
+총 5개
 
 
 
 
+https://keras.co.kr/
+선생님 홈페이지
+
+https://keras.io/
+참고 페이지
+
+이름붙이고 싶으면 Dense 파라미터 name을 사용하자
+
+
+Concatenate와 concatenate는 다르다
+Concatenate를 사용할 때에는 axis를 설정해야 한다
+ex) keras16_ensemble.py
+0 = 가장 높은 차원 기준으로 합치기 -> Total params = 2323
+1 = 두번째로 높은 차원 기준으로 합치기 -> Total params = 2413
+-1 = 가장 낮은 차원 기준으로 합치기 -> Total params = 2413
+
+
+
+
+앙상블 예제 3번 튜닝하기
 
 
 
