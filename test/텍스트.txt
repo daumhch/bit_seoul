@@ -408,10 +408,85 @@ validation을 넣으면서,
 epoch 출력 결과에
 loss와 val_loss 차이가 있다
 
+val_loss를 통해 최적 epoch를 구할 수 있다
 
 
 
 ==== Sequential 기초 끝 ====
+
+
+
+
+함수형 모델
+
+함수를 사용하는 목적: 재사용
+
+
+
+activation = 활성화 함수
+레이어 전달 할 때,
+문제 있는 값을 정리하는 기능
+모든 레이어 마다 있다
+Dense layer의 default activatin은 'linear'
+'relu'를 사용하는 게 무난하다
+마지막 activation은 'linear' 해야 한다
+
+
+
+
+시퀀셜 모델은,
+모델 정의하고 구성했다면,
+
+함수형 모델은,
+구성을 먼저하고 모델을 정의한다
+
+
+model.summary()에서
+모델을 확인했을 때,
+param의 결과가
+배치된 layer 및 node 개수와 다른 이유는,
+
+node 개수에 바이어스노드(+1) 해주기 때문
+
+
+
+### 내 생각
+https://stackoverflow.com/questions/2480650/what-is-the-role-of-the-bias-in-neural-networks
+
+y=w*x+b = w*x+b*1
+
+모델 안에는 연산이기 때문에,
+b 또한 b*1로 생각하여 연산한다
+그래야 찾을 수 있을 것 같다
+
+### 내 생각 끝
+
+
+함수형 모델의 summary는
+Model: "functional_1"
+이런 형태로 메시지가 나온다
+
+
+
+
+### 앙상블(ensemble)
+
+모델의 신뢰성 이전에,
+
+데이터 신뢰성은 어떻게?
+
+=도박사의 오류=
+서로 영향을 끼치지 않는 일련의 확률적 사건들에서 
+상관관계를 찾아내려 하는 사고의 오류를 이야기한다.
+
+
+
+데이터를 합치지 않고,
+데이터별로 모델을 만들어서,
+모델을 합친다 = concatenate
+
+
+
 
 
 
