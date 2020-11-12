@@ -524,6 +524,61 @@ ex) keras16_ensemble.py
 
 201112
 
+복습
+시퀀셜 -> 함수형 모델
+모델 섞기 -> 앙상블
+튜너
+
+
+오늘은 LSTM 할 예정
+
+DNN = deep neural networks
+RNN = recurrent neural networks 
+- LSTM = Long Short-Term Memory models
+
+RNN = 순환 신경망 = 순차적인 데이터 분석 = Time Series = 시계열
+시계열이라 하여 주식/온도 처럼 시간데이터 뿐 아니라,
+'나는 밥을 먹는다'처럼, 텍스트 또한 순차적인 의미가 있다
+자연어 처리, 챗봇의 기초
+
+
+1, 2, 3, 4 라는 데이터에서,
+다음 값이 5라고 예상되는 이유는, weight와 bias를 경험적으로 계산했기 때문에
+
+
+LSTM = 가장 좋은 성능의 RNN
+https://gruuuuu.github.io/machine-learning/lstm-doc2/#
+
+GRU = LSTM을 더 발전시킨 구조
+
+
+LSTM 파라미터 계산 방법
+https://en.wikipedia.org/wiki/Long_short-term_memory#/media/File:LSTM_cell.svg
+
+4*(n+m+b)*m
+4 = sigmoid 3개 + tanh 1개
+n = input vector
+m = LSTM layer number
+b = bias = 1
+
+
+내 생각에,
+feedback이 아니고 recurrent인 이유: 값 + 상태를 되먹인다
+
+
+input_shape = (input_length , input_dim)
+
+
+
+simpleRNN은,
+(n+m+b)*m = parameter의 수
+
+GRU는,
+### 조사하자
+
+
+
+하이퍼파리미터 튜닝 조건 추가 : EarlyStopping에서 patience 지표
 
 
 
