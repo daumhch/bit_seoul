@@ -582,3 +582,21 @@ GRU는,
 
 
 
+
+keras22_Return_sequences.py
+ValueError: Input 0 of layer lstm_1 is incompatible with the layer: 
+expected ndim=3, found ndim=2. Full shape received: [None, 64] 
+
+-> 3차원 기대했는데 2차원을 확인했다
+
+
+return_sequences가 default False인데,
+LSTM에서 입력은 3차원, 결과는 2차원인데,
+return_sequences를 True로 하면 3차원 반환
+
+
+LSTM을 2개 엮으려면 return_sequences=True로 설정하면 되지만,
+모델 효율이 좋을까? (좋지 않아 보인다)
+
+
+
