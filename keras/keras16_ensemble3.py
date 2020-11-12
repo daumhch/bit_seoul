@@ -5,6 +5,21 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
 # 1.데이터
 import numpy as np
+
+# #재현을 위한 랜덤시드 고정
+# import tensorflow as tf
+# import random as rn
+# import os
+# os.environ['PYTHONHASHSEED'] = '0'
+# np.random.seed(1)
+# rn.seed(1)
+# session_conf = tf.compat.v1.ConfigProto(intra_op_parallelism_threads=1, inter_op_parallelism_threads=1)
+# from tensorflow.python.keras import backend as K
+# tf.random.set_seed(1)
+# sess = tf.compat.v1.Session(graph=tf.compat.v1.get_default_graph(), config=session_conf)
+# K.set_session(sess)
+
+
 x1 = np.array([range(1,101),range(711,811), range(100)])
 x2 = np.array([range(4,104),range(761,861), range(100)])
 
@@ -32,9 +47,9 @@ x2_test, x2_val, = train_test_split(
     x2_rest, train_size=0.5, test_size=0.5) # 남은 4를 5:5로 나눔
 
 
-print("y1_train.size", y1_train.size)
-print("y1_val.size", y1_val.size)
-print("y1_test.size", y1_test.size)
+# print("y1_train.size", y1_train.size)
+# print("y1_val.size", y1_val.size)
+# print("y1_test.size", y1_test.size)
 
 
 
@@ -45,19 +60,19 @@ from tensorflow.keras.layers import Dense, Input
 
 # 모델 1
 input1 = Input(shape=(3,))
-dense1_1 = Dense(256, activation='relu', name='dense1_1')(input1)
-dense1_2 = Dense(512, activation='relu', name='dense1_2')(dense1_1)
-dense1_3 = Dense(1024, activation='relu', name='dense1_3')(dense1_2)
-output1 = Dense(2048, name='output1')(dense1_3)
+dense1_1 = Dense(8, activation='relu', name='dense1_1')(input1)
+dense1_2 = Dense(16, activation='relu', name='dense1_2')(dense1_1)
+dense1_3 = Dense(32, activation='relu', name='dense1_3')(dense1_2)
+output1 = Dense(128, name='output1')(dense1_3)
 # model1 = Model(inputs=input1, outputs=output1)
 # model1.summary()
 
 # 모델 2
 input2 = Input(shape=(3,))
-dense2_1 = Dense(256, activation='relu', name='dense2_1')(input2)
-dense2_2 = Dense(512, activation='relu', name='dense2_2')(dense2_1)
-dense2_3 = Dense(1024, activation='relu', name='dense2_3')(dense2_2)
-output2 = Dense(2048, name='output2')(dense2_3)
+dense2_1 = Dense(8, activation='relu', name='dense2_1')(input2)
+dense2_2 = Dense(16, activation='relu', name='dense2_2')(dense2_1)
+dense2_3 = Dense(32, activation='relu', name='dense2_3')(dense2_2)
+output2 = Dense(128, name='output2')(dense2_3)
 # model2 = Model(inputs=input2, outputs=output2)
 # model2.summary()
 
@@ -68,9 +83,9 @@ from tensorflow.keras.layers import Concatenate, concatenate
 # merge1 = concatenate([output1, output2]) # concatenate layer
 # merge1 = Concatenate()([output1, output2])
 merge1 = Concatenate(axis=1)([output1, output2])
-middle1 = Dense(2048, name='middle1')(merge1)
-middle2 = Dense(1024, name='middle2')(middle1)
-middle3 = Dense(512, name='middle3')(middle2)
+middle1 = Dense(128, name='middle1')(merge1)
+middle2 = Dense(64, name='middle2')(middle1)
+middle3 = Dense(32, name='middle3')(middle2)
 
 # 이렇게 해도 된다
 # middle3 = Dense(30)(merge1)
@@ -79,15 +94,15 @@ middle3 = Dense(512, name='middle3')(middle2)
 
 # output 모델 구성(분기)
 # middle layer 하기 싫으면 merge1을 바로 입력하면 된다
-output1_1 = Dense(256, name='output1_1')(middle3)
-output1_2 = Dense(128, name='output1_2')(output1_1)
+output1_1 = Dense(16, name='output1_1')(middle3)
+output1_2 = Dense(8, name='output1_2')(output1_1)
 output1_3 = Dense(3, name='output1_3')(output1_2)
 
 
 # 모델 정의
 model = Model(inputs=[input1,input2], 
                 outputs=output1_3)
-model.summary()
+# model.summary()
 
 
 
