@@ -600,3 +600,10 @@ LSTM을 2개 엮으려면 return_sequences=True로 설정하면 되지만,
 
 
 
+
+201112 끝
+
+내일은 데이터 전처리 하는 날
+
+RNN CNN은 꼭 알자
+

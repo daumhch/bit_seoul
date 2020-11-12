@@ -1,6 +1,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
+import numpy as np
 from numpy import array
 
 # 1.데이터
@@ -25,16 +26,19 @@ x2 = x2.reshape(x2.shape[0], x2.shape[1], 1) # (13,3,1)
 
 
 # x1_predict = array([55,65,75])
-# x2_predict = array([65,75,85])
+x1_predict = array([105,110,115])
+x2_predict = array([65,75,85])
 # x1_predict = array([1,2,3])
 # x2_predict = array([10,20,30])
-x1_predict = x1 # array([40,50,60])
-x2_predict = x2 # array([4,5,6])
-x1_predict = x1_predict.reshape(13,3,1)
-x2_predict = x2_predict.reshape(13,3,1)
+# x1_predict = x1 # array([40,50,60])
+# x2_predict = x2 # array([4,5,6])
+x1_predict = x1_predict.reshape(1,3,1)
+x2_predict = x2_predict.reshape(1,3,1)
 
 ### 실습 : 앙상블 함수형 모델을 만드시오
 
+# 기대하는 값은 85이다
+# x1영향이 크고, x2 영향이 작게
 
 
 
@@ -79,11 +83,11 @@ model.compile( # 컴파일
 from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
 early_stopping = EarlyStopping(
     monitor='loss',
-    patience=100, 
-    mode='auto', 
+    patience=150, 
+    mode='auto',
     verbose=2 )
 hist = model.fit([x1,x2], y, 
-    epochs=1000, # 훈련 횟수
+    epochs=10000, # 훈련 횟수
     batch_size=1, # 훈련 데이터단위
     verbose=0,
     callbacks=[early_stopping]) # 훈련하고 호출하기, 리스트인걸 봐선 여러개 가능할 듯
@@ -102,8 +106,22 @@ y_predict = model.predict([x1_predict, x2_predict])
 print("y_predict:\n", y_predict)
 
 
+'''
+# 사용자정의 RMSE 함수
+# 사이킷런의 metrics에서 mean_squared_error을 불러온다
+from sklearn.metrics import mean_squared_error
+def RMSE(y_test, y_predict):
+    return np.sqrt(mean_squared_error(y_test, y_predict))
+
+print("RMSE:", RMSE(y, y_predict))
 
 
 
+# 사용자정의 R2 함수
+# 사이킷런의 metrics에서 r2_score를 불러온다
+from sklearn.metrics import r2_score
+r2 = r2_score(y, y_predict)
+print("R2:", r2)
+'''
 
 
