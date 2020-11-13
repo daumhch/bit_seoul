@@ -9,6 +9,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 # multi layer perceptron
 # 1.데이터
 import numpy as np # numpy를 불러오고 앞으로 이름을 np로 쓴다
+'''
 x1 = np.array([
     [1,2,3],[2,3,4],[3,4,5],[4,5,6],
     [5,6,7],[6,7,8],[7,8,9],[8,9,10],
@@ -32,8 +33,10 @@ y = np.array([
     8,9,10,11,
     12,13,
     50,60,70])
+'''
 
 
+# 데이터 다시 만들자
 def hcbae_split_x(seq, size):
     aaa = []
     for i in range(len(seq)-size+1):
