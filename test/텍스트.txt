@@ -607,3 +607,18 @@ LSTM을 2개 엮으려면 return_sequences=True로 설정하면 되지만,
 
 RNN CNN은 꼭 알자
 
+
+
+
+How to Diagnose Overfitting and Underfitting of LSTM Models
+
+https://machinelearningmastery.com/diagnose-overfitting-underfitting-lstm-models/
+
+
+
+텐서플로우 API 설명
+https://www.tensorflow.org/api_docs/python/tf/keras/Model#fit
+
+
+
+

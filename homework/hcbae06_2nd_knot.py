@@ -51,7 +51,7 @@ array_size = 3
 # 10000 = 2~3초
 # 5000 = 1~2초
 # 1000 = 13ms
-data_size = 5000
+data_size = 1000
 
 x1 = hcbae_split_x(range(1,1+data_size+array_size-1),array_size)
 x2 = hcbae_split_x(range(101,101+data_size+array_size-1),array_size)
@@ -98,17 +98,17 @@ from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Input, Dense, LSTM, SimpleRNN, GRU
 
 input_LSTM = Input(shape=(3,1))
-dense_LSTM = LSTM(32, activation='relu')(input_LSTM)
+dense_LSTM = LSTM(64, activation='relu')(input_LSTM)
 dense_LSTM = Dense(512, activation='relu')(dense_LSTM)
 output_LSTM = Dense(256)(dense_LSTM)
 
 input_SRNN = Input(shape=(3,1))
-dense_SRNN = SimpleRNN(32, activation='relu')(input_SRNN)
+dense_SRNN = SimpleRNN(64, activation='relu')(input_SRNN)
 dense_SRNN = Dense(512, activation='relu')(dense_SRNN)
 output_SRNN = Dense(256)(dense_SRNN)
 
 input_GRU = Input(shape=(3,1))
-dense_GRU = GRU(32, activation='relu')(input_GRU)
+dense_GRU = GRU(64, activation='relu')(input_GRU)
 dense_GRU = Dense(512, activation='relu')(dense_GRU)
 output_GRU = Dense(256)(dense_GRU)
 
@@ -123,7 +123,7 @@ output_total = Dense(1)(merge_temp)
 # 모델 정의
 model = Model(inputs=[input_LSTM, input_SRNN, input_GRU], 
                 outputs=output_total)
-# model.summary()
+model.summary()
 
 
 
@@ -140,9 +140,8 @@ early_stopping = EarlyStopping(
     mode='auto',
     verbose=2)
 
-hist = model.fit( [x1_train, x2_train, x3_train], y_train, #훈련, 일단 x_train, y_train 입력하고
+history = model.fit( [x1_train, x2_train, x3_train], y_train, #훈련, 일단 x_train, y_train 입력하고
     epochs=10000, # 훈련 횟수
-    batch_size=32, # 훈련 데이터단위
     validation_data=([x1_val, x2_val, x3_val], y_val), # 검증 데이터 사용하기
     verbose=1,
     callbacks=[early_stopping]) # 0=로그 출력하지 않기, 1=막대그래프, 2=손실 정보
@@ -153,7 +152,7 @@ hist = model.fit( [x1_train, x2_train, x3_train], y_train, #훈련, 일단 x_tra
 
 # 4. 평가, 예측
 # 평가 데이터 넣어서 결과 보기
-result = model.evaluate([x1_test, x2_test, x3_test], y_test, batch_size=32) 
+result = model.evaluate([x1_test, x2_test, x3_test], y_test) 
 print("result: ", result) # 이건 기본으로 나오고
 
 
@@ -190,20 +189,17 @@ print("R2:", r2)
 
 
 # 그래프 그리기
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as pyplot
 
-fig, loss_ax = plt.subplots()
-acc_ax = loss_ax.twinx()
-loss_ax.plot(hist.history['loss'], 'y', label='train loss')
-loss_ax.plot(hist.history['val_loss'], 'r', label='val loss')
-
-loss_ax.set_xlabel('epoch')
-loss_ax.set_ylabel('loss')
-
-loss_ax.legend(loc='upper left')
-acc_ax.legend(loc='lower left')
-
-plt.show()
+# plot train and validation loss
+pyplot.plot(history.history['loss'])
+pyplot.plot(history.history['val_loss'])
+pyplot.title('model train vs validation loss')
+pyplot.ylabel('loss')
+pyplot.xlabel('epoch')
+pyplot.legend(['train', 'validation'], loc='upper right')
+pyplot.ylim((0,1000))
+pyplot.show()
 
 
 
