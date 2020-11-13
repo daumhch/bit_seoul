@@ -42,11 +42,13 @@ print("x_train.reshape:", x_train.shape) # (57,4,1)
 
 # 2.모델
 model = load_model("./save/keras28.h5")
-input1 = Input(shape=(4,1), name='input1')
-dense = model(input1)
-output1 = Dense(1)(dense)
-model = Model(inputs=input1, outputs=output1)
+# input1 = Input(shape=(4,1), name='input1')
+# dense = model(input1)
+# output1 = Dense(1)(dense)
+# model = Model(inputs=input1, outputs=output1)
 
+model(Input(shape=(4,1), name='input1'))
+model.add(Dense(1, name='output1'))
 model.summary()
 
 
