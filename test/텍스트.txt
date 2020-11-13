@@ -683,3 +683,39 @@ https://3months.tistory.com/150
 주말에 dictionary 공부하기
 
 
+앞으로는,
+취미 = 하이퍼 파라미터
+특기 = 데이터 전처리
+
+
+데이터 전처리 하는 이유는
+연산하면서 값이 엄청 클 수도 있다, 그걸 막는게 좋지 않을까
+
+데이터를 최대값으로 나눠서 0~1 사이로 압축한다면? 괜찮겠다 
+-> 데이터 스케일 바꾸면 조작 아냐?
+-> x와 y의 1:1대응은 변하지 않으니 괜찮다
+-> 데이터 전처리에서 y는 건들지 않는다
+
+
+
+전처리 방식
+
+x = (x-최소)/(최대-최소)
+
+from sklearn.preprocessing import MinMaxScaler
+이런 좋은 도구가 이미 있다
+
+
+train만 fit+transform
+val/test/predict는 transform만 한다
+
+
+### 과제+실습
+- StandardScaler
+- RobustScaler
+- MaxAbsScaler
+위의 세 개를 정리하라
+
+
+### 월요일부터 CNN 한다
+
