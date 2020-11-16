@@ -98,17 +98,27 @@ print("after x_val.shape",x_val.shape)
 
 
 # 2.모델
+# https://buomsoo-kim.github.io/keras/2018/05/05/Easy-deep-learning-with-Keras-11.md/
+# 위 링크 보고 뭔가 개선해봄
+
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
+from tensorflow.keras.layers import BatchNormalization
 
 model = Sequential()
-model.add( Conv2D(32, (2,2), padding='same', input_shape=(28,28,1) ) )
-model.add(MaxPooling2D(pool_size=(2,2) ))
-model.add( Conv2D(64, (2,2) ) )
-model.add(MaxPooling2D(pool_size=(2,2) ))
+model.add( Conv2D(10, (2,2), padding='same', input_shape=(28,28,1)) )
+model.add(BatchNormalization())
+model.add( Conv2D(10, (3,3), padding = 'same') )
+# 1x1 convolution
+model.add( Conv2D(10, (1,1), padding = 'valid') )
+model.add(BatchNormalization())
+model.add(MaxPooling2D())
+model.add( Conv2D(10, (3,3), padding = 'same') )
+# prior layer should be flattend to be connected to dense layers
 model.add(Flatten())
-model.add(Dense(20, activation='relu') )
-model.add(Dense(10, activation='softmax') )
+# dense layer with 50 neurons
+model.add(Dense(50, activation = 'relu'))
+model.add(Dense(10, activation = 'softmax') )
 model.summary()
 
 
@@ -123,15 +133,15 @@ model.compile(
 from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
 early_stopping = EarlyStopping(
     monitor='loss',
-    patience=100,
+    patience=2,
     mode='auto',
     verbose=2)
 
-model.fit(
+history = model.fit(
     x_train, y_train,
     
     # 수치 계산이 아닌, 데이터 7만개 훈련이니, epoch이 그리 크지 않아도 되는 것...맞는지 확인해보자
-    epochs=15, 
+    epochs=10, 
     batch_size=128,
     verbose=1, # 0=로그 출력하지 않기, 1=막대그래프, 2=손실 정보
     
@@ -154,6 +164,13 @@ y_predict = np.argmax(y_predict, axis=1)
 # print("y_predict:\n", y)
 print("y_test:\n", y_test)
 print("y_predict:\n", y_predict)
+
+
+
+plt.plot(history.history['loss'])
+plt.plot(history.history['accuracy'])
+plt.legend(['training', 'validation'], loc = 'upper left')
+plt.show()
 
 
 
