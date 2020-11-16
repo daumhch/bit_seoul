@@ -842,3 +842,33 @@ Conv2d layer parameter = nowLayer * (width * height * prevLayer +1)
 https://wikidocs.net/22647
 https://needjarvis.tistory.com/565
 
+
+### one hot encoding
+결과값에 인덱스를 붙여,
+분류 할 때에 동일한 가중치를 부여하는 방식
+
+from tensorflow.keras.utils import to_categorical
+
+from sklearn.preprocessing import OneHotEncoder
+
+
+
+
+LSTM의 default activation 
+= Default: hyperbolic tangent (tanh)
+https://keras.io/api/layers/recurrent_layers/lstm/
+
+Conv2D의 default activation 
+= relu
+https://keras.io/api/layers/convolution_layers/convolution2d/
+
+
+다중분류 할 때, 
+y 라벨링을 one hot encoding = to_categorical,
+마지막 Dense의 activation은 softmax,
+컴파일 loss는 categorical_crossentropy
+
+
+softmax에 의해 나온 결과들을 모두 합치면 1이 된다
+
+
