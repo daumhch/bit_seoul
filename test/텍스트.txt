@@ -799,6 +799,46 @@ CNN
 
 
 
+특성 중첩을 통해 특징이 더 드러나기 때문에
+Convolution layer는 엮을수록 성능이 좋아진다
 
 
+보통의 프로세스
+conv2d를 통과시켜 증폭시키다가
+dense를 통과시키면서 압축시킨다
+
+
+
+conv2d의 filters 숫자 또한 RNN에서 node개수 처럼,
+데이터마다 최적지점이 다르다
+사용자가 계산해야 한다
+
+
+Convolution 에서는, 출력에서 차원이 줄어들지 않는다
+LSTM에서 return_sequences 같은 걸 하지 않아도 된다
+
+
+
+이미지를 자르는데, 중복시키지 않고 자르는 경우 
+= 잘라낸 범위별로 최대값만 찾는 경우
+= MaxPooling2D
+= (내생각)커진 데이터 이미지를 다시 압축할 때 사용하는 것 같다
+
+
+
+
+Conv2d layer parameter = nowLayer * (width * height * prevLayer +1)
+
+
+
+
+### mnist = 0~9까지의 손글씨 데이터베이스
+
+# 분류 할 때에 중요한 점
+각각의 결과값은 동일한 가치를 가져야 한다
+
+# 회귀에서는 RMSE R2 수치를 높이는 게 목표라면
+# 분류에서는 분류 결과들이 평등하다는 것을 알려줘야 한다 = One-Hot Encoding
+https://wikidocs.net/22647
+https://needjarvis.tistory.com/565
 
