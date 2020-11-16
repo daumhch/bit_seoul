@@ -28,10 +28,17 @@ print("after y_train[0]:",y_train[0]) # [0. 0. 0. 0. 0. 1. 0. 0. 0. 0.]
 
 
 
+'''
 # CNN을 위한 reshape
 x_train = x_train.reshape(x_train.shape[0],x_train.shape[1],x_train.shape[2],1)
 # shape 뒷부분이 28, 28 일 필요는 없지만, 일단 그대로 가져다 사용한다
 x_test = x_test.reshape(x_test.shape[0],x_test.shape[1],x_test.shape[2],1)
+
+'''
+
+# DNN을 위한 reshape
+x_train = x_train.reshape(x_train.shape[0],x_train.shape[1]*x_train.shape[2])
+x_test = x_test.reshape(x_test.shape[0],x_test.shape[1]*x_test.shape[2])
 print("reshape x:", x_train.shape, x_test.shape)
 
 
@@ -68,18 +75,14 @@ print("after x_train.shape",x_train.shape)
 print("after x_test.shape",x_test.shape)
 print("after x_val.shape",x_val.shape)
 
-def make_model(node_1st, y_test):
+def make_model():
     # 2.모델
     from tensorflow.keras.models import Sequential
     from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 
     model = Sequential()
-    model.add( Conv2D(node_1st[0], (2,2), padding='same', input_shape=(28,28,1) ) )
-    model.add(MaxPooling2D(pool_size=(2,2) ))
-    model.add( Conv2D(node_1st[0], (2,2) ) )
-    model.add(MaxPooling2D(pool_size=(2,2) ))
-    model.add(Flatten())
-    model.add(Dense(node_1st[1]))
+    model.add(Dense(30, activation='relu', input_shape=(784,) ))
+    model.add(Dense(20, activation='relu') )
     model.add(Dense(10, activation='softmax') )
     model.summary()
 
@@ -90,51 +93,19 @@ def make_model(node_1st, y_test):
         optimizer='adam',
         metrics=['accuracy']
         )
-
-    from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
-    early_stopping = EarlyStopping(
-        monitor='loss',
-        patience=3,
-        mode='auto',
-        verbose=2)
-
-    model.fit(
-        x_train, y_train,
-        epochs=10,
-        batch_size=32,
-        verbose=0,
-        validation_data=(x_val,y_val),
-        callbacks=[early_stopping])
-
-
-
-    # 4. 평가, 예측
-    loss, accuracy = model.evaluate(x_test, y_test, batch_size=32)
-    # print("loss: ", loss)
-    print("accuracy: ", accuracy)
-
-
-    y_predict = model.predict(x_test) # 평가 데이터 다시 넣어 예측값 만들기
-    y_test = np.argmax(y_test, axis=1)
-    y_predict = np.argmax(y_predict, axis=1)
-    # print("y_predict:\n", y)
-    # print("y_test:\n", y_test)
-    # print("y_predict:\n", y_predict)
-    return accuracy
+    return model
 # end of make_model
 
+from sklearn.model_selection import GridSearchCV
+from keras.wrappers.scikit_learn import KerasClassifier
+model = KerasClassifier(build_fn=make_model, verbose=1)
 
+batch_size = [10, 20, 40, 60, 80, 100]
+epochs = [10, 50, 100]
+param_grid = dict(batch_size=batch_size, epochs=epochs)
+grid = GridSearchCV(estimator=model, param_grid=param_grid)
+grid_result = grid.fit(x_train, y_train)
 
-result_list = np.zeros((10,10))
-
-for cnt1 in range(1,10):
-    for cnt2 in range(1,10):
-        result = make_model([cnt1,cnt2], y_test)
-        result_list[cnt1][cnt2] = result
-
-
-print("???:",result_list )
-print("???:", np.max(result_list) )
-
-
+# summarize results
+print("Best: %f using %s" % (grid_result.best_score_, grid_result.best_params_))
 

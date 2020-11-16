@@ -14,7 +14,7 @@ from tensorflow.keras.layers import Flatten
 # 참고 LSTM
 # units
 # return_sequence
-# 입력모양: batch_size, timesteps, feture
+# 입력모양: batch_size, timesteps, feature
 # input_shape = (timesteps, feture)
 
 model = Sequential()

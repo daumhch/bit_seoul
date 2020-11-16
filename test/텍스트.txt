@@ -823,7 +823,7 @@ LSTM에서 return_sequences 같은 걸 하지 않아도 된다
 = 잘라낸 범위별로 최대값만 찾는 경우
 = MaxPooling2D
 = (내생각)커진 데이터 이미지를 다시 압축할 때 사용하는 것 같다
-
+https://keras.io/ko/layers/pooling/
 
 
 
@@ -869,6 +869,6 @@ y 라벨링을 one hot encoding = to_categorical,
 컴파일 loss는 categorical_crossentropy
 
 
-softmax에 의해 나온 결과들을 모두 합치면 1이 된다
+softmax에 의해 나온 결과들을 모두 합치면 1이 된다 ()
 
 
