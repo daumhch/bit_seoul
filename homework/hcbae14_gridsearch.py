@@ -82,6 +82,7 @@ def make_model():
 
     model = Sequential()
     model.add(Dense(30, activation='relu', input_shape=(784,) ))
+    model.add(Dense(30, activation='relu') )
     model.add(Dense(20, activation='relu') )
     model.add(Dense(10, activation='softmax') )
     model.summary()
@@ -101,7 +102,7 @@ from keras.wrappers.scikit_learn import KerasClassifier
 model = KerasClassifier(build_fn=make_model, verbose=1)
 
 batch_size = [10, 20, 40, 60, 80, 100]
-epochs = [10, 50, 100]
+epochs = [10, 50, 100, 200]
 param_grid = dict(batch_size=batch_size, epochs=epochs)
 grid = GridSearchCV(estimator=model, param_grid=param_grid)
 grid_result = grid.fit(x_train, y_train)
