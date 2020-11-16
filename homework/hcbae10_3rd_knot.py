@@ -18,7 +18,7 @@ data_size = 100
 
 # def도 다른 파일에서 import하자 매번 선언하기 귀찮다
 from custom_def import hcbae_split_x 
-datasets = hcbae_split_x(range(1,1+data_size+array_size-1),array_size)
+datasets = hcbae_split_x(range(10000,10000+data_size+array_size-1),array_size)
 # 위처럼 하면, 
 # 연속된 데이터를 array_size만큼 잘라서
 # data_size 길이만큼 만든다
@@ -32,6 +32,19 @@ y = datasets[:,(array_size-1)]
 print("x.shape:", x.shape)
 print("y.shape:", y.shape)
 
+
+# 데이터 전처리
+from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
+# print(x)
+# scaler = MinMaxScaler()
+# scaler = RobustScaler()
+scaler = StandardScaler()
+scaler.fit(x) # fit하고
+x = scaler.transform(x) # 사용할 수 있게 바꿔서 저장하자
+# print(x)
+
+
+# LSTM 모델 input을 위한 reshape
 x = x.reshape(x.shape[0], x.shape[1], 1)
 print("x.reshape:", x.shape) # (96,4,1)
 
@@ -70,7 +83,7 @@ from tensorflow.keras.layers import Input
 from tensorflow.keras.layers import Dense
 lstm_model(Input(shape=(x.shape[1],1), name='input1'))
 lstm_model.add(Dense(1, name='output1'))
-lstm_model.summary()
+# lstm_model.summary()
 
 
 
@@ -89,8 +102,6 @@ early_stopping = EarlyStopping(
     mode='auto',
     verbose=2)
 
-print("os.getcwd():",os.getcwd())
-
 from tensorflow.keras.callbacks import TensorBoard # 텐서보드 = 웹페이지 시각화
 
 from custom_def import hcbae_removeAllFile
@@ -103,7 +114,7 @@ to_tensorboard = TensorBoard(
     write_images=True)
 
 history = lstm_model.fit(x_train, y_train,
-    epochs=100,
+    epochs=10000,
     verbose=0,
     validation_data=(x_val,y_val),
     callbacks=[early_stopping, to_tensorboard])

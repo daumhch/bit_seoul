@@ -6,11 +6,14 @@ import numpy as np
 # 2.모델
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM
-
+from tensorflow.keras.layers import BatchNormalization
 model = Sequential()
 model.add(LSTM(30, activation='relu', input_shape=(3,1) ) ) 
+model.add(BatchNormalization())
 model.add(Dense(30))
+model.add(BatchNormalization())
 model.add(Dense(30))
+model.add(BatchNormalization())
 model.add(Dense(20))
 model.summary()
 # total params: 2540
