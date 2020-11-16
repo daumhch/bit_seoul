@@ -747,5 +747,58 @@ epoch가 커진다 (더 많이 돌리는 경향이 있는 것 같다)
 
 
 
+201116 수업시작
+
+저번 주 복습
+
+
+모델 차원
+LSTM 3차원 = 행 / 열 / 몇 개씩 자르는지
+DNN 2차원 = 행 / 열
+CNN 4차원 = 이미지 갯수 / 가로 / 세로 / RGB
+
+
+return_sequences = 입력차원 그대로 다음 레이어로 넘기기
+LSTM 여러개 연결할 때 사용
+
+
+
+모델부터 공부한 이유, 쉬워서
+
+
+AI디벨로퍼 vs 데이터 사이언티스트
+
+
+85% 데이터 전처리
+15% 모델링
+
+
+전이학습 = 잘 만든 weight와 model을 가져다 쓰자
+
+
+스케일링
+(내생각) 제일 무난한게 MinMaxScaler, StandardScaler
+               X        |    Y
+train | fit / transform |    x 
+test  |    transform    |    x
+val   |    transform    |    x
+pred  |    transform    | 값 없음
+
+
+
+
+CNN
+컴퓨터는 그림을 숫자로 인식한다 (가로,세로,픽셀)
+머신이 그림을 인식할 수 있게, 그림을 잘라서 입력할 수 있다
+
+1x1씩 자르는 게 아니라, 2x2씩 자른다면,
+특성값(feature)을 중첩시켜서 머신이 더 확실하게 구분짓도록 유도할 수 있다
+
+이렇게 조각내서 연산하는 방식이 CNN = Convolution Neural Network
+
+
+
+
+
 
 
