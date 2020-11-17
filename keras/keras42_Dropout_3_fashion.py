@@ -1,7 +1,7 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
-from tensorflow.keras.datasets import cifar10
+from tensorflow.keras.datasets import fashion_mnist
 from tensorflow.keras.utils import to_categorical
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Conv2D, LSTM
@@ -9,7 +9,7 @@ from tensorflow.keras.layers import Flatten, MaxPooling2D
 import matplotlib.pyplot as plt
 import numpy as np
 
-(x_train, y_train), (x_test, y_test) = cifar10.load_data()
+(x_train, y_train), (x_test, y_test) = fashion_mnist.load_data()
 # print(x_train[0])
 # print("y_train[0]:", y_train[0])
 print("x_train.shape:", x_train.shape) # x_train.shape: (50000, 32, 32, 3)
@@ -28,8 +28,8 @@ print(y_train[0]) # [0. 0. 0. 0. 0. 0. 1. 0. 0. 0.]
 
 
 # CNN을 위한 reshape
-x_train = x_train.reshape(x_train.shape[0],x_train.shape[1],x_train.shape[2],x_train.shape[3])
-x_test = x_test.reshape(x_test.shape[0],x_test.shape[1],x_test.shape[2],x_train.shape[3])
+x_train = x_train.reshape(x_train.shape[0],x_train.shape[1],x_train.shape[2],1)
+x_test = x_test.reshape(x_test.shape[0],x_test.shape[1],x_test.shape[2],1)
 print("reshape x:", x_train.shape, x_test.shape)
 
 
@@ -52,8 +52,6 @@ x_test,x_val, y_test,y_val = train_test_split(
 print("after x_train.shape",x_train.shape)
 print("after x_test.shape",x_test.shape)
 print("after x_val.shape",x_val.shape)
-
-
 
 
 
@@ -86,6 +84,9 @@ model.add(Flatten())
 model.add(Dense(10, activation = 'softmax') )
 model.summary()
 
+
+
+
 # 3. 컴파일, 훈련
 model.compile(
     loss='categorical_crossentropy', #CNN은 웬만하면 categorical_crossentropy
@@ -96,14 +97,14 @@ model.compile(
 from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
 early_stopping = EarlyStopping(
     monitor='loss',
-    patience=10,
+    patience=5,
     mode='auto',
     verbose=2)
 
 history = model.fit(
     x_train, y_train,
     epochs=100, 
-    batch_size=64,
+    batch_size=128,
     verbose=1,
     validation_split=0.2,
     callbacks=[early_stopping]) 
@@ -111,7 +112,7 @@ history = model.fit(
 
 
 # 4. 평가, 예측
-loss, accuracy = model.evaluate(x_test, y_test, batch_size=64)
+loss, accuracy = model.evaluate(x_test, y_test, batch_size=128)
 print("loss: ", loss)
 print("accuracy: ", accuracy)
 
@@ -143,5 +144,9 @@ loss_ax.legend(loc='upper left')
 acc_ax.legend(loc='lower left')
  
 plt.show()
+
+
+print("keras42_Dropout_3_fashion end")
+
 
 

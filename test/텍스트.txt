@@ -706,6 +706,11 @@ from sklearn.preprocessing import MinMaxScaler
 이런 좋은 도구가 이미 있다
 
 
+데이터 스케일링 그림 비교자료
+https://homeproject.tistory.com/3
+
+
+
 train만 fit+transform
 val/test/predict는 transform만 한다
 
@@ -945,6 +950,37 @@ https://boysboy3.tistory.com/105
 https://stackoverflow.com/questions/58567253/how-would-i-increase-my-accuracy-in-the-cifar-100-dataset-i-have-a-10-accuracy
 
 
+
+
+항상 모든 모델의 최적의 값을 찾아놓자 'ㅁ')/
+
+
+
+보통은 node개수를 늘리면 성능이 좋아지긴 하는데,
+적당한 한계선은 어떻게 찾아야 할까
+
+
+
+Dropout은 값은 가지고 있는데, 작업은 Dropout이 저장된다
+
+
+
+### 오전에 한 건 다중분류 / 
+
+
+
+# 과제 : 43번 44번도 cnn과 lstm 만들기
+
+CNN을 일단 최대로 올려놓고
+DNN과 LSTM을 올려라
+
+
+### 경험상,
+회귀관련 모델링에는 Dropout을 안 쓰는 게 좋겠다
+
+
+
+내일은 이진분류 및 그 외의 잡기술
 
 
 

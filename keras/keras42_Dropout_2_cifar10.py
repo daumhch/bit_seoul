@@ -56,35 +56,35 @@ print("after x_val.shape",x_val.shape)
 
 
 
+from tensorflow.keras.layers import Dropout
 
-from tensorflow.keras.layers import BatchNormalization, Dropout
 # 2.모델
-baseMapNum = 32
 model = Sequential()
-model.add(Conv2D(baseMapNum, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
-model.add(BatchNormalization())
-model.add(Conv2D(baseMapNum, (1,1), padding='valid', activation='relu'))
-model.add(BatchNormalization())
+model.add( Conv2D(32, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
+model.add( Conv2D(32, (1,1), padding='valid') )
+model.add( Conv2D(32, (3,3), padding='same') )
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-model.add(Conv2D(2*baseMapNum, (3,3), padding='same', activation='relu'))
-model.add(BatchNormalization())
-model.add(Conv2D(2*baseMapNum, (1,1), padding='valid', activation='relu'))
-model.add(BatchNormalization())
+model.add( Conv2D(64, (3,3), padding='same') )
+model.add( Conv2D(64, (1,1), padding='valid') )
+model.add( Conv2D(64, (3,3), padding='same') )
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.3))
 
-model.add(Conv2D(4*baseMapNum, (3,3), padding='same', activation='relu'))
-model.add(BatchNormalization())
-model.add(Conv2D(4*baseMapNum, (1,1), padding='valid', activation='relu'))
-model.add(BatchNormalization())
+model.add( Conv2D(128, (3,3), padding='same') )
+model.add( Conv2D(128, (1,1), padding='valid') )
+model.add( Conv2D(128, (3,3), padding='same') )
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.4))
 
 model.add(Flatten())
+model.add(Dense(512, activation = 'relu'))
 model.add(Dense(10, activation = 'softmax') )
 model.summary()
+
+
+
 
 # 3. 컴파일, 훈련
 model.compile(
@@ -103,7 +103,7 @@ early_stopping = EarlyStopping(
 history = model.fit(
     x_train, y_train,
     epochs=100, 
-    batch_size=64,
+    batch_size=128,
     verbose=1,
     validation_split=0.2,
     callbacks=[early_stopping]) 
@@ -111,7 +111,7 @@ history = model.fit(
 
 
 # 4. 평가, 예측
-loss, accuracy = model.evaluate(x_test, y_test, batch_size=64)
+loss, accuracy = model.evaluate(x_test, y_test, batch_size=128)
 print("loss: ", loss)
 print("accuracy: ", accuracy)
 
@@ -143,5 +143,10 @@ loss_ax.legend(loc='upper left')
 acc_ax.legend(loc='lower left')
  
 plt.show()
+
+
+
+print("keras42_Dropout_2_cifar10 end")
+
 
 
