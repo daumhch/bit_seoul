@@ -106,14 +106,15 @@ from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 from tensorflow.keras.layers import BatchNormalization
 
 model = Sequential()
-model.add( Conv2D(10, (2,2), padding='same', input_shape=(28,28,1)) )
-model.add(BatchNormalization())
-model.add( Conv2D(10, (3,3), padding = 'same') )
-# 1x1 convolution
-model.add( Conv2D(10, (1,1), padding = 'valid') )
-model.add(BatchNormalization())
+model.add( Conv2D(8, (3,3), padding='same', input_shape=(28,28,1)) )
+model.add( Conv2D(8, (1,1), padding='same') )
 model.add(MaxPooling2D())
-model.add( Conv2D(10, (3,3), padding = 'same') )
+
+model.add( Conv2D(16, (3,3), padding='same') )
+model.add( Conv2D(16, (1,1), padding='same') )
+model.add(MaxPooling2D())
+
+
 # prior layer should be flattend to be connected to dense layers
 model.add(Flatten())
 # dense layer with 50 neurons
@@ -133,7 +134,7 @@ model.compile(
 from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
 early_stopping = EarlyStopping(
     monitor='loss',
-    patience=2,
+    patience=10,
     mode='auto',
     verbose=2)
 
@@ -141,9 +142,9 @@ history = model.fit(
     x_train, y_train,
     
     # 수치 계산이 아닌, 데이터 7만개 훈련이니, epoch이 그리 크지 않아도 되는 것...맞는지 확인해보자
-    epochs=10, 
+    epochs=100, 
     batch_size=128,
-    verbose=1, # 0=로그 출력하지 않기, 1=막대그래프, 2=손실 정보
+    verbose=0, # 0=로그 출력하지 않기, 1=막대그래프, 2=손실 정보
     
     # 별도의 validation 데이터를 split 하지 않았으니, train에서 잘라 쓴다
     validation_split=0.2, 
@@ -176,3 +177,95 @@ plt.show()
 
 
 
+
+
+
+'''
+여러 테스트 후 최적이라 생각하는 설정을 위와 같이 했다
+적은 total params, 낮은 early stoppting, 낮은 loss, 높은 accuracy를 추구했다
+
+patience 10 epoch 100
+
+
+Network In Network (NIN)
+1-D conv
+
+(2,2)->(2,2) 4 단위 층
+Total params: 37,310
+Epoch 00071: early stopping
+loss:  0.0940813273191452
+accuracy:  0.9800000190734863
+
+(2,2)->(1,1) 4 단위 층
+Total params: 22,310
+Epoch 00097: early stopping
+loss:  0.07866955548524857
+accuracy:  0.9860000014305115
+
+(3,3)->(1,1) 4 단위 층
+Total params: 41,310
+
+1st train
+Epoch 00039: early stopping
+loss:  0.033764030784368515
+accuracy:  0.9909999966621399
+
+2nd train
+Epoch 00059: early stopping
+loss:  0.06788752973079681
+accuracy:  0.984000027179718
+
+(3,3)->(1,1)->batchNormal
+Total params: 41,710
+Trainable params: 41,510
+Non-trainable params: 200
+1st train
+Epoch 00052: early stopping
+loss:  0.049033768475055695
+accuracy:  0.9919999837875366
+
+2nd train
+Epoch 00061: early stopping
+loss:  0.04857822507619858
+accuracy:  0.9909999966621399
+
+
+
+
+VGGNet
+16x2 -> 32x2 -> 64x2 -> 128x2
+Total params: 300,192
+Epoch 00039: early stopping
+loss:  0.04993342235684395
+accuracy:  0.9869999885559082
+
+16x2 -> 32x2 -> 64x2
+Total params: 101,152
+Epoch 00031: early stopping
+loss:  0.039570145308971405
+accuracy:  0.9869999885559082
+
+32x2 -> 64x2 -> 128x2
+Total params: 344,592
+끝까지
+loss:  0.019834283739328384
+accuracy:  0.996999979019165
+
+64x2 -> 128x2
+Total params: 573,168
+Epoch 00034: early stopping
+loss:  0.1277066320180893
+accuracy:  0.9879999756813049
+
+8x2+(1,1) -> 16x2+(1,1)
+1st train
+Total params: 44,256
+Epoch 00038: early stopping
+loss:  0.06576678156852722
+accuracy:  0.9900000095367432
+
+2nd train
+Epoch 00054: early stopping
+loss:  0.10196372121572495
+accuracy:  0.9810000061988831
+'''
