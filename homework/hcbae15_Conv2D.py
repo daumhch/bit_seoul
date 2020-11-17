@@ -84,7 +84,7 @@ x_test = x_test.astype('float32')/255.
 
 
 
-# 10000개 데이터 중에 99980개는 validation, 20개는 test
+# 10000개 데이터 중에 9980개는 validation, 20개는 test
 # train_size=0.002, test_size=0.998
 from sklearn.model_selection import train_test_split 
 x_test,x_val, y_test,y_val = train_test_split(

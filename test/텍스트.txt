@@ -872,3 +872,79 @@ y 라벨링을 one hot encoding = to_categorical,
 softmax에 의해 나온 결과들을 모두 합치면 1이 된다 ()
 
 
+
+201117
+
+mnist에 대한 구현은,
+
+CNN, DNN, LSTM(RNN) 다 가능하다, 가능해야한다
+
+
+
+코랩
+https://colab.research.google.com/
+
+소스 넣고 돌리면 알아서 동작한다
+
+
+## 내가 한 중간 질문
+model.add(Dense(50))
+model.add(activation=~~~) 이런 형태로 따로 돌리기도 하는데,
+이건, model.add(Dense(50, activation=~~~))와 같다
+
+
+
+
+### cifar10 데이터셋
+그림데이터, (60000,32,32,3)
+https://www.cs.toronto.edu/~kriz/cifar.html
+
+airplane : 0
+automobile : 1
+bird : 2
+cat : 3
+deer : 4
+dog : 5
+frog : 6
+horse : 7
+ship : 8
+truck : 9
+
+
+validation accuracy와 train accuracy가 너무 멀면 과적합
+
+
+
+### fashion_mnist 데이터셋
+0 T-shirt/top
+1 Trouser
+2 Pullover
+3 Dress
+4 Coat
+5 Sandal
+6 Shirt
+7 Sneaker
+8 Bag
+9 Ankle boot
+
+
+# cifar100 데이터셋
+
+
+# cnn 개선하는데 참고중인 사이트들
+https://towardsdatascience.com/cifar-10-image-classification-in-tensorflow-5b501f7dc77c
+
+https://buomsoo-kim.github.io/keras/2018/05/05/Easy-deep-learning-with-Keras-11.md/
+
+https://github.com/buomsoo-kim/Easy-deep-learning-with-Keras/blob/master/2.%20CNN/2-Advanced-CNN/2-advanced-cnn.ipynb
+
+https://www.machinecurve.com/index.php/2020/02/09/how-to-build-a-convnet-for-cifar-10-and-cifar-100-classification-with-keras/
+
+https://boysboy3.tistory.com/105
+
+https://stackoverflow.com/questions/58567253/how-would-i-increase-my-accuracy-in-the-cifar-100-dataset-i-have-a-10-accuracy
+
+
+
+
+

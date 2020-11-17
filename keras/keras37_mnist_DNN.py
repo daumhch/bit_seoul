@@ -101,7 +101,7 @@ model.fit(
     x_train, y_train,
     epochs=1000,
     batch_size=128,
-    verbose=1,
+    verbose=0,
     validation_split=0.2,
     callbacks=[early_stopping])
 
