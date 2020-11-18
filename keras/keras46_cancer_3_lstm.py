@@ -56,10 +56,13 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM
 
 model = Sequential()
-model.add(LSTM(32, activation='relu', input_shape=(x_train.shape[1],x_train.shape[2]) ))
-model.add(Dense(64, activation='relu'))
-model.add(Dense(8, activation='relu'))
-model.add(Dense(2, activation='sigmoid') )
+model.add(LSTM(int(x_train.shape[1]/1), activation='relu', input_shape=(x_train.shape[1],x_train.shape[2]) ))
+model.add(Dense(int(x_train.shape[1]/2), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/3), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/4), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/5), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/6), activation='relu'))
+model.add(Dense(2, activation='sigmoid'))
 model.summary()
 
 

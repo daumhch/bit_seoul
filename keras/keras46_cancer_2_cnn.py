@@ -14,10 +14,15 @@ y = datasets.target
 print("x.shape:",x.shape)
 print("y.shape:",y.shape)
 print("y[0:10%]:",y[:int(y.shape[0]/10)])
+
+# 중복을 제거한 후, 종류를 살펴서 회귀인지 분류인지 판단할 수도 있겠다
+# set(y)는 중복 제거한 집합 표시
+# len(set(y))는 중복 제거한 집합의 길이
+print("y_set:",len(set(y)) )
+
 # OneHotEncoding
 from tensorflow.keras.utils import to_categorical
 y = to_categorical(y)
-
 
 
 # train/test/val
@@ -55,10 +60,13 @@ print("reshape x:", x_train.shape, x_test.shape)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 model = Sequential()
-model.add(Conv2D(16, (x_train.shape[1]), padding='same', input_shape=(x_train.shape[1],1,1) ))
+model.add(Conv2D(int(x_train.shape[1]/1), (x_train.shape[1]), padding='same', input_shape=(x_train.shape[1],1,1) ))
 model.add(Flatten())
-model.add(Dense(64, activation = 'relu'))
-model.add(Dense(64, activation = 'relu'))
+model.add(Dense(int(x_train.shape[1]/2), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/3), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/4), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/5), activation='relu'))
+model.add(Dense(int(x_train.shape[1]/6), activation='relu'))
 model.add(Dense(2, activation='sigmoid'))
 model.summary()
 
