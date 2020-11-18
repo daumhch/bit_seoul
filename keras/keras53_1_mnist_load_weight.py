@@ -52,79 +52,101 @@ print("reshape x:", x_train.shape, x_test.shape)
 
 
 
-# 2.모델
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
-
-model = Sequential()
-model.add( Conv2D(32, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
-model.add( Conv2D(16, (1,1), padding='valid') )
-model.add(MaxPooling2D(pool_size=(2,2)))
-
-model.add( Conv2D(32, (3,3), padding='same') )
-model.add( Conv2D(16, (1,1), padding='valid') )
-model.add(MaxPooling2D(pool_size=(2,2)))
-
-model.add(Flatten())
-model.add(Dense(128, activation = 'relu'))
-model.add(Dense(256, activation = 'relu'))
-model.add(Dense(512, activation = 'relu'))
-model.add(Dense(1024, activation = 'relu'))
-model.add(Dense(10, activation = 'softmax') )
-model.summary()
-
-# model.save("./save/model_test01_1.h5") # root/save 폴더 밑에 저장
 
 
-# 3. 컴파일, 훈련
-model.compile(
-    loss='categorical_crossentropy',
-    optimizer='adam',
-    metrics=['accuracy']
-    )
-
-from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
-early_stopping = EarlyStopping(
-    monitor='loss',
-    patience=50,
-    mode='auto',
-    verbose=2)
-
-model.fit(x_train, y_train,
-    epochs=1000,
-    batch_size=128,
-    verbose=2,
-    validation_split=0.2,
-    callbacks=[early_stopping]) # 0=로그 출력하지 않기, 1=막대그래프, 2=손실 정보
-
-
-# 4. 평가, 예측
-loss, accuracy = model.evaluate(x_test, y_test, batch_size=128)
-print("loss: ", loss)
-print("accuracy: ", accuracy)
-
-y_predict = model.predict(x_test)
-y_predict = np.argmax(y_predict, axis=1)
-print("y_predict:", y_predict)
-
-
-
-# 사용자정의 RMSE 함수
 from sklearn.metrics import mean_squared_error
 def RMSE(y_test, y_predict):
     return np.sqrt(mean_squared_error(y_test, y_predict))
 
-print("RMSE:", RMSE(y_test, y_predict))
-
-
-
-# 사용자정의 R2 함수
-# 사이킷런의 metrics에서 r2_score를 불러온다
 from sklearn.metrics import r2_score
-r2 = r2_score(y_test, y_predict)
-print("R2:", r2)
+
+
+
+modelpath = './model/keras53-1-06-0.0444.hdf5'
+model_save_path = './save/keras53_1_mnist_model.h5'
+weights_save_path = './save/keras53_1_mnist_weights.h5'
+
+# 2.모델1=======================================================
+from tensorflow.keras.models import load_model
+model1 = load_model(model_save_path)
+
+result1 = model1.evaluate(x_test, y_test, batch_size=128)
+
+y_predict1 = model1.predict(x_test)
+y_predict1 = np.argmax(y_predict1, axis=1)
+y_recovery = np.argmax(y_test, axis=1)
+print("RMSE_1:", RMSE(y_recovery, y_predict1))
+
+r2_1 = r2_score(y_recovery, y_predict1)
+print("R2_1:", r2_1)
+# 2.모델1 끝=======================================================
 
 
 
 
 
+# 2.모델2=======================================================
+from tensorflow.keras.models import load_model
+model2 = load_model(modelpath)
+
+result2 = model2.evaluate(x_test, y_test, batch_size=128)
+
+y_predict2 = model2.predict(x_test)
+y_predict2 = np.argmax(y_predict2, axis=1)
+y_recovery = np.argmax(y_test, axis=1)
+print("RMSE_2:", RMSE(y_recovery, y_predict2))
+
+r2_2 = r2_score(y_recovery, y_predict2)
+print("R2_2:", r2_2)
+# 2.모델2 끝=======================================================
+
+
+
+
+
+# 2.모델3
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
+model3 = Sequential()
+model3.add( Conv2D(32, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
+model3.add( Conv2D(16, (1,1), padding='valid') )
+model3.add(MaxPooling2D(pool_size=(2,2)))
+
+model3.add( Conv2D(32, (3,3), padding='same') )
+model3.add( Conv2D(16, (1,1), padding='valid') )
+model3.add(MaxPooling2D(pool_size=(2,2)))
+
+model3.add(Flatten())
+model3.add(Dense(1024, activation = 'relu'))
+model3.add(Dense(512, activation = 'relu'))
+model3.add(Dense(256, activation = 'relu'))
+model3.add(Dense(128, activation = 'relu'))
+model3.add(Dense(10, activation = 'softmax') )
+model3.summary()
+
+# 3. 컴파일, 훈련
+model3.compile(
+    loss='categorical_crossentropy',
+    optimizer='adam',
+    metrics=['accuracy'])
+
+model3.load_weights(weights_save_path)
+
+result3 = model3.evaluate(x_test, y_test, batch_size=128)
+
+y_predict = model3.predict(x_test)
+y_predict = np.argmax(y_predict, axis=1)
+y_recovery = np.argmax(y_test, axis=1)
+print("RMSE_3:", RMSE(y_recovery, y_predict))
+
+r2_3 = r2_score(y_recovery, y_predict)
+print("R2_3:", r2_3)
+
+# 2.모델3 끝=======================================================
+
+print("result1:", result1)
+print("result2:", result2)
+print("result3:", result3)
+# result1: [0.06328283995389938, 0.9912999868392944]
+# result2: [0.03977067396044731, 0.9887999892234802]
+# result3: [0.06328283995389938, 0.9912999868392944]
