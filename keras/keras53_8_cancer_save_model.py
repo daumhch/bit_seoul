@@ -61,13 +61,17 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 
 model = Sequential()
-model.add(Dense(int(x_train.shape[1]/1), activation='relu', input_shape=(x_train.shape[1],) ))
-model.add(Dense(int(x_train.shape[1]/2), activation='relu'))
-model.add(Dense(int(x_train.shape[1]/3), activation='relu'))
-model.add(Dense(int(x_train.shape[1]/4), activation='relu'))
-model.add(Dense(int(x_train.shape[1]/5), activation='relu'))
-model.add(Dense(int(x_train.shape[1]/6), activation='relu'))
-model.add(Dense(2, activation='sigmoid'))
+model.add(Dense(512, activation='relu', input_shape=(x_train.shape[1],) ))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(256, activation='relu'))
+model.add(Dense(256, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(128, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(2, activation='sigmoid') )
 model.summary()
 
 

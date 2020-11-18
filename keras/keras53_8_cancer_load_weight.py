@@ -62,7 +62,7 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './model/keras53-8-66-0.0112.hdf5'
+modelpath = './model/keras53-8-11-0.0097.hdf5'
 model_save_path = "./save/keras53_8_cancer_model.h5"
 weights_save_path = './save/keras53_8_cancer_weights.h5'
 
@@ -108,14 +108,19 @@ print("R2_2:", r2_2)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten
 model3 = Sequential()
-model3.add(Dense(int(x_train.shape[1]/1), activation='relu', input_shape=(x_train.shape[1],) ))
-model3.add(Dense(int(x_train.shape[1]/2), activation='relu'))
-model3.add(Dense(int(x_train.shape[1]/3), activation='relu'))
-model3.add(Dense(int(x_train.shape[1]/4), activation='relu'))
-model3.add(Dense(int(x_train.shape[1]/5), activation='relu'))
-model3.add(Dense(int(x_train.shape[1]/6), activation='relu'))
-model3.add(Dense(2, activation='sigmoid'))
+model3.add(Dense(512, activation='relu', input_shape=(x_train.shape[1],) ))
+model3.add(Dense(512, activation='relu'))
+model3.add(Dense(512, activation='relu'))
+model3.add(Dense(512, activation='relu'))
+model3.add(Dense(256, activation='relu'))
+model3.add(Dense(256, activation='relu'))
+model3.add(Dense(128, activation='relu'))
+model3.add(Dense(128, activation='relu'))
+model3.add(Dense(64, activation='relu'))
+model3.add(Dense(64, activation='relu'))
+model3.add(Dense(2, activation='sigmoid') )
 model3.summary()
+
 
 # 3. 컴파일, 훈련
 model3.compile(
@@ -140,6 +145,21 @@ print("R2_3:", r2_3)
 print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
-result1: [0.00014916602231096476, 0.004148771986365318]
-result2: [0.0012311177561059594, 0.015218174085021019]
-result3: [0.003601651405915618, 1.0] 
+# result1: [0.017543859779834747, 0.017544187605381012]
+# result2: [0.052628643810749054, 0.05269017815589905]
+# result3: [0.28277385234832764, 0.9824561476707458]
+
+
+print("RMSE_1:", RMSE(y_recovery, y_predict1))
+print("R2_1:", r2_1)
+print("RMSE_2:", RMSE(y_recovery, y_predict2))
+print("R2_2:", r2_2)
+print("RMSE_3:", RMSE(y_recovery, y_predict))
+print("R2_3:", r2_3)
+
+# RMSE_1: 0.13245323570650439
+# R2_1: 0.9246031746031746
+# RMSE_2: 0.22941573387056177
+# R2_2: 0.7738095238095237
+# RMSE_3: 0.13245323570650439
+# R2_3: 0.9246031746031746
