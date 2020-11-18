@@ -1012,5 +1012,23 @@ train_test_split
 
 
 
+model만 save 할 수 있지만,
+fit 하고나서 save 하면, 가중치까지 save 된다
+= 동일한 결과를 얻을 수 있다
 
+
+
+#1
+
+#2 모델
+save_model -> 모델만 저장
+load_model -> #3에서 저장한거면 fit이 2번 동작 
+
+#3 컴파일 훈련
+save_model -> 모델+가중치까지
+load_model -> #3에서 저장한거면 compile+fit까지 모두 되고
+              #2에서 저장한거면 compile+fit을 해줘야 한다
+save_weight -> 가중치만 저장
+
+#4 
 
