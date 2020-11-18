@@ -984,3 +984,33 @@ DNN과 LSTM을 올려라
 
 
 
+201118
+어제 한 모델들은 80~90%는 되어야 한다
+그렇게 되도록 하이퍼 파라미터 튜닝을 해놓자
+
+
+        회귀      |                 분류
+---------------------------------------------------
+결과가 linear     |      다중분류            |     이중분류
+값(실수)가 나온다  | 결과가 여러개            | 결과가 홀짝
+                 | activation = 'softmax'   | activation = 'sigmoid'
+                 | loss='categorical_crossentropy' | loss='bianry_crossentropy'
+
+
+
+### ㅛ
+
+
+
+데이터 전처리
+
+Scaling
+
+train_test_split
+
+
+
+
+
+
+

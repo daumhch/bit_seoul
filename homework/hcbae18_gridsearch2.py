@@ -102,7 +102,7 @@ from sklearn.metrics import log_loss, make_scorer
 
 model = KerasRegressor(build_fn=create_model, verbose=1)
 
-batch_size = [128, 256, 512]
+batch_size = [128, 256, 512, 1024]
 param_grid = dict(batch_size=batch_size, epochs=[1000])
 grid = GridSearchCV(
     estimator=model, 

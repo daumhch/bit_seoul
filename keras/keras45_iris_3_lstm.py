@@ -2,53 +2,30 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
 
-# 당뇨병 관련 데이터
 
-
-'''
-x
-442 행 10 열 
-Age
-Sex
-Body mass index
-Average blood pressure
-S1
-S2
-S3
-S4
-S5
-S6
-
-y
-442 행 1 열 
-target: a quantitative measure of disease progression one year after baseline
-'''
-
-
+# 다중분류
 import numpy as np
-from sklearn.datasets import load_diabetes
-datasets = load_diabetes()
+from sklearn.datasets import load_iris
+
+# 꽃 잎과 꽃 줄기를 보고 꽃을 판단하는 것
+datasets = load_iris()
 x = datasets.data
 y = datasets.target
 
-print("x.shape:",x.shape) # (506, 13)
-print("y.shape:",y.shape) # (506, )
-print("y[0:10]:", y[0:10])
+print("x.shape:",x.shape)
+print("y.shape:",y.shape)
+
+# OneHotEncoding
+from tensorflow.keras.utils import to_categorical
+y = to_categorical(y)
 
 
-# 구현 순서
-# 데이터 전처리
-# 모델
-# 컴파일 훈련
-# 평가 예측
-# 회귀는 RMSE와 R2
 
 # 데이터 전처리
 from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
-scaler = MinMaxScaler()
+scaler = StandardScaler()
 scaler.fit(x) # fit하고
 x = scaler.transform(x) # 사용할 수 있게 바꿔서 저장하자
-
 
 
 
@@ -65,25 +42,24 @@ print("after x_test.shape",x_test.shape)
 print("after x_val.shape",x_val.shape)
 
 
-
 # reshape?
-# x가 2차원이라, CNN을 위해 3차원으로 reshape
-x_train = x_train.reshape(x_train.shape[0],x_train.shape[1],1,1)
-x_test = x_test.reshape(x_test.shape[0],x_train.shape[1],1,1)
-x_val = x_val.reshape(x_val.shape[0],x_train.shape[1],1,1)
+# x가 2차원이라, LSTM을 위해 3차원으로 reshape
+x_train = x_train.reshape(x_train.shape[0],x_train.shape[1],1)
+x_test = x_test.reshape(x_test.shape[0],x_train.shape[1],1)
+x_val = x_val.reshape(x_val.shape[0],x_train.shape[1],1)
 print("reshape x:", x_train.shape, x_test.shape, x_val.shape)
+
 
 
 # 2. 모델 구성
 from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
-model = Sequential()
-model.add(Conv2D(8, (x_train.shape[1]), padding='same', input_shape=(x_train.shape[1],1,1) ))
+from tensorflow.keras.layers import Dense, LSTM
 
-model.add(Flatten())
-model.add(Dense(8, activation = 'relu'))
-model.add(Dense(8, activation = 'relu'))
-model.add(Dense(1))
+model = Sequential()
+model.add(LSTM(32, activation='relu', input_shape=(x_train.shape[1],x_train.shape[2]) ))
+model.add(Dense(64, activation='relu'))
+model.add(Dense(8, activation='relu'))
+model.add(Dense(3, activation='softmax') )
 model.summary()
 
 
@@ -91,38 +67,41 @@ model.summary()
 
 # 3. 컴파일, 훈련
 model.compile(
-    loss='mse',
+    loss='categorical_crossentropy',
     optimizer='adam',
-    metrics=['mae'])
+    metrics=['accuracy'])
 
 
-from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
-early_stopping = EarlyStopping(
-    monitor='loss',
-    patience=100,
-    mode='auto',
-    verbose=2)
+
+# from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
+# early_stopping = EarlyStopping(
+#     monitor='accuracy',
+#     patience=50,
+#     mode='auto',
+#     verbose=2)
 
 history = model.fit(x_train, y_train,
-    epochs=10000,
-    verbose=0,
+    epochs=500,
+    verbose=1,
     validation_data=(x_val,y_val),
-    callbacks=[early_stopping],
-    batch_size=512)
+    # callbacks=[early_stopping],
+    batch_size=128)
 
 
 
 # 4. 평가 및 예측
-loss, mae = model.evaluate(x_test, y_test, batch_size=512)
-print("loss: ", loss) # 이건 기본으로 나오고
-print("mae: ", mae)
-
+loss, accuracy = model.evaluate(x_test, y_test, batch_size=128)
+print("loss: ", loss)
+print("accuracy: ", accuracy)
 
 
 y_predict = model.predict(x_test) # 평가 데이터 다시 넣어 예측값 만들기
-# print("y_predict:\n", y_test)
-# print("y_predict:\n", y_predict)
-print("y_predict.shape:\n", y_predict.shape)
+y_test = np.argmax(y_test, axis=1)
+y_predict = np.argmax(y_predict, axis=1)
+print("y_test:\n", y_test)
+print("y_predict:\n", y_predict)
+
+
 
 # 사용자정의 RMSE 함수
 from sklearn.metrics import mean_squared_error
@@ -145,23 +124,26 @@ print("R2:", r2)
 import matplotlib.pyplot as plt
 #모델 시각
 fig, loss_ax = plt.subplots()
- 
 acc_ax = loss_ax.twinx()
- 
 loss_ax.plot(history.history['loss'], 'y', label='train loss')
 loss_ax.plot(history.history['val_loss'], 'r', label='val loss')
- 
-acc_ax.plot(history.history['mae'], 'b', label='train mae')
-acc_ax.plot(history.history['val_mae'], 'g', label='val mae')
- 
+acc_ax.plot(history.history['accuracy'], 'b', label='train accuracy')
+acc_ax.plot(history.history['val_accuracy'], 'g', label='val accuracy')
 loss_ax.set_xlabel('epoch')
 loss_ax.set_ylabel('loss')
-acc_ax. set_ylabel('mae')
- 
+acc_ax. set_ylabel('accuracy')
 loss_ax.legend(loc='upper left')
 acc_ax.legend(loc='lower left')
- 
+
+plt.title("keras45_iris_3_lstm")
 plt.show()
 model.summary()
 
-print("keras44_diabetes_2_cnn end")
+
+
+
+print("keras45_iris_3_lstm end")
+
+
+
+
