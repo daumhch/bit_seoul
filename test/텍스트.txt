@@ -1032,3 +1032,23 @@ save_weight -> 가중치만 저장
 
 #4 
 
+
+체크포인트에 저장된 것도, 모델+가중치다
+
+accuracy는 조금 달라질 수 있지만,
+진짜 기준은 loss 및 val_loss다
+
+
+
+### 숙제
+keras49의 7개 파일에,
+model1 = 모델 로드하고 
+model2 = 체크포인트 사용해서
+model3 = 가중치 로드
+
+result1 = model1의 결과
+
+예상
+model2 성능 > model1 = model3
+
+
