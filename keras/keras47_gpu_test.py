@@ -30,7 +30,6 @@ with tf.device('/gpu:0'):
         epochs=3, 
         batch_size=16)
 
-    model.save('./save/my_model.h5')
 # end of with tf.device
 
 end1 = datetime.datetime.now()
@@ -52,7 +51,6 @@ with tf.device('/cpu:0'):
     model.fit(x,y,
         epochs=3, 
         batch_size=16)
-    model.save('./save/my_model.h5')
 # end of with tf.device
 
 end2 = datetime.datetime.now()
