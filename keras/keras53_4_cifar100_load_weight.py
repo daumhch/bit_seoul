@@ -63,7 +63,7 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './model/keras53-4-24-2.1742.hdf5'
+modelpath = './save/keras53_4_24_2.0375.hdf5'
 model_save_path = "./save/keras53_4_cifar100_model.h5"
 weights_save_path = './save/keras53_4_cifar100_weights.h5'
 
@@ -109,28 +109,31 @@ print("R2_2:", r2_2)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 model3 = Sequential()
-model3.add( Conv2D(32, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
-model3.add(Dropout(0.2))
-
-model3.add( Conv2D(32, (3,3), padding='same', activation='relu') )
+model3.add( Conv2D(64, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
+model3.add( Conv2D(64, (3,3), padding='same', activation='relu') )
 model3.add(MaxPooling2D(pool_size=(2,2)))
 model3.add(Dropout(0.2))
 
-model3.add( Conv2D(64, (3,3), padding='same', activation='relu') )
-model3.add( Conv2D(64, (3,3), padding='same', activation='relu') )
+model3.add( Conv2D(128, (3,3), padding='same', activation='relu') )
+model3.add( Conv2D(128, (3,3), padding='same', activation='relu') )
 model3.add(MaxPooling2D(pool_size=(2,2)))
 model3.add(Dropout(0.3))
 
-model3.add( Conv2D(128, (3,3), padding='same', activation='relu') )
-model3.add( Conv2D(128, (3,3), padding='same', activation='relu') )
+model3.add( Conv2D(256, (3,3), padding='same', activation='relu') )
+model3.add( Conv2D(256, (3,3), padding='same', activation='relu') )
 model3.add(MaxPooling2D(pool_size=(2,2)))
 model3.add(Dropout(0.4))
 
+model3.add( Conv2D(512, (3,3), padding='same', activation='relu') )
+model3.add( Conv2D(512, (3,3), padding='same', activation='relu') )
+model3.add(MaxPooling2D(pool_size=(2,2)))
+model3.add(Dropout(0.5))
+
 model3.add(Flatten())
 model3.add(Dense(512, activation = 'relu'))
-model3.add(Dropout(0.2))
 model3.add(Dense(100, activation = 'softmax') )
 model3.summary()
+
 
 # 3. 컴파일, 훈련
 model3.compile(
@@ -156,8 +159,8 @@ print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
 
-# result1: [2.4097163677215576, 0.47699999809265137]
-# result2: [2.140023946762085, 0.46230000257492065]
-# result3: [2.4097163677215576, 0.47699999809265137]
+# result1: [2.5879650115966797, 0.5162000060081482]
+# result2: [1.99038827419281, 0.49720001220703125]
+# result3: [2.5879650115966797, 0.5162000060081482]
 
 

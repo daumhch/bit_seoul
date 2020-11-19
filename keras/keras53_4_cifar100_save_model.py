@@ -59,7 +59,7 @@ print("reshape x:", x_train.shape, x_test.shape)
 
 
 
-modelpath = './model/keras53-4-{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = './model/keras53_4_{epoch:02d}_{val_loss:.4f}.hdf5'
 model_save_path = "./save/keras53_4_cifar100_model.h5"
 weights_save_path = './save/keras53_4_cifar100_weights.h5'
 
@@ -68,26 +68,28 @@ from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Flatten, Dropout
 
 model = Sequential()
-model.add( Conv2D(32, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
-model.add(Dropout(0.2))
-
-model.add( Conv2D(32, (3,3), padding='same', activation='relu') )
+model.add( Conv2D(64, (3,3), padding='same', input_shape=(x_train.shape[1],x_train.shape[2],x_train.shape[3])) )
+model.add( Conv2D(64, (3,3), padding='same', activation='relu') )
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.2))
 
-model.add( Conv2D(64, (3,3), padding='same', activation='relu') )
-model.add( Conv2D(64, (3,3), padding='same', activation='relu') )
+model.add( Conv2D(128, (3,3), padding='same', activation='relu') )
+model.add( Conv2D(128, (3,3), padding='same', activation='relu') )
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.3))
 
-model.add( Conv2D(128, (3,3), padding='same', activation='relu') )
-model.add( Conv2D(128, (3,3), padding='same', activation='relu') )
+model.add( Conv2D(256, (3,3), padding='same', activation='relu') )
+model.add( Conv2D(256, (3,3), padding='same', activation='relu') )
 model.add(MaxPooling2D(pool_size=(2,2)))
 model.add(Dropout(0.4))
 
+model.add( Conv2D(512, (3,3), padding='same', activation='relu') )
+model.add( Conv2D(512, (3,3), padding='same', activation='relu') )
+model.add(MaxPooling2D(pool_size=(2,2)))
+model.add(Dropout(0.5))
+
 model.add(Flatten())
 model.add(Dense(512, activation = 'relu'))
-model.add(Dropout(0.2))
 model.add(Dense(100, activation = 'softmax') )
 model.summary()
 

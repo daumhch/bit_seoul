@@ -63,9 +63,9 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './model/keras53-2-22-0.5624.hdf5'
-model_save_path = "./save/keras53_2_mnist_model.h5"
-weights_save_path = './save/keras53_2_mnist_weights.h5'
+modelpath = './save/keras53_2_39_0.5823.hdf5'
+model_save_path = "./save/keras53_2_cifar10_model.h5"
+weights_save_path = './save/keras53_2_cifar10_weights.h5'
 
 # 2.모델1=======================================================
 from tensorflow.keras.models import load_model
@@ -156,8 +156,8 @@ print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
 
-# result1: [0.6665322184562683, 0.8115000128746033]
-# result2: [0.5919675230979919, 0.8070999979972839]
-# result3: [0.6665322184562683, 0.8115000128746033]
+# result1: [0.7250201106071472, 0.8130999803543091]
+# result2: [0.6283094882965088, 0.8064000010490417]
+# result3: [0.7250201106071472, 0.8130999803543091]
 
 

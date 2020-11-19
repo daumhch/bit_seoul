@@ -52,7 +52,7 @@ print("reshape x:", x_train.shape, x_test.shape)
 
 
 
-modelpath = './model/keras53-2-{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = './model/keras53_2_{epoch:02d}_{val_loss:.4f}.hdf5'
 model_save_path = "./save/keras53_2_cifar10_model.h5"
 weights_save_path = './save/keras53_2_cifar10_weights.h5'
 
@@ -108,7 +108,7 @@ model_check_point = ModelCheckpoint(
 
 model.fit(x_train, y_train,
     epochs=1000,
-    batch_size=128,
+    batch_size=512,
     verbose=1,
     validation_split=0.2,
     callbacks=[early_stopping, model_check_point])
@@ -118,7 +118,7 @@ model.save_weights(weights_save_path)
 
 
 # 4. 평가, 예측
-result3 = model.evaluate(x_test, y_test, batch_size=128)
+result3 = model.evaluate(x_test, y_test, batch_size=512)
 print("loss: ", result3[0])
 print("accuracy: ", result3[1])
 

@@ -62,7 +62,7 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './model/keras53-1-06-0.0444.hdf5'
+modelpath = './save/keras53_1_07_0.0492.hdf5'
 model_save_path = './save/keras53_1_mnist_model.h5'
 weights_save_path = './save/keras53_1_mnist_weights.h5'
 
@@ -147,6 +147,6 @@ print("R2_3:", r2_3)
 print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
-# result1: [0.06328283995389938, 0.9912999868392944]
-# result2: [0.03977067396044731, 0.9887999892234802]
-# result3: [0.06328283995389938, 0.9912999868392944]
+# result1: [0.1260603964328766, 0.9908000230789185]
+# result2: [0.03750783950090408, 0.9896000027656555]
+# result3: [0.1260603964328766, 0.9908000230789185]
