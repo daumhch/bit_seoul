@@ -30,7 +30,7 @@ print("origin y.shape:",y.shape) # (506, )
 # 1.2 train_test_split
 from sklearn.model_selection import train_test_split 
 x_train,x_test, y_train,y_test = train_test_split(
-    x, y, train_size=0.9, test_size=0.1)
+    x, y, train_size=0.9, test_size=0.1, random_state = 44)
 
 print("after x_train.shape",x_train.shape)
 print("after x_test.shape",x_test.shape)
@@ -152,11 +152,11 @@ print("R2_2:", r2_2)
 print("RMSE_3:", RMSE(y_recovery, y_predict))
 print("R2_3:", r2_3)
 
-# RMSE_1: 1.8701070120000969
-# R2_1: 0.961259780093942
-# RMSE_2: 1.9689812383497347
-# R2_2: 0.957055028360953
-# RMSE_3: 1.8701070120000969
-# R2_3: 0.961259780093942
+# RMSE_1: 1.7804986086989867
+# R2_1: 0.9553803242665257
+# RMSE_2: 1.7537161961695826
+# R2_2: 0.9567125743910392
+# RMSE_3: 1.7804986086989867
+# R2_3: 0.9553803242665257
 
 
