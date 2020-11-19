@@ -60,7 +60,7 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './model/keras53-5-131-11.9107.hdf5'
+modelpath = './save/keras53_5_284_11.2764.hdf5'
 model_save_path = "./save/keras53_5_boston_model.h5"
 weights_save_path = './save/keras53_5_boston_weights.h5'
 

@@ -53,7 +53,7 @@ print("reshape x:", x_train.shape, x_test.shape) # (135, 4, 1, 1) (15, 4, 1, 1)
 
 
 
-modelpath = './model/keras53-7-{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = './model/keras53_7_{epoch:02d}_{val_loss:.4f}.hdf5'
 model_save_path = "./save/keras53_7_iris_model.h5"
 weights_save_path = './save/keras53_7_iris_weights.h5'
 

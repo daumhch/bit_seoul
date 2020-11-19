@@ -14,10 +14,12 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 import numpy as np
 
 # 1.1 load_data
-from sklearn.datasets import load_diabetes
-datasets = load_diabetes()
-x = datasets.data
-y = datasets.target
+# npy에서 로드하니 필요 없음
+
+# npy 로드하기
+x = np.load('./data/diabetes_x.npy')
+y = np.load('./data/diabetes_y.npy')
+
 print("origin x.shape:",x.shape) # (506, 13)
 print("origin y.shape:",y.shape) # (506, )
 
@@ -140,9 +142,9 @@ print("R2_3:", r2_3)
 print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
-# result1: [1713.51220703125, 28.639341354370117]
-# result2: [2619.064208984375, 40.62339782714844]
-# result3: [1713.51220703125, 28.639341354370117]
+# result1: [2031.953125, 33.399173736572266]    
+# result2: [4044.331298828125, 48.25872802734375]
+# result3: [2031.953125, 33.399173736572266] 
 
 print("RMSE_1:", RMSE(y_recovery, y_predict1))
 print("R2_1:", r2_1)
@@ -151,11 +153,11 @@ print("R2_2:", r2_2)
 print("RMSE_3:", RMSE(y_recovery, y_predict))
 print("R2_3:", r2_3)
 
-# RMSE_1: 41.394590147106044
-# R2_1: 0.6052056233209251
-# RMSE_2: 51.176791427427545
-# R2_2: 0.3965658394011581
-# RMSE_3: 41.394590147106044
-# R2_3: 0.6052056233209251
+# RMSE_1: 45.07719323639411
+# R2_1: 0.6675792907279081
+# RMSE_2: 63.59505901143885
+# R2_2: 0.3383610131063526
+# RMSE_3: 45.07719323639411
+# R2_3: 0.6675792907279081
 
 

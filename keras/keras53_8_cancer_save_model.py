@@ -52,7 +52,7 @@ x_test = scaler.transform(x_test) # 사용할 수 있게 바꿔서 저장하자
 
 
 
-modelpath = './model/keras53-8-{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = './model/keras53_8_{epoch:02d}_{val_loss:.4f}.hdf5'
 model_save_path = "./save/keras53_8_cancer_model.h5"
 weights_save_path = './save/keras53_8_cancer_weights.h5'
 

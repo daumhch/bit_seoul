@@ -1075,6 +1075,12 @@ npy저장할 때에는
 전처리 하는 게 효율적이다
 (전처리 기법도 많고, 전처리가 제대로 된지 알 수 없으므로)
 
+### npy 저장/로드 속도 비교자료
+https://stackoverflow.com/questions/30329726/fastest-save-and-load-options-for-a-numpy-array
+
+https://stackoverflow.com/questions/9619199/best-way-to-preserve-numpy-arrays-on-disk
+
+
 
 
 

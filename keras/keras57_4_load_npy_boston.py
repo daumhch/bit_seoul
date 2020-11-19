@@ -14,10 +14,11 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 import numpy as np
 
 # 1.1 load_data
-from sklearn.datasets import load_diabetes
-datasets = load_diabetes()
-x = datasets.data
-y = datasets.target
+# npy에서 로드하니 필요 없음
+# npy 로드하기
+x = np.load('./data/boston_x.npy')
+y = np.load('./data/boston_y.npy')
+
 print("origin x.shape:",x.shape) # (506, 13)
 print("origin y.shape:",y.shape) # (506, )
 
@@ -60,9 +61,9 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './save/keras53_6_29_2997.7808.hdf5'
-model_save_path = "./save/keras53_6_diabetes_model.h5"
-weights_save_path = './save/keras53_6_diabetes_weights.h5'
+modelpath = './save/keras53_5_284_11.2764.hdf5'
+model_save_path = "./save/keras53_5_boston_model.h5"
+weights_save_path = './save/keras53_5_boston_weights.h5'
 
 # 2.모델1=======================================================
 from tensorflow.keras.models import load_model
@@ -140,9 +141,9 @@ print("R2_3:", r2_3)
 print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
-# result1: [1713.51220703125, 28.639341354370117]
-# result2: [2619.064208984375, 40.62339782714844]
-# result3: [1713.51220703125, 28.639341354370117]
+# result1: [3.4972991943359375, 0.9129324555397034]
+# result2: [3.876885414123535, 1.0072880983352661]
+# result3: [3.4972991943359375, 0.9129324555397034]
 
 print("RMSE_1:", RMSE(y_recovery, y_predict1))
 print("R2_1:", r2_1)
@@ -151,11 +152,11 @@ print("R2_2:", r2_2)
 print("RMSE_3:", RMSE(y_recovery, y_predict))
 print("R2_3:", r2_3)
 
-# RMSE_1: 41.394590147106044
-# R2_1: 0.6052056233209251
-# RMSE_2: 51.176791427427545
-# R2_2: 0.3965658394011581
-# RMSE_3: 41.394590147106044
-# R2_3: 0.6052056233209251
+# RMSE_1: 1.8701070120000969
+# R2_1: 0.961259780093942
+# RMSE_2: 1.9689812383497347
+# R2_2: 0.957055028360953
+# RMSE_3: 1.8701070120000969
+# R2_3: 0.961259780093942
 
 

@@ -50,7 +50,7 @@ x_test = scaler.transform(x_test)
 
 
 
-modelpath = './model/keras53-5-{epoch:02d}-{val_loss:.4f}.hdf5'
+modelpath = './model/keras53_5_{epoch:02d}_{val_loss:.4f}.hdf5'
 model_save_path = "./save/keras53_5_boston_model.h5"
 weights_save_path = './save/keras53_5_boston_weights.h5'
 

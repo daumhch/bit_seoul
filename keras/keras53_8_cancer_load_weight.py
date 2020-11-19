@@ -62,7 +62,7 @@ from sklearn.metrics import r2_score
 
 
 
-modelpath = './model/keras53-8-11-0.0097.hdf5'
+modelpath = './save/keras53_8_76_0.0270.hdf5'
 model_save_path = "./save/keras53_8_cancer_model.h5"
 weights_save_path = './save/keras53_8_cancer_weights.h5'
 
@@ -145,9 +145,9 @@ print("R2_3:", r2_3)
 print("result1:", result1)
 print("result2:", result2)
 print("result3:", result3)
-# result1: [0.017543859779834747, 0.017544187605381012]
-# result2: [0.052628643810749054, 0.05269017815589905]
-# result3: [0.28277385234832764, 0.9824561476707458]
+# result1: [1.9002008002644288e-06, 0.0001822795020416379]
+# result2: [8.003606490092352e-05, 0.0016799158183857799]
+# result3: [0.0001973948092199862, 1.0]
 
 
 print("RMSE_1:", RMSE(y_recovery, y_predict1))
@@ -157,9 +157,9 @@ print("R2_2:", r2_2)
 print("RMSE_3:", RMSE(y_recovery, y_predict))
 print("R2_3:", r2_3)
 
-# RMSE_1: 0.13245323570650439
-# R2_1: 0.9246031746031746
-# RMSE_2: 0.22941573387056177
-# R2_2: 0.7738095238095237
-# RMSE_3: 0.13245323570650439
-# R2_3: 0.9246031746031746
+# RMSE_1: 0.0
+# R2_1: 1.0
+# RMSE_2: 0.0
+# R2_2: 1.0
+# RMSE_3: 0.0
+# R2_3: 1.0
