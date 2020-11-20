@@ -26,9 +26,7 @@ x_test = x_test.astype('float32')/255.
 
 
 # 1.4 reshape
-x_train = x_train.reshape(x_train.shape[0],x_train.shape[1]*x_train.shape[2],1)
-x_test = x_test.reshape(x_test.shape[0],x_train.shape[1]*x_train.shape[2],1)
-print("reshape x:", x_train.shape, x_test.shape)
+# 원본이 3차원이니, 별도의 reshape을 하지 않는다
 
 
 
@@ -40,16 +38,30 @@ weights_save_path = './save/keras61_1_mnist_weights.h5'
 # 2.모델
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Conv1D, Flatten
-from tensorflow.keras.layers import MaxPooling1D
+from tensorflow.keras.layers import MaxPooling1D, Dropout
 
 model = Sequential()
-model.add(Conv1D(75, 3, input_shape=(x_train.shape[1]*x_train.shape[2],1)) )
+model.add(Conv1D(64, 3, 
+                padding='same',
+                strides=1,
+                activation='relu',
+                input_shape=(x_train.shape[1],x_train.shape[2])) )
+model.add(MaxPooling1D(pool_size=2, padding='valid', strides=2))
+model.add(Dropout(0.2))
+
+model.add(Conv1D(128, 3, padding='same', strides=1, activation='relu') )
+model.add(MaxPooling1D(pool_size=2, padding='valid', strides=2))
+model.add(Dropout(0.3))
+
+model.add(Conv1D(256, 3, padding='same', strides=1, activation='relu') )
+model.add(MaxPooling1D(pool_size=2, padding='valid', strides=2))
+model.add(Dropout(0.4))
+
 model.add(Flatten())
-model.add(Dense(180, activation = 'relu'))
-model.add(Dense(150, activation = 'relu'))
-model.add(Dense(110, activation = 'relu'))
-model.add(Dense(60, activation = 'relu'))
-model.add(Dense(10, activation = 'relu'))
+model.add(Dense(128, activation = 'relu'))
+model.add(Dense(256, activation = 'relu'))
+model.add(Dense(512, activation = 'relu'))
+model.add(Dense(1024, activation = 'relu'))
 model.add(Dense(10, activation = 'softmax'))
 model.summary()
 

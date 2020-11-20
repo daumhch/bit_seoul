@@ -40,17 +40,27 @@ weights_save_path = './save/keras61_3_fashion_weights.h5'
 # 2.모델
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, LSTM, Conv1D, Flatten
-from tensorflow.keras.layers import MaxPooling1D
+from tensorflow.keras.layers import MaxPooling1D, Dropout
 
 model = Sequential()
-model.add(Conv1D(75, 3, input_shape=(x_train.shape[1]*x_train.shape[2],1)) )
+model.add(Conv1D(64, 9, input_shape=(x_train.shape[1]*x_train.shape[2],1)) )
+model.add(Conv1D(64, 9, padding='same', strides=1, activation='relu') )
+model.add(MaxPooling1D(pool_size=2, padding='valid', strides=2))
+model.add(Dropout(0.2))
+
+model.add(Conv1D(128, 9, padding='same', strides=1, activation='relu') )
+model.add(Conv1D(128, 9, padding='same', strides=1, activation='relu') )
+model.add(MaxPooling1D(pool_size=2, padding='valid', strides=2))
+model.add(Dropout(0.3))
+
+model.add(Conv1D(256, 9, padding='same', strides=1, activation='relu') )
+model.add(Conv1D(256, 9, padding='same', strides=1, activation='relu') )
+model.add(MaxPooling1D(pool_size=2, padding='valid', strides=2))
+model.add(Dropout(0.4))
+
 model.add(Flatten())
-model.add(Dense(180, activation = 'relu'))
-model.add(Dense(150, activation = 'relu'))
-model.add(Dense(110, activation = 'relu'))
-model.add(Dense(60, activation = 'relu'))
-model.add(Dense(10, activation = 'relu'))
-model.add(Dense(10, activation = 'softmax'))
+model.add(Dense(64, activation = 'relu'))
+model.add(Dense(10, activation = 'softmax') )
 model.summary()
 
 
