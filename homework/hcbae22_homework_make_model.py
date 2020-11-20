@@ -25,6 +25,9 @@ def split_x2(seq, size):
 import numpy as np
 samsung_data = np.load('./data/samsung_data.npy', allow_pickle=True).astype('float32')
 samsung_data = split_x2(samsung_data, view_size)
+samsung_pred = samsung_data[-1]
+# print("samsung_pred:\n",samsung_pred)
+
 samsung_data = samsung_data[:-1]
 # print("type(samsung_data):",type(samsung_data))
 # print("samsung_data:",samsung_data)
@@ -37,6 +40,9 @@ samsung_target = samsung_target[view_size:]
 
 bitcom_data = np.load('./data/bitcom_data.npy', allow_pickle=True).astype('float32')
 bitcom_data = split_x2(bitcom_data, view_size)
+bitcom_pred = bitcom_data[-1]
+# print("bitcom_pred:\n",bitcom_pred)
+
 bitcom_data = bitcom_data[:-1]
 # print("type(bitcom_data):",type(bitcom_data))
 # print("bitcom_data:",bitcom_data)
@@ -102,8 +108,10 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 samsung_scaler = StandardScaler()
 samsung_data_train = scaling3D(samsung_data_train, samsung_scaler)
 samsung_data_test = transform3D(samsung_data_test, samsung_scaler)
+
 print("after scaled samsung_data_train.shape:",samsung_data_train.shape)
 print("after scaled samsung_data_test.shape:",samsung_data_test.shape)
+
 # print("after scaled samsung_data_train[0]:",samsung_data_train[0])
 # print("after scaled samsung_data_test[0]:",samsung_data_test[0])
 
@@ -193,8 +201,11 @@ total_model.fit([samsung_data_train, bitcom_data_train],
     samsung_target_train,
     epochs=1000, # 훈련 횟수
     batch_size=128, # 훈련 데이터단위
+    verbose=1,
     validation_split=0.2,
-    verbose=1)
+    callbacks=[early_stopping,
+    model_check_point
+    ])
 
 total_model.save(model_save_path)
 total_model.save_weights(weights_save_path)
@@ -207,7 +218,7 @@ print("loss: ", result[0])
 print("mae: ", result[1])
 
 y_predict = total_model.predict([samsung_data_test, bitcom_data_test])
-print("y_predict:", y_predict)
+# print("y_predict:", y_predict)
 
 
 
@@ -229,6 +240,18 @@ print("R2:", r2)
 
 
 
+# predict
+samsung_pred = samsung_pred.reshape(1, samsung_pred.shape[0],samsung_pred.shape[1])
+samsung_pred = transform3D(samsung_pred, samsung_scaler)
+samsung_pred = samsung_pred.reshape(1, samsung_pred.shape[1]*samsung_pred.shape[2],1)
 
+bitcom_pred = bitcom_pred.reshape(1, bitcom_pred.shape[0],bitcom_pred.shape[1])
+bitcom_pred = transform3D(bitcom_pred, bitcom_scaler)
+bitcom_pred = bitcom_pred.reshape(1, bitcom_pred.shape[1]*bitcom_pred.shape[2],1)
+print("samsung_pred.shape:",samsung_pred.shape)
+print("bitcom_pred.shape:",bitcom_pred.shape)
+
+samsung_predict_today = total_model.predict([samsung_pred, bitcom_pred])
+print("samsung_predict_today:", int(samsung_predict_today))
 
 
