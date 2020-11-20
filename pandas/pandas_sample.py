@@ -24,7 +24,12 @@ df2 = pd.DataFrame(data2,
                     index=['A', 'B', 'C', 'D', 'E'],
                     columns=['가','나','다','라'])
 print(df2)
-
+#    가   나   다   라
+# A   1   2   3   4
+# B   5   6   7   8
+# C   9  10  11  12
+# D  13  14  15  16
+# E  17  18  19  20
 
 
 df3 = pd.DataFrame(np.array([[1,2,3],[4,5,6]]))

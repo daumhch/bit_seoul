@@ -104,7 +104,7 @@ print("header=1, index_col=1 datasets\n",datasets)
 '''
 
 print(datasets.head()) # 위에서부터 5개만 보여줌
-print(datasets.tail()) # 위에서부터 5개만 보여줌
+print(datasets.tail()) # 아래에서부터 5개만 보여줌
 print(type(datasets))
 
 aaa = datasets.to_numpy()
