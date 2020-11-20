@@ -105,28 +105,28 @@ print('kosdaq_target.shape',kosdaq_target.shape)
 # 1.2 train_test_split
 from sklearn.model_selection import train_test_split 
 samsung_data_train,samsung_data_test, samsung_target_train,samsung_target_test = train_test_split(
-    samsung_data, samsung_target, train_size=0.9, test_size=0.1, random_state = 44)
+    samsung_data, samsung_target, train_size=0.8, test_size=0.2, random_state = 44)
 # print("after samsung_data_train.shape:\n",samsung_data_train.shape)
 # print("after samsung_data_test.shape:\n",samsung_data_test.shape)
 # print("samsung_data_train[0]:\n",samsung_data_train[0])
 # print("samsung_data_test[0]:\n",samsung_data_test[0])
 
 bitcom_data_train,bitcom_data_test, bitcom_target_train,bitcom_target_test = train_test_split(
-    bitcom_data, bitcom_target, train_size=0.9, test_size=0.1, random_state = 44)
+    bitcom_data, bitcom_target, train_size=0.8, test_size=0.2, random_state = 44)
 # print("after bitcom_data_train.shape:\n",bitcom_data_train.shape)
 # print("after bitcom_data_test.shape:\n",bitcom_data_test.shape)
 # print("bitcom_data_train[0]:\n",bitcom_data_train[0])
 # print("bitcom_data_test[0]:\n",bitcom_data_test[0])
 
 gold_data_train,gold_data_test, gold_target_train,gold_target_test = train_test_split(
-    gold_data, gold_target, train_size=0.9, test_size=0.1, random_state = 44)
+    gold_data, gold_target, train_size=0.8, test_size=0.2, random_state = 44)
 # print("after gold_data_train.shape:\n",gold_data_train.shape)
 # print("after gold_data_test.shape:\n",gold_data_test.shape)
 # print("gold_data_train[0]:\n",gold_data_train[0])
 # print("gold_data_test[0]:\n",gold_data_test[0])
 
 kosdaq_data_train,kosdaq_data_test, kosdaq_target_train,kosdaq_target_test = train_test_split(
-    kosdaq_data, kosdaq_target, train_size=0.9, test_size=0.1, random_state = 44)
+    kosdaq_data, kosdaq_target, train_size=0.8, test_size=0.2, random_state = 44)
 # print("after kosdaq_data_train.shape:\n",kosdaq_data_train.shape)
 # print("after kosdaq_data_test.shape:\n",kosdaq_data_test.shape)
 # print("kosdaq_data_train[0]:\n",kosdaq_data_train[0])
@@ -214,108 +214,12 @@ print("after reshape x:", kosdaq_data_train.shape, kosdaq_data_test.shape)
 
 
 
-modelpath = './model/hcbae22_{epoch:02d}_{val_loss:.4f}.hdf5'
-model_save_path = "./save/hcbae22_model.h5"
-weights_save_path = './save/hcbae22_weights.h5'
-
-
-
-# model을 채우기 위해 폴더를 비우자
-def remove_file(path):
-    for file in os.scandir(path):
-        os.unlink(file.path)
-remove_file('./model')
-
-
-
+modelpath = './save/hcbae22_823_1166773.1250.hdf5'
 
 # 2.모델
-from tensorflow.keras.models import Sequential, Model
-from tensorflow.keras.layers import Dense, Input
-from tensorflow.keras.layers import Conv2D, Flatten
-from tensorflow.keras.layers import MaxPooling2D, Dropout
-
-def custom_model(model, node):
-    temp = Conv2D(node, (3,3), padding='same', activation='relu')(model)
-    temp = Conv2D(node/2, (1,1), padding='valid', activation='relu')(temp)
-    temp = Dropout(0.2)(temp)
-    # temp = Conv2D(node*2, (3,3), padding='same', activation='relu')(temp)
-    # temp = Conv2D(node, (1,1), padding='valid', activation='relu')(temp)
-    # temp = Dropout(0.3)(temp)
-    # temp = Conv2D(node*4, (3,3), padding='same', activation='relu')(temp)
-    # temp = Conv2D(node*2, (1,1), padding='valid', activation='relu')(temp)
-    # temp = Dropout(0.4)(temp)
-    # temp = Conv2D(node*8, (3,3), padding='same', activation='relu')(temp)
-    # temp = Conv2D(node*4, (1,1), padding='valid', activation='relu')(temp)
-    # temp = Dropout(0.5)(temp)
-    temp = Flatten()(temp) 
-    return temp
-
-samsung_model_input = Input(shape=(samsung_data_train.shape[1],samsung_data_train.shape[2],1))
-samsung_model_output1 = custom_model(samsung_model_input, 64)
-
-bitcom_model_input = Input(shape=(bitcom_data_train.shape[1],bitcom_data_train.shape[2],1))
-bitcom_model_output1 = custom_model(bitcom_model_input, 4)
-
-gold_model_input = Input(shape=(gold_data_train.shape[1],gold_data_train.shape[2],1))
-gold_model_output1 = custom_model(gold_model_input, 4)
-
-kosdaq_model_input = Input(shape=(kosdaq_data_train.shape[1],kosdaq_data_train.shape[2],1))
-kosdaq_model_output1 = custom_model(kosdaq_model_input, 4)
-
-
-
-from tensorflow.keras.layers import concatenate
-samsung_out = concatenate([samsung_model_output1, bitcom_model_output1,
-                       gold_model_output1, kosdaq_model_output1])
-samsung_out = Dense(768, activation='relu')(samsung_out)
-samsung_out = Dense(512, activation='relu')(samsung_out)
-samsung_out = Dense(256, activation='relu')(samsung_out)
-samsung_out = Dense(128, activation='relu')(samsung_out)
-samsung_model_output2 = Dense(1, name='output1_3')(samsung_out)
-
-
-total_model = Model(inputs=[samsung_model_input,bitcom_model_input,
-                            gold_model_input,kosdaq_model_input], 
-                    outputs=samsung_model_output2)
-total_model.summary()
-
-
 # 3. 컴파일, 훈련
-total_model.compile(
-    loss='mse',
-    optimizer='adam',
-    metrics=['mae'])
-
-from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
-early_stopping = EarlyStopping(
-    monitor='val_loss',
-    patience=50,
-    mode='auto',
-    verbose=2)
-
-from tensorflow.keras.callbacks import ModelCheckpoint # 모델 체크 포인트
-model_check_point = ModelCheckpoint(
-    filepath=modelpath,
-    monitor='val_loss',
-    save_best_only=True,
-    mode='auto')
-
-#훈련, 일단 x_train, y_train 입력하고
-hist = total_model.fit([samsung_data_train, bitcom_data_train,
-                         gold_data_train, kosdaq_data_train], 
-                        samsung_target_train,
-                        epochs=1000, # 훈련 횟수
-                        batch_size=512, # 훈련 데이터단위
-                        verbose=1,
-                        validation_split=0.2,
-                        callbacks=[early_stopping,
-                        model_check_point
-                        ])
-
-total_model.save(model_save_path)
-total_model.save_weights(weights_save_path)
-
+from tensorflow.keras.models import load_model
+total_model = load_model(modelpath)
 total_model.summary()
 
 # 4. 평가, 예측
@@ -329,11 +233,11 @@ print("mae: ", result[1])
 
 y_predict = total_model.predict([samsung_data_test, bitcom_data_test,
                                 gold_data_test, kosdaq_data_test])
-# print("y_predict:", y_predict)
-
 
 
 y_recovery = samsung_target_test
+print("y_test:\n", y_recovery)
+print("y_predict:\n", y_predict)
 
 # 사용자정의 RMSE 함수
 from sklearn.metrics import mean_squared_error
@@ -382,28 +286,22 @@ print("samsung_predict_today:", int(samsung_predict_today))
 
 
 
+
+
 # 시각화
 import matplotlib.pyplot as plt
 
 plt.figure(figsize=(10,6)) # 단위는 찾아보자
 
-plt.subplot(2,1,1) # 2장 중에 첫 번째
-plt.plot(hist.history['loss'], marker='.', c='red', label='loss')
-plt.plot(hist.history['val_loss'], marker='.', c='blue', label='val_loss')
+plt.subplot(1,1,1) # 2장 중에 첫 번째
+plt.plot(y_recovery, marker='.', c='red', label='y_recovery')
+plt.plot(y_predict, marker='.', c='blue', label='y_predict')
 plt.grid()
-plt.title('loss')
-plt.ylabel('loss')
+plt.title('y_recovery vs y_predict')
+plt.ylabel('y_predict')
 plt.xlabel('epochs')
 plt.legend(loc='upper right')
 
-plt.subplot(2,1,2) # 2장 중에 두 번째
-plt.plot(hist.history['mae'], marker='.', c='red')
-plt.plot(hist.history['val_mae'], marker='.', c='blue')
-plt.grid()
-plt.title('mae')
-plt.ylabel('mae')
-plt.xlabel('epochs')
-plt.legend(['mae', 'val_mae'])
 
 plt.show()
 
