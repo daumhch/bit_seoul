@@ -48,16 +48,16 @@ print("=========== original data ===========")
 # print(kosdaq.head())
 
 samsung = samsung[['시가','종가','저가','고가', '거래량', '기관', '외인(수량)']]
-samsung = samsung.iloc[0:626]
+samsung = samsung.iloc[1:626]
 
 bitcom = bitcom[['시가','종가','저가','고가', '금액(백만)', '기관']]
-bitcom = bitcom.iloc[0:626]
+bitcom = bitcom.iloc[1:626]
 
 gold = gold[['시가','종가','저가','고가', '거래대금(백만)']]
-gold = gold.iloc[0:626]
+gold = gold.iloc[1:626]
 
 kosdaq = kosdaq[['시가','고가','저가']]
-kosdaq = kosdaq.iloc[0:626]
+kosdaq = kosdaq.iloc[1:626]
 
 print("=========== after cutting ===========")
 # print(type(samsung))
@@ -69,9 +69,9 @@ print("=========== after cutting ===========")
 # print(type(gold))
 # print(gold.shape)
 # print(gold.head())
-print(type(kosdaq))
-print(kosdaq.shape)
-print(kosdaq.head())
+# print(type(kosdaq))
+# print(kosdaq.shape)
+# print(kosdaq.head())
 
 samsung = samsung.sort_values(['일자'],ascending=['True'])
 bitcom = bitcom.sort_values(['일자'],ascending=['True'])
