@@ -1,8 +1,15 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
+# RMSE: 1370.452
+# R2: 0.9479117827466026
+# loss:  1878137.5
+# mae:  1004.488037109375
+# RMSLE: 0.026613992
+# samsung_predict_today: 68917
+# model load~evluate~predict total time: 0:03:29.457945
 
-view_size = 3
+view_size = 10
 before_days = 3
 test_rate = 0.2
 def split_x2(seq, size):
@@ -197,27 +204,27 @@ print("after scaled kosdaq_data_test.shape:",kosdaq_data_test.shape)
 
 
 # 1.4 reshape
-samsung_data_train = samsung_data_train.reshape(samsung_data_train.shape[0],samsung_data_train.shape[1],samsung_data_train.shape[2],1)
-samsung_data_test = samsung_data_test.reshape(samsung_data_test.shape[0],samsung_data_test.shape[1],samsung_data_test.shape[2],1)
+samsung_data_train = samsung_data_train.reshape(samsung_data_train.shape[0],samsung_data_train.shape[1],samsung_data_train.shape[2])
+samsung_data_test = samsung_data_test.reshape(samsung_data_test.shape[0],samsung_data_test.shape[1],samsung_data_test.shape[2])
 print("after reshape x:", samsung_data_train.shape, samsung_data_test.shape)
 
-bitcom_data_train = bitcom_data_train.reshape(bitcom_data_train.shape[0],bitcom_data_train.shape[1],bitcom_data_train.shape[2],1)
-bitcom_data_test = bitcom_data_test.reshape(bitcom_data_test.shape[0],bitcom_data_test.shape[1],bitcom_data_test.shape[2],1)
+bitcom_data_train = bitcom_data_train.reshape(bitcom_data_train.shape[0],bitcom_data_train.shape[1],bitcom_data_train.shape[2])
+bitcom_data_test = bitcom_data_test.reshape(bitcom_data_test.shape[0],bitcom_data_test.shape[1],bitcom_data_test.shape[2])
 print("after reshape x:", bitcom_data_train.shape, bitcom_data_test.shape)
 
-gold_data_train = gold_data_train.reshape(gold_data_train.shape[0],gold_data_train.shape[1],gold_data_train.shape[2],1)
-gold_data_test = gold_data_test.reshape(gold_data_test.shape[0],gold_data_test.shape[1],gold_data_test.shape[2],1)
+gold_data_train = gold_data_train.reshape(gold_data_train.shape[0],gold_data_train.shape[1],gold_data_train.shape[2])
+gold_data_test = gold_data_test.reshape(gold_data_test.shape[0],gold_data_test.shape[1],gold_data_test.shape[2])
 print("after reshape x:", gold_data_train.shape, gold_data_test.shape)
 
-kosdaq_data_train = kosdaq_data_train.reshape(kosdaq_data_train.shape[0],kosdaq_data_train.shape[1],kosdaq_data_train.shape[2],1)
-kosdaq_data_test = kosdaq_data_test.reshape(kosdaq_data_test.shape[0],kosdaq_data_test.shape[1],kosdaq_data_test.shape[2],1)
+kosdaq_data_train = kosdaq_data_train.reshape(kosdaq_data_train.shape[0],kosdaq_data_train.shape[1],kosdaq_data_train.shape[2])
+kosdaq_data_test = kosdaq_data_test.reshape(kosdaq_data_test.shape[0],kosdaq_data_test.shape[1],kosdaq_data_test.shape[2])
 print("after reshape x:", kosdaq_data_train.shape, kosdaq_data_test.shape)
 
 
 
-modelpath = './model/hcbae22_{epoch:02d}_{val_loss:.4f}.hdf5'
-model_save_path = "./save/hcbae22_model.h5"
-weights_save_path = './save/hcbae22_weights.h5'
+modelpath = './model/hcbae22_conv1d_{epoch:02d}_{val_loss:.4f}.hdf5'
+model_save_path = "./save/hcbae22_conv1d_model.h5"
+weights_save_path = './save/hcbae22_conv1d_weights.h5'
 
 
 
@@ -228,36 +235,38 @@ def remove_file(path):
 remove_file('./model')
 
 
+import datetime
+start1 = datetime.datetime.now()
 
 
 # 2.모델
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input
-from tensorflow.keras.layers import Conv2D, Flatten, GRU
-from tensorflow.keras.layers import MaxPooling2D, Dropout
+from tensorflow.keras.layers import Conv1D, Flatten, GRU
+from tensorflow.keras.layers import MaxPooling1D, Dropout
 
 def custom_model(model, node):
-    temp = Conv2D(node, (2,2), padding='same', activation='relu')(model)
-    temp = Conv2D(node, (1,1), padding='same', activation='relu')(temp)
-    temp = MaxPooling2D(pool_size=(2,2),strides=1)(temp)
+    temp = Conv1D(node, 3, padding='same', activation='relu')(model)
+    temp = Conv1D(node, 3, padding='same', activation='relu')(temp)
+    temp = MaxPooling1D(pool_size=2,strides=2)(temp)
     temp = Dropout(0.2)(temp)
-    temp = Conv2D(node*2, (2,2), padding='same', activation='relu')(temp)
-    temp = Conv2D(node*2, (1,1), padding='same', activation='relu')(temp)
-    temp = MaxPooling2D(pool_size=(2,2),strides=1)(temp)
+    temp = Conv1D(node*2, 3, padding='same', activation='relu')(temp)
+    temp = Conv1D(node*2, 3, padding='same', activation='relu')(temp)
+    temp = MaxPooling1D(pool_size=2,strides=2)(temp)
     temp = Dropout(0.3)(temp)
     temp = Flatten()(temp)
     return temp
 
-samsung_model_input = Input(shape=(samsung_data_train.shape[1],samsung_data_train.shape[2],1))
-samsung_model_output1 = custom_model(samsung_model_input, 512)
+samsung_model_input = Input(shape=(samsung_data_train.shape[1],samsung_data_train.shape[2]))
+samsung_model_output1 = custom_model(samsung_model_input, 128)
 
-bitcom_model_input = Input(shape=(bitcom_data_train.shape[1],bitcom_data_train.shape[2],1))
+bitcom_model_input = Input(shape=(bitcom_data_train.shape[1],bitcom_data_train.shape[2]))
 bitcom_model_output1 = custom_model(bitcom_model_input, 64)
 
-gold_model_input = Input(shape=(gold_data_train.shape[1],gold_data_train.shape[2],1))
+gold_model_input = Input(shape=(gold_data_train.shape[1],gold_data_train.shape[2]))
 gold_model_output1 = custom_model(gold_model_input, 64)
 
-kosdaq_model_input = Input(shape=(kosdaq_data_train.shape[1],kosdaq_data_train.shape[2],1))
+kosdaq_model_input = Input(shape=(kosdaq_data_train.shape[1],kosdaq_data_train.shape[2]))
 kosdaq_model_output1 = custom_model(kosdaq_model_input, 64)
 
 
@@ -265,16 +274,8 @@ kosdaq_model_output1 = custom_model(kosdaq_model_input, 64)
 from tensorflow.keras.layers import concatenate
 samsung_out = concatenate([samsung_model_output1, bitcom_model_output1,
                        gold_model_output1, kosdaq_model_output1])
-# samsung_out = Dense(1024, activation='relu')(samsung_out)
-# samsung_out = Dense(1024, activation='relu')(samsung_out)
 samsung_out = Dense(512, activation='relu')(samsung_out)
 samsung_out = Dense(512, activation='relu')(samsung_out)
-# samsung_out = Dense(256, activation='relu')(samsung_out)
-# samsung_out = Dense(256, activation='relu')(samsung_out)
-# samsung_out = Dense(128, activation='relu')(samsung_out)
-# samsung_out = Dense(128, activation='relu')(samsung_out)
-# samsung_out = Dense(64, activation='relu')(samsung_out)
-# samsung_out = Dense(64, activation='relu')(samsung_out)
 samsung_model_output2 = Dense(1, name='output1_3')(samsung_out)
 
 
@@ -308,7 +309,7 @@ model_check_point = ModelCheckpoint(
 hist = total_model.fit([samsung_data_train, bitcom_data_train,
                          gold_data_train, kosdaq_data_train], 
                         samsung_target_train,
-                        epochs=1000, # 훈련 횟수
+                        epochs=10000, # 훈련 횟수
                         batch_size=512, # 훈련 데이터단위
                         verbose=1,
                         validation_split=0.25,
@@ -387,6 +388,11 @@ kosdaq_pred = transform3D(kosdaq_pred, kosdaq_scaler)
 samsung_predict_today = total_model.predict([samsung_pred, bitcom_pred,
                                             gold_pred, kosdaq_pred])
 print("samsung_predict_today:", int(samsung_predict_today))
+
+
+
+end1 = datetime.datetime.now()
+print('model load~evluate~predict total time:', (end1-start1))
 
 
 

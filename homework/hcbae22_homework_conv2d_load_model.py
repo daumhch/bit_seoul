@@ -2,8 +2,9 @@ import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
 
-view_size = 25
-
+view_size = 3
+before_days = 3
+test_rate = 0.2
 def split_x2(seq, size):
     bbb = []
     for i in range(len(seq) - size + 1):
@@ -25,45 +26,45 @@ def split_x2(seq, size):
 import numpy as np
 samsung_data = np.load('./data/samsung_data.npy', allow_pickle=True).astype('float32')
 samsung_data = split_x2(samsung_data, view_size)
-samsung_pred = samsung_data[-3]
+samsung_pred = samsung_data[-(1+before_days)]
 # print("samsung_pred:\n",samsung_pred)
 
-samsung_data = samsung_data[:-2]
+samsung_data = samsung_data[:-before_days]
 # print("type(samsung_data):",type(samsung_data))
 # print("samsung_data:\n",samsung_data)
 # print("samsung_data.shape:", samsung_data.shape)
 samsung_target = np.load('./data/samsung_target.npy', allow_pickle=True).astype('float32')
-samsung_target = samsung_target[view_size+1:]
+samsung_target = samsung_target[view_size+before_days-1:]
 # print("samsung_target:\n",samsung_target)
 # print('samsung_target.shape',samsung_target.shape)
 
 
 bitcom_data = np.load('./data/bitcom_data.npy', allow_pickle=True).astype('float32')
 bitcom_data = split_x2(bitcom_data, view_size)
-bitcom_pred = bitcom_data[-1]
+bitcom_pred = bitcom_data[-(1+before_days)]
 # print("bitcom_pred:\n",bitcom_pred)
 
-bitcom_data = bitcom_data[:-2]
+bitcom_data = bitcom_data[:-before_days]
 # print("type(bitcom_data):",type(bitcom_data))
 # print("bitcom_data:",bitcom_data)
 # print("bitcom_data.shape:", bitcom_data.shape)
 bitcom_target = np.load('./data/bitcom_target.npy', allow_pickle=True).astype('float32')
-bitcom_target = bitcom_target[view_size+1:]
+bitcom_target = bitcom_target[view_size+before_days-1:]
 # print("bitcom_target:",bitcom_target)
 # print('bitcom_target.shape',bitcom_target.shape)
 
 
 gold_data = np.load('./data/gold_data.npy', allow_pickle=True).astype('float32')
 gold_data = split_x2(gold_data, view_size)
-gold_pred = gold_data[-1]
+gold_pred = gold_data[-(1+before_days)]
 # print("gold_pred:\n",gold_pred)
 
-gold_data = gold_data[:-2]
+gold_data = gold_data[:-before_days]
 # print("type(gold_data):",type(gold_data))
 # print("gold_data:",gold_data)
 # print("gold_data.shape:", gold_data.shape)
 gold_target = np.load('./data/gold_target.npy', allow_pickle=True).astype('float32')
-gold_target = gold_target[view_size+1:]
+gold_target = gold_target[view_size+before_days-1:]
 # print("gold_target:",gold_target)
 # print('gold_target.shape',gold_target.shape)
 
@@ -71,15 +72,15 @@ gold_target = gold_target[view_size+1:]
 
 kosdaq_data = np.load('./data/kosdaq_data.npy', allow_pickle=True).astype('float32')
 kosdaq_data = split_x2(kosdaq_data, view_size)
-kosdaq_pred = kosdaq_data[-1]
+kosdaq_pred = kosdaq_data[-(1+before_days)]
 # print("kosdaq_pred:\n",kosdaq_pred)
 
-kosdaq_data = kosdaq_data[:-2]
+kosdaq_data = kosdaq_data[:-before_days]
 # print("type(kosdaq_data):",type(kosdaq_data))
 # print("kosdaq_data:",kosdaq_data)
 # print("kosdaq_data.shape:", kosdaq_data.shape)
 kosdaq_target = np.load('./data/kosdaq_target.npy', allow_pickle=True).astype('float32')
-kosdaq_target = kosdaq_target[view_size+1:]
+kosdaq_target = kosdaq_target[view_size+before_days-1:]
 # print("kosdaq_target:",kosdaq_target)
 # print('kosdaq_target.shape',kosdaq_target.shape)
 
@@ -105,28 +106,28 @@ print('kosdaq_target.shape',kosdaq_target.shape)
 # 1.2 train_test_split
 from sklearn.model_selection import train_test_split 
 samsung_data_train,samsung_data_test, samsung_target_train,samsung_target_test = train_test_split(
-    samsung_data, samsung_target, train_size=0.8, test_size=0.2, random_state = 44)
+    samsung_data, samsung_target, train_size=(1.-test_rate), test_size=test_rate, random_state = 44)
 # print("after samsung_data_train.shape:\n",samsung_data_train.shape)
 # print("after samsung_data_test.shape:\n",samsung_data_test.shape)
 # print("samsung_data_train[0]:\n",samsung_data_train[0])
 # print("samsung_data_test[0]:\n",samsung_data_test[0])
 
 bitcom_data_train,bitcom_data_test, bitcom_target_train,bitcom_target_test = train_test_split(
-    bitcom_data, bitcom_target, train_size=0.8, test_size=0.2, random_state = 44)
+    bitcom_data, bitcom_target, train_size=(1.-test_rate), test_size=test_rate, random_state = 44)
 # print("after bitcom_data_train.shape:\n",bitcom_data_train.shape)
 # print("after bitcom_data_test.shape:\n",bitcom_data_test.shape)
 # print("bitcom_data_train[0]:\n",bitcom_data_train[0])
 # print("bitcom_data_test[0]:\n",bitcom_data_test[0])
 
 gold_data_train,gold_data_test, gold_target_train,gold_target_test = train_test_split(
-    gold_data, gold_target, train_size=0.8, test_size=0.2, random_state = 44)
+    gold_data, gold_target, train_size=(1.-test_rate), test_size=test_rate, random_state = 44)
 # print("after gold_data_train.shape:\n",gold_data_train.shape)
 # print("after gold_data_test.shape:\n",gold_data_test.shape)
 # print("gold_data_train[0]:\n",gold_data_train[0])
 # print("gold_data_test[0]:\n",gold_data_test[0])
 
 kosdaq_data_train,kosdaq_data_test, kosdaq_target_train,kosdaq_target_test = train_test_split(
-    kosdaq_data, kosdaq_target, train_size=0.8, test_size=0.2, random_state = 44)
+    kosdaq_data, kosdaq_target, train_size=(1.-test_rate), test_size=test_rate, random_state = 44)
 # print("after kosdaq_data_train.shape:\n",kosdaq_data_train.shape)
 # print("after kosdaq_data_test.shape:\n",kosdaq_data_test.shape)
 # print("kosdaq_data_train[0]:\n",kosdaq_data_train[0])
@@ -213,8 +214,11 @@ kosdaq_data_test = kosdaq_data_test.reshape(kosdaq_data_test.shape[0],kosdaq_dat
 print("after reshape x:", kosdaq_data_train.shape, kosdaq_data_test.shape)
 
 
+import datetime
+start1 = datetime.datetime.now()
 
-modelpath = './save/hcbae22_823_1166773.1250.hdf5'
+
+modelpath = './save/hcbae22_827_2214103.5000.hdf5'
 
 # 2.모델
 # 3. 컴파일, 훈련
@@ -233,7 +237,8 @@ print("mae: ", result[1])
 
 y_predict = total_model.predict([samsung_data_test, bitcom_data_test,
                                 gold_data_test, kosdaq_data_test])
-
+end1 = datetime.datetime.now()
+time_delta1 = end1 - start1
 
 y_recovery = samsung_target_test
 print("y_test:\n", y_recovery)
@@ -305,6 +310,7 @@ plt.legend(loc='upper right')
 
 plt.show()
 
+print('model load~evluate~predict total time:', time_delta1)
 
 
 
