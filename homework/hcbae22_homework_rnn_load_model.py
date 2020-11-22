@@ -33,7 +33,7 @@ def split_x2(seq, size):
 import numpy as np
 samsung_data = np.load('./data/samsung_data.npy', allow_pickle=True).astype('float32')
 samsung_data = split_x2(samsung_data, view_size)
-samsung_pred = samsung_data[-(1+before_days)]
+samsung_pred = samsung_data[-(1+before_days):]
 # print("samsung_pred:\n",samsung_pred)
 
 samsung_data = samsung_data[:-before_days]
@@ -48,7 +48,7 @@ samsung_target = samsung_target[view_size+before_days-1:]
 
 bitcom_data = np.load('./data/bitcom_data.npy', allow_pickle=True).astype('float32')
 bitcom_data = split_x2(bitcom_data, view_size)
-bitcom_pred = bitcom_data[-(1+before_days)]
+bitcom_pred = bitcom_data[-(1+before_days):]
 # print("bitcom_pred:\n",bitcom_pred)
 
 bitcom_data = bitcom_data[:-before_days]
@@ -63,7 +63,7 @@ bitcom_target = bitcom_target[view_size+before_days-1:]
 
 gold_data = np.load('./data/gold_data.npy', allow_pickle=True).astype('float32')
 gold_data = split_x2(gold_data, view_size)
-gold_pred = gold_data[-(1+before_days)]
+gold_pred = gold_data[-(1+before_days):]
 # print("gold_pred:\n",gold_pred)
 
 gold_data = gold_data[:-before_days]
@@ -79,7 +79,7 @@ gold_target = gold_target[view_size+before_days-1:]
 
 kosdaq_data = np.load('./data/kosdaq_data.npy', allow_pickle=True).astype('float32')
 kosdaq_data = split_x2(kosdaq_data, view_size)
-kosdaq_pred = kosdaq_data[-(1+before_days)]
+kosdaq_pred = kosdaq_data[-(1+before_days):]
 # print("kosdaq_pred:\n",kosdaq_pred)
 
 kosdaq_data = kosdaq_data[:-before_days]
@@ -289,32 +289,37 @@ print("RMSLE:",np.sqrt(mean_squared_log_error(y_recovery, y_predict)))
 
 # predict 11~17일 데이터
 # samsung_predict_today 19일 시가 (실제 "64,100")
-# print("samsung_pred:\n",samsung_pred)
-# print("samsung_pred.shape:",samsung_pred.shape)
-samsung_pred = samsung_pred.reshape(1, samsung_pred.shape[0],samsung_pred.shape[1])
+print("samsung_pred:\n",samsung_pred)
+print("samsung_pred.shape:",samsung_pred.shape)
+# samsung_pred = samsung_pred.reshape(1, samsung_pred.shape[0],samsung_pred.shape[1])
 samsung_pred = transform3D(samsung_pred, samsung_scaler)
+# samsung_pred = samsung_pred.reshape(samsung_pred.shape[0],samsung_pred.shape[1],samsung_pred.shape[2])
 # samsung_pred = samsung_pred.reshape(1, samsung_pred.shape[0]*samsung_pred.shape[1])
-# print("samsung_pred.shape:",samsung_pred.shape)
+print("samsung_pred.shape:",samsung_pred.shape)
 
-bitcom_pred = bitcom_pred.reshape(1, bitcom_pred.shape[0],bitcom_pred.shape[1])
+# bitcom_pred = bitcom_pred.reshape(1, bitcom_pred.shape[0],bitcom_pred.shape[1])
 bitcom_pred = transform3D(bitcom_pred, bitcom_scaler)
+# bitcom_pred = bitcom_pred.reshape(bitcom_pred.shape[0],bitcom_pred.shape[1],bitcom_pred.shape[2])
 # bitcom_pred = bitcom_pred.reshape(1, bitcom_pred.shape[0]*bitcom_pred.shape[1])
 # print("bitcom_pred.shape:",bitcom_pred.shape)
 
-gold_pred = gold_pred.reshape(1, gold_pred.shape[0],gold_pred.shape[1])
+# gold_pred = gold_pred.reshape(1, gold_pred.shape[0],gold_pred.shape[1])
 gold_pred = transform3D(gold_pred, gold_scaler)
+# gold_pred = gold_pred.reshape(gold_pred.shape[0],gold_pred.shape[1],gold_pred.shape[2])
 # gold_pred = gold_pred.reshape(1, gold_pred.shape[0]*gold_pred.shape[1])
 # print("gold_pred.shape:",gold_pred.shape)
 
-kosdaq_pred = kosdaq_pred.reshape(1, kosdaq_pred.shape[0],kosdaq_pred.shape[1])
+# kosdaq_pred = kosdaq_pred.reshape(1, kosdaq_pred.shape[0],kosdaq_pred.shape[1])
 kosdaq_pred = transform3D(kosdaq_pred, kosdaq_scaler)
+# kosdaq_pred = kosdaq_pred.reshape(kosdaq_pred.shape[0],kosdaq_pred.shape[1],kosdaq_pred.shape[2])
 # kosdaq_pred = kosdaq_pred.reshape(1, kosdaq_pred.shape[0]*kosdaq_pred.shape[1])
 # print("kosdaq_pred.shape:",kosdaq_pred.shape)
 
 samsung_predict_today = total_model.predict([samsung_pred, bitcom_pred,
                                             gold_pred, kosdaq_pred])
-print("samsung_predict_today:", int(samsung_predict_today))
+print("samsung_predict_today:", samsung_predict_today)
 
+print("samsung_target:", samsung_target[-(1+before_days):])
 
 
 end1 = datetime.datetime.now()

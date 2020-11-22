@@ -33,7 +33,7 @@ def split_x2(seq, size):
 import numpy as np
 samsung_data = np.load('./data/samsung_data.npy', allow_pickle=True).astype('float32')
 samsung_data = split_x2(samsung_data, view_size)
-samsung_pred = samsung_data[-(1+before_days)]
+samsung_pred = samsung_data[-(1+before_days):]
 # print("samsung_pred:\n",samsung_pred)
 
 samsung_data = samsung_data[:-before_days]
@@ -42,13 +42,13 @@ samsung_data = samsung_data[:-before_days]
 # print("samsung_data.shape:", samsung_data.shape)
 samsung_target = np.load('./data/samsung_target.npy', allow_pickle=True).astype('float32')
 samsung_target = samsung_target[view_size+before_days-1:]
-# print("samsung_target:\n",samsung_target)
-# print('samsung_target.shape',samsung_target.shape)
+print("samsung_target:\n",samsung_target)
+print('samsung_target.shape',samsung_target.shape)
 
 
 bitcom_data = np.load('./data/bitcom_data.npy', allow_pickle=True).astype('float32')
 bitcom_data = split_x2(bitcom_data, view_size)
-bitcom_pred = bitcom_data[-(1+before_days)]
+bitcom_pred = bitcom_data[-(1+before_days):]
 # print("bitcom_pred:\n",bitcom_pred)
 
 bitcom_data = bitcom_data[:-before_days]
@@ -63,7 +63,7 @@ bitcom_target = bitcom_target[view_size+before_days-1:]
 
 gold_data = np.load('./data/gold_data.npy', allow_pickle=True).astype('float32')
 gold_data = split_x2(gold_data, view_size)
-gold_pred = gold_data[-(1+before_days)]
+gold_pred = gold_data[-(1+before_days):]
 # print("gold_pred:\n",gold_pred)
 
 gold_data = gold_data[:-before_days]
@@ -79,7 +79,7 @@ gold_target = gold_target[view_size+before_days-1:]
 
 kosdaq_data = np.load('./data/kosdaq_data.npy', allow_pickle=True).astype('float32')
 kosdaq_data = split_x2(kosdaq_data, view_size)
-kosdaq_pred = kosdaq_data[-(1+before_days)]
+kosdaq_pred = kosdaq_data[-(1+before_days):]
 # print("kosdaq_pred:\n",kosdaq_pred)
 
 kosdaq_data = kosdaq_data[:-before_days]
