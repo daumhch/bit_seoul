@@ -1265,3 +1265,45 @@ from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 
 XGbooster에는 있다 (나중에 한다)
 
+
+
+미니 개인프로젝트 1번
+1일~1주일
+주제에 대해 생각해보자
+발표시간 5분
+원천기술(소스) 
+
+
+팀프로젝트 3인 1조
+
+
+최종 진도는,
+강화학습x
+자연어처리 못함 (시간이 안 됨)
+GAN도 힘들다
+
+
+
+
+
+# wine2 target 분포
+# quality
+# 3      20
+# 4     163
+# 5    1457
+# 6    2198
+# 7     880
+# 8     175
+# 9       5
+# Name: quality, dtype: int64
+
+5,6,7에 치중되어 있다
+데이터카 큰 쪽으로 훈련하고, 성능이 좋은 것 처럼 보일 수 있다
+그래서 때로는, 카테고리를 통합하는 것도 하나의 방법일 수 있다
+
+
+내일은,
+validation 한다
+모델 전 튜닝
+
+

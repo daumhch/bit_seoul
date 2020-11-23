@@ -1,3 +1,7 @@
+# winequality-white.csv
+
+# 1.데이터
+# 1.1 load_data
 import numpy as np
 from sklearn.datasets import load_wine
 from sklearn.model_selection import train_test_split 
@@ -8,17 +12,17 @@ from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
 from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
 from sklearn.metrics import accuracy_score, r2_score
 
-# 1.데이터
-# x, y = load_wine(return_X_y=True)
-datasets = load_wine()
-x = datasets.data
-y = datasets.target
-
 import pandas as pd
-print(datasets.feature_names)
-print(datasets.target_names)
-data1 = pd.DataFrame(data= np.c_[datasets['data'], datasets['target']],
-                    columns= datasets['feature_names'] + ['target'])
+
+wine = pd.read_csv('./data/csv/winequality-white.csv', 
+                        header=0, # 첫 번 째 행 = 헤더다
+                        index_col=0, # 컬럼 번호
+                        encoding='CP949',
+                        sep=';' # 구분 기호
+                        )
+wine = wine.to_numpy()
+x = wine[:,:-1]
+y = wine[:,-1]
 
 
 x_train,x_test, y_train,y_test = train_test_split(
