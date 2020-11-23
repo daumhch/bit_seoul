@@ -1201,4 +1201,67 @@ npy로 저장해서
 
 
 
+=================================================================
+
+201123
+
+오늘 할 것, 머신러닝
+
+XG부스터: 
+케라스 나오기 전 까지 최고
+딥러닝 나오고 조금씩 밀림
+그러나 속도가 매우 빠르다
+
+
+머신러닝 들어가는 이유:
+기간이 짧다, 최적화 해서 배우자
+딥러닝이 좋다 한들, 
+아직까지 머신러닝이 준수한 성능, 빠른 속도
+
+모델을 머신러닝 돌려서 기준값 찾고,
+딥러닝으로 최적화
+
+XG는 CPU를 병렬로 사용한다
+
+
+
+# 인공지능 역사
+2차 세계대전 - 암호 해독
+엘런 튜링 - 튜링머신, 튜링게임
+
+인공지능의 암흑기
+첫번째 암흑기(1974-1980): "XOR의 문제"
+두번째 암흑기(1987-1993)
+
+
+
+### LinearSVC
+OneHotEncoding 안 해도 된다
+모델이 간단하다
+
+다만 XOR 문제에서 최대 0.75
+이것이 인공지능의 첫번째 겨울
+
+
+LinearSVC가 아닌 SVC를 쓰면 문제가 해결됨
+
+
+# m04_xor2_keras1에서,
+Dense 하나만 쓰면 LinearSVC와 같은 결과다
+
+
+# 뒤에 
+Classifier가 붙으면 분류
+Regressor가 붙으면 회귀
+
+단, Logistic Regressor는 분류
+
+
+
+from sklearn.svm import LinearSVC, SVC
+from sklearn.neighbors import KNeighborsClassifier, KNeighborsRegressor
+from sklearn.ensemble import RandomForestClassifier, RandomForestRegressor
+위에 모델들은 validation이 없다
+
+XGbooster에는 있다 (나중에 한다)
 
