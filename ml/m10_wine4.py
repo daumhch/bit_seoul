@@ -19,17 +19,17 @@ x = wine.drop('quality', axis=1).to_numpy()
 print(x.shape)
 print(y.shape)
 
-newlist = []
-for i in list(y):
-    if i <=4:
-        newlist = newlist + [0]
-    elif i <=7:
-        newlist += [1]
-    else:
-        newlist += [2]
+# newlist = []
+# for i in list(y):
+#     if i <=4:
+#         newlist = newlist + [0]
+#     elif i <=7:
+#         newlist += [1]
+#     else:
+#         newlist += [2]
 
-y = newlist
-print(x.shape)
+# y = newlist
+# print(x.shape)
 
 # y의 범위를 3~9 -> 0,1,2로 좁히는 것은
 # 평가 방법을 바꾼 것이지 데이터 조작이 아니다
@@ -65,7 +65,6 @@ from sklearn.metrics import accuracy_score, r2_score
 model = RandomForestClassifier()
 # model = RandomForestRegressor()
 
-
 # 3.훈련
 model.fit(x_train, y_train)
 
@@ -85,3 +84,4 @@ print('r2_score:',r2)
 
 print(y_test[:10])
 print(y_predict[:10])
+
