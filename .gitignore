@@ -1,3 +1,4 @@
 save/*
 model/*
 data/*
+project/*.csv
