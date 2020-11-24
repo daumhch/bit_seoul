@@ -1,3 +1,5 @@
+# 분류
+
 # 클래스파이어 모델들 추출
 
 # 1.데이터
@@ -26,12 +28,17 @@ x_train,x_test, y_train,y_test = train_test_split(
 
 allAlgorithms = all_estimators(type_filter='classifier')
 
+from sklearn.model_selection import KFold, cross_val_score
+
 for (name, algorithm) in allAlgorithms:
     try:
         model = algorithm()
         model.fit(x_train, y_train)
+        kfold = KFold(n_splits=5, shuffle=True)
+        scores = cross_val_score(model, x_train, y_train, cv=kfold)
         y_pred = model.predict(x_test)
-        print(name, '의 정답률:', accuracy_score(y_test, y_pred))
+        print(kfold.n_splits,"/", name, '의 정답률:', format(accuracy_score(y_test, y_pred), '.6f'))
+        print(kfold.n_splits,"/", name, '의 scores:', scores)
     except:
         print(name,'은 수행될 수 없습니다')
         pass
