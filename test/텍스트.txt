@@ -1346,3 +1346,10 @@ Cross Validation = CV = K-Fold
 
 
 
+
+오후수업
+데이터 낭비가 있는 것 같아서 = 모든 데이터 검증 = KFold = CV
+파라미터 튜닝도 주관->객관 하기 위해 XXXSearchCV
+
+
+
