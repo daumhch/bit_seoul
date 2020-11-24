@@ -6,7 +6,7 @@ wine = pd.read_csv('./data/csv/winequality-white.csv',
                         encoding='CP949',
                         sep=';' # 구분 기호
                         )
-
+print(wine)
 count_data = wine.groupby('quality')['quality'].count()
 print(count_data)
 # quality
