@@ -74,9 +74,8 @@ model.add(Flatten())
 model.add(Dense(10, activation='softmax') )
 '''
 model = Sequential()
-model.add(Dense(30, activation='relu', input_shape=(x_train.shape[1],) ))
-model.add(Dense(30, activation='relu') )
-model.add(Dense(20, activation='relu') )
+model.add(Dense(64, activation='relu', input_shape=(x_train.shape[1],) ))
+model.add(Dense(64, activation='relu') )
 model.add(Dense(10, activation='softmax') )
 model.summary()
 

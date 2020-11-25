@@ -2,3 +2,4 @@ save/*
 model/*
 data/*
 project/*.csv
+project/*.npy
