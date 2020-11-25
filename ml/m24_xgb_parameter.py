@@ -20,9 +20,9 @@ x_train,x_test, y_train,y_test = train_test_split(
 from xgboost import XGBClassifier, XGBRFRegressor, plot_importance
 n_estimators = 300 # 생성할 tree의 개수
 learning_rate = 1 # 학습 속도
-colsample_bytree = 1 # 각 트리마다의 feature 샘플링 비율
-colsample_bylevel = 1
-max_depth = 5 # 트리의 최대 깊이
+colsample_bytree = 1 # 각 트리마다의 feature 샘플링 비율, 보통 0.5 ~ 1 사용됨
+colsample_bylevel = 1 # 각 노드에서 사용되는 기능 (무작위로 선택됨)의 비율
+max_depth = 5 # 트리의 최대 깊이, 보통 3-10 사이
 n_jobs = -1
 
 

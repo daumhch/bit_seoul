@@ -28,6 +28,20 @@ acc = model.score(x_test, y_test)
 print("acc:", acc)
 print(model.feature_importances_)
 
+import matplotlib.pyplot as plt
+import numpy as np
+def plot_feature_importances(data_name, model):
+    n_features = data_name.data.shape[1]
+    plt.barh(np.arange(n_features), model.feature_importances_,
+            align='center')
+
+    plt.yticks(np.arange(n_features), data_name.feature_names)
+    plt.xlabel("Feature Importances")
+    plt.ylabel("Features")
+    plt.ylim(-1, n_features)
+
+plot_feature_importances(iris, model)
+plt.show()
 
 import numpy as np
 
@@ -42,7 +56,7 @@ def earseLowFI_index(fi_arr, low_value, input_arr):
     return temp
 
 print("before x.shape:",x.shape)
-x = earseLowFI_index(model.feature_importances_, 0.3, x)
+x = earseLowFI_index(model.feature_importances_, 0.1, x)
 print("after x.shape:",x.shape)
 
 

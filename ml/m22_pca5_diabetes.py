@@ -29,7 +29,11 @@ print("x.shape:", x.shape) # (70000, 28, 28)
 print("after reshape x.shape:", x.shape) # (70000, 28, 28)
 
 
-
+# 1.3 scaler
+from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
 
 
 # 1.5 PCA
@@ -61,10 +65,10 @@ print("split x_train.shape:",x_train.shape, x_test.shape)
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
 model = Sequential()
-model.add(Dense(64, activation='relu', input_shape=(x_train.shape[1],) ))
-model.add(Dense(256, activation='relu'))
-model.add(Dense(128, activation='relu'))
-model.add(Dense(64, activation='relu'))
+model.add(Dense(512, activation='relu', input_shape=(x_train.shape[1],) ))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
+model.add(Dense(512, activation='relu'))
 model.add(Dense(1) )
 model.summary()
 
