@@ -37,7 +37,7 @@ pca = PCA()
 pca.fit(x)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
 d = np.argmax(cumsum >= cumsum_standard) +1
-print("n_components:",d) # 154
+print("n_components:",d) # 154 # StandardScaler 붙이면 332
 
 pca = PCA(n_components=d) # 소숫점을 넣어도 적용된다
 x = pca.fit_transform(x)

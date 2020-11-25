@@ -1481,7 +1481,16 @@ feature engineering
 feature impotance
 
 
+F score 확인하기
+https://deepai.org/machine-learning-glossary-and-terms/f-score
 
 
+
+### 개인프로젝트
+26일 오후에 주제 발표
+리젝당했다면 금요일 다시 발표
+
+금토일월
+발표는 화요일 오전
 
 
