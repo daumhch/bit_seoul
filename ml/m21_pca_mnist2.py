@@ -22,6 +22,14 @@ print("x.shape:", x.shape) # (70000, 28, 28)
 x = x.reshape(x.shape[0],x.shape[1]*x.shape[2])
 print("after reshape x.shape:", x.shape) # (70000, 784)
 
+
+# 1.3 scaler
+from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
+
+
 # 1.5 PCA
 from sklearn.decomposition import PCA
 cumsum_standard = 0.95

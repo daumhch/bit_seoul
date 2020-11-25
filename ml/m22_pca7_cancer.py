@@ -29,6 +29,11 @@ y = to_categorical(y)
 print("after reshape x.shape:", x.shape) # (70000, 28, 28)
 
 
+# 1.3 scaler
+from sklearn.preprocessing import MinMaxScaler, RobustScaler, StandardScaler
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
 
 
 # 1.5 PCA

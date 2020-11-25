@@ -1463,4 +1463,25 @@ PCA를 적용하려 하니,
 데이터 전처리 순서가 뒤바뀐다
 
 데이터 전처리 하는 항목만 정리하자
-- 
+(순서는 언제든 바뀔 수 있다, 고정된 게 아니다)
+- OneHotEncoding
+- Reshape
+- XXXScaler
+- (StandardScaler+)PCA
+- train_test_split
+
+
+
+PCA를 적용할 때,
+PCA 전에 StandardScaler를 하면,
+PCA에 성능을 올릴 수 있다
+
+지금 하고 있는 건, 
+feature engineering
+feature impotance
+
+
+
+
+
+

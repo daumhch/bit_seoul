@@ -7,7 +7,6 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 #https://www.kaggle.com/benoit72/uk-accidents-10-years-history-with-many-variables
 import numpy as np
 import pandas as pd
-
 '''
 accidents = pd.read_csv('./project/Accidents0514.csv', 
                         header=0, # 첫 번 째 행 = 헤더다
@@ -22,7 +21,6 @@ accidents = accidents[[
     'Accident_Severity',
     'Number_of_Vehicles',
     'Number_of_Casualties',
-    'Time',
     'Road_Type',
     'Speed_limit',
     'Junction_Detail',
@@ -82,11 +80,7 @@ merge_csv = pd.merge(merge_csv, casualties, how='outer', on='Accident_Index')
 
 print(merge_csv.head())
 print("merge_csv.shape:",merge_csv.shape)
-'''
 
-
-
-'''
 merge_csv.to_csv('./project/merge_csv.csv')
 
 merge_npy = merge_csv.to_numpy()
@@ -103,7 +97,6 @@ merge_csv = pd.read_csv('./project/merge_csv.csv',
                         sep=',' # 구분 기호
                         )
 
-# 시간을 분으로 저장하자 (숫자 저장하자)
 print(merge_csv.head())
 print("merge_csv.shape:",merge_csv.shape)
 
