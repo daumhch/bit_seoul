@@ -15,17 +15,26 @@ from tensorflow.keras.datasets import cifar10
 
 (x_train, y_train), (x_test, y_test) = cifar10.load_data()
 
+
 x = np.append(x_train, x_test, axis=0)
 y = np.append(y_train, y_test, axis=0)
 print("x.shape:", x.shape) # (70000, 28, 28)
 
+# OneHotEncoding
+from tensorflow.keras.utils import to_categorical
+y = to_categorical(y)
+
+# 1.4 reshape
+# PCA를 위해서 reshape
 x = x.reshape(x.shape[0],x.shape[1]*x.shape[2]*x.shape[3])
 print("after reshape x.shape:", x.shape) # (70000, 28, 28)
 
 
+
+
 # 1.5 PCA
 from sklearn.decomposition import PCA
-cumsum_standard = 1
+cumsum_standard = 0.95
 pca = PCA()
 pca.fit(x)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
@@ -39,38 +48,12 @@ print("after pca x.shape", x.shape) # (70000, 154)
 
 
 
-# OneHotEncoding
-from tensorflow.keras.utils import to_categorical
-y = to_categorical(y)
-
-
 
 # 1.2 train_test_split
 from sklearn.model_selection import train_test_split 
 x_train,x_test, y_train,y_test = train_test_split(
-    x, y, train_size=50000, test_size=10000)
-print("split shape:",x_train.shape, x_test.shape)
-
-
-
-# 1.4 reshape
-# PCA를 위해서 위에서 했음
-
-
-
-
-# 이미지를 DNN 할 때에는 reshape하고 scaler 하자
-# 1.3 scaler
-from sklearn.preprocessing import MinMaxScaler, StandardScaler
-scaler = MinMaxScaler()
-scaler.fit(x_train) # fit하고
-x_train = scaler.transform(x_train) # 사용할 수 있게 바꿔서 저장하자
-x_test = scaler.transform(x_test) # 사용할 수 있게 바꿔서 저장하자
-
-
-print("x_train.shape:", x_train.shape)
-
-
+    x, y, train_size=50000, test_size=10000, shuffle=False)
+print("split x_train.shape:",x_train.shape, x_test.shape)
 
 
 

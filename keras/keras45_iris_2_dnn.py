@@ -72,17 +72,17 @@ model.compile(
 
 
 from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
-# early_stopping = EarlyStopping(
-#     monitor='accuracy',
-#     patience=50,
-#     mode='auto',
-#     verbose=2)
+early_stopping = EarlyStopping(
+    monitor='accuracy',
+    patience=50,
+    mode='auto',
+    verbose=2)
 
 history = model.fit(x_train, y_train,
     epochs=500,
     verbose=0,
     validation_split=0.2,
-#    callbacks=[early_stopping],
+    callbacks=[early_stopping],
     batch_size=128)
 
 
