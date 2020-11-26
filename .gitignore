@@ -5,3 +5,4 @@ project/*.csv
 project/*.npy
 data1/*
 data2/*
+image_classifier/*

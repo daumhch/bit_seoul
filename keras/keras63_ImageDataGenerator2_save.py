@@ -112,7 +112,7 @@ hist = model.fit_generator(
 # print("loss: ", result[0])
 # print("accuracy: ", result[1])
 
-scores = model.evaluate_generator(xy_train, steps=5)
+scores = model.evaluate_generator(xy_test, steps=5)
 print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
 # accuracy
 

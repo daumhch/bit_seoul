@@ -98,3 +98,9 @@ print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
 # accuracy
 
 
+print("========== numpy save 시작 ==========")
+np.save('./data/keras64_mf_train_x.npy', arr=mf_train[0][0])
+np.save('./data/keras64_mf_train_y.npy', arr=mf_train[0][1])
+np.save('./data/keras64_mf_test_x.npy', arr=mf_test[1][0])
+np.save('./data/keras64_mf_test_y.npy', arr=mf_test[1][1])
+print("========== numpy save 끝 ==========")
