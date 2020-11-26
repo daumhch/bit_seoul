@@ -7,7 +7,7 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 #https://www.kaggle.com/benoit72/uk-accidents-10-years-history-with-many-variables
 import numpy as np
 import pandas as pd
-'''
+
 accidents = pd.read_csv('./project/Accidents0514.csv', 
                         header=0, # 첫 번 째 행 = 헤더다
                         index_col=None, # 컬럼 시작 번호
@@ -86,11 +86,11 @@ merge_csv.to_csv('./project/merge_csv.csv')
 merge_npy = merge_csv.to_numpy()
 print("merge_npy.shape:",merge_npy.shape)
 np.save('./project/merge_npy.npy',arr=merge_npy)
-'''
+
 # load_npy = np.load('./project/merge_npy.npy', allow_pickle=True)
 # print(load_npy[:5])
 
-
+'''
 merge_csv = pd.read_csv('./project/merge_csv.csv', 
                         header=0, # 첫 번 째 행 = 헤더다
                         index_col=None, # 컬럼 시작 번호
@@ -99,7 +99,7 @@ merge_csv = pd.read_csv('./project/merge_csv.csv',
 
 print(merge_csv.head())
 print("merge_csv.shape:",merge_csv.shape)
-
+'''
 
 
 

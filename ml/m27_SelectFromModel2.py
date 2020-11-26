@@ -168,3 +168,6 @@ print("after cutting 최적의 파라미터:", original_params)
 # after cutting 최적의 파라미터: {'anyway__n_jobs': -1, 'anyway__n_estimators': 400, 'anyway__max_depth': 3, 'anyway__learning_rate': 0.31000000000000005, 'anyway__colsample_bytree': 0.8999999999999999, 'anyway__colsample_bylevel': 0.8999999999999999}
 
 
+# original R2: 0.8969509404888036
+# find param R2: 0.8902902220270855
+# after cutting R2: 0.9147294422888137

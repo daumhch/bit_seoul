@@ -1509,3 +1509,15 @@ SelectFromModel
 feature_importances_의 갯수만큼 실행하여,
 Threshold와 feature갯수에 따른 score를 비교할 수 있다
 
+
+
+[Keras] 대용량 데이터 세트에서 딥 러닝 모델을 학습하려는 경우 Keras에 대해 알아야 할 사항
+https://medium.com/difference-engine-ai/keras-a-thing-you-should-know-about-keras-if-you-plan-to-train-a-deep-learning-model-on-a-large-fdd63ce66bd2
+
+
+
+
+
+
+
+
