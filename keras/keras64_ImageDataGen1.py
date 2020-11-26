@@ -85,7 +85,7 @@ early_stopping = EarlyStopping(
 hist = model.fit_generator(
     mf_train,
     steps_per_epoch = 100,
-    epochs = 100,
+    epochs = 2,
     validation_data = mf_test,
     validation_steps = 4,
     callbacks=[early_stopping]
@@ -97,10 +97,17 @@ scores = model.evaluate_generator(mf_test, steps=5)
 print("%s: %.2f%%" %(model.metrics_names[1], scores[1]*100))
 # accuracy
 
+print(type(mf_train[0][0]))
+# mf_train_x_npy = []
+# for cnt in range(len(mf_train)):
+#     mf_train_x_npy.append([mf_train[cnt][0]])
+# print(mf_train_x_npy)
+# print(mf_train_x_npy.shape)
 
-print("========== numpy save 시작 ==========")
-np.save('./data/keras64_mf_train_x.npy', arr=mf_train[0][0])
-np.save('./data/keras64_mf_train_y.npy', arr=mf_train[0][1])
-np.save('./data/keras64_mf_test_x.npy', arr=mf_test[1][0])
-np.save('./data/keras64_mf_test_y.npy', arr=mf_test[1][1])
-print("========== numpy save 끝 ==========")
+# print("========== numpy save 시작 ==========")
+# np.save('./data/keras64_mf_train_x.npy', arr=mf_train[0][0])
+# np.save('./data/keras64_mf_train_y.npy', arr=mf_train[0][1])
+# np.save('./data/keras64_mf_test_x.npy', arr=mf_test[1][0])
+# np.save('./data/keras64_mf_test_y.npy', arr=mf_test[1][1])
+# print("========== numpy save 끝 ==========")
+

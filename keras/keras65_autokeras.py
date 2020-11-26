@@ -15,11 +15,11 @@ from tensorflow.keras.datasets import mnist
 from tensorflow.python.keras.utils.data_utils import Sequence
 import autokeras as ak
 
-# x_train = np.load('./data/keras64_mf_train_x.npy')
-# y_train = np.load('./data/keras64_mf_train_y.npy')
-# x_test = np.load('./data/keras64_mf_test_x.npy')
-# y_test = np.load('./data/keras64_mf_test_y.npy')
-(x_train, y_train), (x_test, y_test) = mnist.load_data()
+x_train = np.load('./data/keras64_mf_train_x.npy')
+y_train = np.load('./data/keras64_mf_train_y.npy')
+x_test = np.load('./data/keras64_mf_test_x.npy')
+y_test = np.load('./data/keras64_mf_test_y.npy')
+# (x_train, y_train), (x_test, y_test) = mnist.load_data()
 
 print(x_train.shape)
 print(y_train.shape)
