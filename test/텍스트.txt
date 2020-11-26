@@ -1494,3 +1494,18 @@ https://deepai.org/machine-learning-glossary-and-terms/f-score
 발표는 화요일 오전
 
 
+=========================================================
+
+201126
+
+데이터전처리
+feature engineering
+많이 해보는 수 밖에
+
+
+
+SelectFromModel
+
+feature_importances_의 갯수만큼 실행하여,
+Threshold와 feature갯수에 따른 score를 비교할 수 있다
+

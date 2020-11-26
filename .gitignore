@@ -3,3 +3,5 @@ model/*
 data/*
 project/*.csv
 project/*.npy
+data1/*
+data2/*
