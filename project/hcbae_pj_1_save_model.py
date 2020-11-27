@@ -1,4 +1,6 @@
 import numpy as np
+from scipy import stats
+
 # ======== 데이터 불러오기 시작 ========
 indexes = np.load('./project/merge_index.npy', allow_pickle=True)
 x = np.load('./project/merge_data.npy', allow_pickle=True)
@@ -12,7 +14,7 @@ print("npy y.shape:",y.shape)
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 from sklearn.model_selection import train_test_split
 temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=50000)
+    x,y, random_state=44, shuffle=True, test_size=20000)
 
 print("merge_index:", indexes)
 print("merge_data.shape:",x.shape)
@@ -45,7 +47,7 @@ from xgboost import XGBClassifier
 from sklearn.model_selection import RandomizedSearchCV
 kfold = KFold(n_splits=5, shuffle=True)
 pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier())])
-model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
+model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0, scoring='accuracy')
 model.fit(x_train, y_train)
 score_at_fi = model.score(x_test, y_test)
 print("original R2:", score_at_fi)
@@ -73,8 +75,8 @@ for thresh in thresholds:
     select_x_test = selection.transform(x_test)
     y_predict = selection_model.predict(select_x_test)
     score = accuracy_score(y_test, y_predict)
-    print('Thresh=%.6f, n=%d, R2:%.6f' 
-            %(thresh, select_x_train.shape[1], score))
+    # print('Thresh=%.6f, n=%d, R2:%.6f' 
+    #         %(thresh, select_x_train.shape[1], score))
     temp_array.append([thresh, score])
 
 # temp_array를 R2 기준으로 오름차순 정렬하고,
@@ -126,12 +128,23 @@ print("after pca x.shape", x.shape)
 
 
 
+# 모델 돌리자
+print("x.shape", x.shape)
+print("y.shape", y.shape)
+
+
 # ======== 모델을 위한 train_test_split 시작 ========
 from sklearn.model_selection import train_test_split 
-x_train,x_test, y_train,y_test = train_test_split(
+x_train,x_pred, y_train,y_stand = train_test_split(
     x, y, random_state=44, train_size=0.8, test_size=0.2)
-print("split shape:",x_train.shape, x_test.shape)
-print("split shape:",y_train.shape, y_test.shape)
+# print("split shape x_train/x_test:",x_train.shape, x_test.shape)
+# print("split shape y_train/y_test:",y_train.shape, y_test.shape)
+
+x_train,x_test, y_train,y_test = train_test_split(
+    x_train, y_train, random_state=44, train_size=0.75, test_size=0.25)
+print("split x_train.shape:",x_train.shape)
+print("split x_test.shape:",x_test.shape)
+print("split x_pred.shape:",x_pred.shape)
 # ======== 모델을 위한 train_test_split 끝 ========
 
 
@@ -157,10 +170,10 @@ parameters_arr2 = [
 ]
 kfold = KFold(n_splits=5, shuffle=True)
 pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier())])
-model = RandomizedSearchCV(pipe, parameters_arr2, cv=kfold, verbose=0)
+model = RandomizedSearchCV(pipe, parameters_arr2, cv=kfold, verbose=0, scoring='accuracy')
 model.fit(x_train, y_train)
-score = model.score(x_test, y_test)
-print("after cutting R2:", score)
+score_at_ac = model.score(x_test, y_test)
+print("after cutting R2:", score_at_ac)
 original_params2 = model.best_params_
 print("after cutting 최적의 파라미터:", original_params2)
 # ======== 모델+Pipeline+SearchCV 끝 ========
@@ -174,15 +187,23 @@ score = model.score(x_test, y_test)
 print("final param R2:", score)
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 끝 ========
 
-y_predict = model.predict(x_test)
-print('최종정답률:',accuracy_score(y_test, y_predict))
+
 
 print("앞에서 10개만 견본으로 뽑아서 보자")
-print("y_test[:10]:", y_test[:10])
-print("y_predict[:10]:", y_predict[:10])
-print("set(y_test):", set(y_test))
+print("y_stand[:10]:", y_stand[:20])
+print("y_predict[:10]:", y_predict[:20])
+print("set(y_test):", set(y_stand))
 print("set(y_predict):", set(y_predict))
 
 
 print("original score:", score_at_fi)
 print("find param score:", score_at_fi_param)
+print("after cutting score:", score_at_ac)
+print("final param score:", score)
+
+
+
+y_predict = model.predict(x_pred)
+print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
+
+

@@ -47,7 +47,7 @@ parameters = [
     'anyway__max_depth': np.array(range(3,10)),
     'anyway__colsample_bytree': np.array(np.arange(0.5,1,0.1)),
     'anyway__colsample_bylevel': np.array(np.arange(0.5,1,0.1)),
-    'anyway__n_jobs':[-1]
+    'anyway__n_jobs':[-1],
     }
 ]
 kfold = KFold(n_splits=5, shuffle=True)
@@ -67,7 +67,7 @@ print("최적의 파라미터:", original_params)
 
 
 ###### 최적의 파라미터로, 다시 모델 돌리기 -> 피쳐임포턴스 구하기 위해서
-model = XGBRegressor(parameters=original_params)
+model = XGBRegressor(original_params)
 # 3.훈련
 model.fit(x_train, y_train)
 
