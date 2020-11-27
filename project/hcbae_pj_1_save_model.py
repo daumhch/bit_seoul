@@ -1,5 +1,7 @@
 import numpy as np
-from scipy import stats
+import timeit
+
+start_time = timeit.default_timer() # 시작 시간 체크
 
 # ======== 데이터 불러오기 시작 ========
 indexes = np.load('./project/merge_index.npy', allow_pickle=True)
@@ -14,13 +16,12 @@ print("npy y.shape:",y.shape)
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 from sklearn.model_selection import train_test_split
 temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=20000)
+    x,y, random_state=44, shuffle=True, test_size=100000)
 
 print("merge_index:", indexes)
 print("merge_data.shape:",x.shape)
 print("merge_target.shape:",y.shape)
 # ======== 데이터 불러오기 끝 ========
-
 
 
 
@@ -31,10 +32,10 @@ x_train,x_test, y_train,y_test = train_test_split(
 
 parameters_arr = [
     {'anyway__n_estimators':np.array(range(100,1000,100)),
-    'anyway__learning_rate':np.array(np.arange(0.01,1,0.05)),
-    'anyway__max_depth': np.array(range(3,15)),
-    'anyway__colsample_bytree': np.array(np.arange(0.5,1,0.1)),
-    'anyway__colsample_bylevel': np.array(np.arange(0.5,1,0.1)),
+    'anyway__learning_rate':np.array(np.arange(0.1,0.6,0.1)), # 학습률 default 0.3
+    'anyway__max_depth': np.array(range(3,10)), # 트리 최대 깊이 default 6
+    'anyway__colsample_bytree': np.array(np.arange(0.7,1,0.1)), # 트리생성시 반영비율 default 1
+    'anyway__colsample_bylevel': np.array(np.arange(0.7,1,0.1)), # 레벨생성시 반영비율 default 1
     'anyway__n_jobs':[-1]
     }
 ]
@@ -46,8 +47,9 @@ from sklearn.ensemble import RandomForestClassifier
 from xgboost import XGBClassifier
 from sklearn.model_selection import RandomizedSearchCV
 kfold = KFold(n_splits=5, shuffle=True)
-pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier())])
-model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0, scoring='accuracy')
+xbg = XGBClassifier(tree_method = "auto", eval_metric='rmse')
+pipe = Pipeline([('scaler', StandardScaler()),('anyway', xbg)])
+model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0, random_state=44)
 model.fit(x_train, y_train)
 score_at_fi = model.score(x_test, y_test)
 print("original R2:", score_at_fi)
@@ -104,7 +106,6 @@ print("after erase low f.i x.shape:",x.shape)
 
 
 
-
 # ======== PCA 적용 시작 ========
 from sklearn.preprocessing import StandardScaler
 scaler = StandardScaler()
@@ -113,7 +114,7 @@ x = scaler.transform(x)
 
 # 1.5 PCA
 from sklearn.decomposition import PCA
-cumsum_standard = 0.99
+cumsum_standard = 0.95
 pca = PCA()
 pca.fit(x)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
@@ -161,16 +162,17 @@ y = to_categorical(y)
 # ======== 모델+Pipeline+SearchCV 시작 ========
 parameters_arr2 = [
     {'anyway__n_estimators':np.array(range(100,1000,100)),
-    'anyway__learning_rate':np.array(np.arange(0.01,1,0.05)),
-    'anyway__max_depth': np.array(range(3,15)),
-    'anyway__colsample_bytree': np.array(np.arange(0.5,1,0.1)),
-    'anyway__colsample_bylevel': np.array(np.arange(0.5,1,0.1)),
+    'anyway__learning_rate':np.array(np.arange(0.1,0.6,0.1)), # 학습률 default 0.3
+    'anyway__max_depth': np.array(range(3,10)), # 트리 최대 깊이 default 6
+    'anyway__colsample_bytree': np.array(np.arange(0.7,1,0.1)), # 트리생성시 반영비율 default 1
+    'anyway__colsample_bylevel': np.array(np.arange(0.7,1,0.1)), # 레벨생성시 반영비율 default 1
     'anyway__n_jobs':[-1]
     }
 ]
 kfold = KFold(n_splits=5, shuffle=True)
-pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier())])
-model = RandomizedSearchCV(pipe, parameters_arr2, cv=kfold, verbose=0, scoring='accuracy')
+xbg = XGBClassifier(tree_method = "auto", eval_metric='rmse')
+pipe = Pipeline([('scaler', StandardScaler()),('anyway', xbg)])
+model = RandomizedSearchCV(pipe, parameters_arr2, cv=kfold, verbose=0, random_state=44)
 model.fit(x_train, y_train)
 score_at_ac = model.score(x_test, y_test)
 print("after cutting R2:", score_at_ac)
@@ -188,22 +190,44 @@ print("final param R2:", score)
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 끝 ========
 
 
+y_predict = model.predict(x_pred)
+print("================================")
+print("original score:", score_at_fi)
+print("find param score:", score_at_fi_param)
+print("after cutting score:", score_at_ac)
+print("final param score:", score)
+print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
+print("================================")
 
-print("앞에서 10개만 견본으로 뽑아서 보자")
+print("앞에서 20개만 견본으로 뽑아서 보자")
+# print("x_pred[:10]:", x_pred[:20])
 print("y_stand[:10]:", y_stand[:20])
 print("y_predict[:10]:", y_predict[:20])
 print("set(y_test):", set(y_stand))
 print("set(y_predict):", set(y_predict))
 
 
-print("original score:", score_at_fi)
-print("find param score:", score_at_fi_param)
-print("after cutting score:", score_at_ac)
-print("final param score:", score)
+
+
+terminate_time = timeit.default_timer() # 종료 시간 체크  
+print("%f초 걸렸습니다." % (terminate_time - start_time)) 
+
+
+from xgboost import XGBClassifier
+from yellowbrick.classifier import ROCAUC
+
+
+xgb_basic = XGBClassifier()
+xgb_basic.fit(x_train, y_train)
+
+visualizer = ROCAUC(xgb_basic, classes=[1, 2, 3], micro=False, macro=True, per_class=False)
+visualizer.fit(x_train, y_train)
+visualizer.fit(x_train, y_train)
+visualizer.show()
+ 
 
 
 
-y_predict = model.predict(x_pred)
-print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
+
 
 
