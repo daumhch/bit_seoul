@@ -3,6 +3,8 @@ import numpy as np
 indexes = np.load('./project/merge_index.npy', allow_pickle=True)
 x = np.load('./project/merge_data.npy', allow_pickle=True)
 y = np.load('./project/merge_target.npy', allow_pickle=True)
+print("npy x.shape:",x.shape)
+print("npy y.shape:",y.shape)
 
 # 테스트를 위해 잘라냄
 # x = x[:10000,:]
@@ -10,12 +12,13 @@ y = np.load('./project/merge_target.npy', allow_pickle=True)
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 from sklearn.model_selection import train_test_split
 temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=100000)
+    x,y, random_state=44, shuffle=True, test_size=50000)
 
 print("merge_index:", indexes)
 print("merge_data.shape:",x.shape)
 print("merge_target.shape:",y.shape)
 # ======== 데이터 불러오기 끝 ========
+
 
 
 
@@ -26,8 +29,8 @@ x_train,x_test, y_train,y_test = train_test_split(
 
 parameters_arr = [
     {'anyway__n_estimators':np.array(range(100,1000,100)),
-    'anyway__learning_rate':np.array(np.arange(0.01,1,0.1)),
-    'anyway__max_depth': np.array(range(3,10)),
+    'anyway__learning_rate':np.array(np.arange(0.01,1,0.05)),
+    'anyway__max_depth': np.array(range(3,15)),
     'anyway__colsample_bytree': np.array(np.arange(0.5,1,0.1)),
     'anyway__colsample_bylevel': np.array(np.arange(0.5,1,0.1)),
     'anyway__n_jobs':[-1]
@@ -44,17 +47,17 @@ kfold = KFold(n_splits=5, shuffle=True)
 pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier())])
 model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
-score = model.score(x_test, y_test)
-print("original R2:", score)
-original_params = model.best_params_
-print("original 최적의 파라미터:", original_params)
+score_at_fi = model.score(x_test, y_test)
+print("original R2:", score_at_fi)
+original_params_at_fi = model.best_params_
+print("original 최적의 파라미터:", original_params_at_fi)
 
 
 ###### 최적의 파라미터로, 다시 모델 돌리기 -> 피쳐임포턴스 구하기 위해서
-model = XGBClassifier(original_params)
+model = XGBClassifier(original_params_at_fi)
 model.fit(x_train, y_train)
-score = model.score(x_test, y_test)
-print("find param R2:", score)
+score_at_fi_param = model.score(x_test, y_test)
+print("find param R2:", score_at_fi_param)
 print("find f.i:",model.feature_importances_)
 
 
@@ -70,17 +73,18 @@ for thresh in thresholds:
     select_x_test = selection.transform(x_test)
     y_predict = selection_model.predict(select_x_test)
     score = accuracy_score(y_test, y_predict)
-    print('Thresh=%.6f, n=%d, R2:%.4f' 
-            %(thresh, select_x_train.shape[1], score*100.0))
+    print('Thresh=%.6f, n=%d, R2:%.6f' 
+            %(thresh, select_x_train.shape[1], score))
     temp_array.append([thresh, score])
 
 # temp_array를 R2 기준으로 오름차순 정렬하고,
 # 마지막 값이 최대 R2일 때의 thresh를 적용
-print("temp_array:\r\n", temp_array)
+# print("temp_array:\r\n", temp_array)
 temp_array.sort(key=lambda x: x[1])
-print("temp_array:\r\n", temp_array)
+# print("temp_array:\r\n", temp_array)
 
 feature_thresh = temp_array[-1][0]
+print("feature_thresh:",feature_thresh)
 def earseLowFI_index(fi_arr, low_value, input_arr):
     input_arr = input_arr.T
     temp = []
@@ -91,26 +95,27 @@ def earseLowFI_index(fi_arr, low_value, input_arr):
     temp = temp.T
     return temp
 
-print("before x.shape:",x.shape)
+print("before erase low f.i x.shape:",x.shape)
 x = earseLowFI_index(model.feature_importances_, feature_thresh, x)
-print("after x.shape:",x.shape)
+print("after erase low f.i x.shape:",x.shape)
 # ======== 피쳐 임포턴스 특성 찾기 끝 ========
 
 
 
-# # ======== PCA 적용 시작 ========
-# # PCA 극대화를 위한 스케일러
-# from sklearn.preprocessing import StandardScaler
-# scaler = StandardScaler()
-# scaler.fit(x)
-# x = scaler.transform(x)
+
+# ======== PCA 적용 시작 ========
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+scaler.fit(x)
+x = scaler.transform(x)
 
 # 1.5 PCA
 from sklearn.decomposition import PCA
-cumsum_standard = 0.95
+cumsum_standard = 0.99
 pca = PCA()
 pca.fit(x)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
+print("cumsum:\r\n", cumsum)
 d = np.argmax(cumsum >= cumsum_standard) +1
 print("n_components:",d)
 pca = PCA(n_components=d)
@@ -120,10 +125,11 @@ print("after pca x.shape", x.shape)
 
 
 
+
 # ======== 모델을 위한 train_test_split 시작 ========
 from sklearn.model_selection import train_test_split 
 x_train,x_test, y_train,y_test = train_test_split(
-    x, y, train_size=0.8, test_size=0.2)
+    x, y, random_state=44, train_size=0.8, test_size=0.2)
 print("split shape:",x_train.shape, x_test.shape)
 print("split shape:",y_train.shape, y_test.shape)
 # ======== 모델을 위한 train_test_split 끝 ========
@@ -142,8 +148,8 @@ y = to_categorical(y)
 # ======== 모델+Pipeline+SearchCV 시작 ========
 parameters_arr2 = [
     {'anyway__n_estimators':np.array(range(100,1000,100)),
-    'anyway__learning_rate':np.array(np.arange(0.01,1,0.1)),
-    'anyway__max_depth': np.array(range(3,10)),
+    'anyway__learning_rate':np.array(np.arange(0.01,1,0.05)),
+    'anyway__max_depth': np.array(range(3,15)),
     'anyway__colsample_bytree': np.array(np.arange(0.5,1,0.1)),
     'anyway__colsample_bylevel': np.array(np.arange(0.5,1,0.1)),
     'anyway__n_jobs':[-1]
@@ -155,34 +161,28 @@ model = RandomizedSearchCV(pipe, parameters_arr2, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
 score = model.score(x_test, y_test)
 print("after cutting R2:", score)
-original_params = model.best_params_
-print("after cutting 최적의 파라미터:", original_params)
+original_params2 = model.best_params_
+print("after cutting 최적의 파라미터:", original_params2)
 # ======== 모델+Pipeline+SearchCV 끝 ========
 
 
 
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 시작 ========
-model = XGBClassifier(original_params)
+model = XGBClassifier(original_params2)
 model.fit(x_train, y_train)
 score = model.score(x_test, y_test)
 print("final param R2:", score)
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 끝 ========
 
-
-
-
-# original R2: 0.945
-# original 최적의 파라미터: {'anyway__n_jobs': -1, 'anyway__n_estimators': 400, 'anyway__max_depth': 3, 'anyway__learning_rate': 0.91, 'anyway__colsample_bytree': 0.7, 'anyway__colsample_bylevel': 0.7999999999999999}
-# find param R2: 0.96
-# after cutting R2: 0.96
-# after cutting 최적의 파라미터: {'anyway__n_jobs': -1, 'anyway__n_estimators': 200, 'anyway__max_depth': 6, 'anyway__learning_rate': 0.51, 'anyway__colsample_bytree': 0.7999999999999999, 'anyway__colsample_bylevel': 0.6}
-# final param R2: 0.96
-
-
 y_predict = model.predict(x_test)
-print(y_test)
-print(y_predict)
 print('최종정답률:',accuracy_score(y_test, y_predict))
 
-print(set(y_test))
-print(set(y_predict))
+print("앞에서 10개만 견본으로 뽑아서 보자")
+print("y_test[:10]:", y_test[:10])
+print("y_predict[:10]:", y_predict[:10])
+print("set(y_test):", set(y_test))
+print("set(y_predict):", set(y_predict))
+
+
+print("original score:", score_at_fi)
+print("find param score:", score_at_fi_param)

@@ -33,7 +33,6 @@ accidents = accidents[[
 # print(accidents.head())
 print("accidents.shape:",accidents.shape)
 
-
 vehicles = pd.read_csv('./project/Vehicles0514.csv', 
                         header=0, # 첫 번 째 행 = 헤더다
                         index_col=None, # 컬럼 시작 번호
@@ -55,7 +54,6 @@ vehicles = vehicles[[
 # print(vehicles.head())
 print("vehicles.shape:",vehicles.shape)
 
-
 casualties = pd.read_csv('./project/Casualties0514.csv', 
                         header=0, # 첫 번 째 행 = 헤더다
                         index_col=None, # 컬럼 시작 번호
@@ -74,19 +72,23 @@ casualties = casualties[[
 # print(casualties.head())
 print("casualties.shape:",casualties.shape)
 
-
 # https://www.kaggle.com/regaipkurt/financial-markets
 ftse = pd.read_csv('./project/Index2018.csv', 
                         header=0, # 첫 번 째 행 = 헤더다
                         index_col=None, # 컬럼 시작 번호
                         sep=',' # 구분 기호
                         )
-ftse = ftse[[
-    'Date',
-    'ftse'
-    ]]
+# ftse = ftse[[
+#     'Date',
+#     'ftse'
+#     ]]
 # print(ftse.head())
 print("ftse.shape:",ftse.shape)
+
+
+
+
+
 
 
 import datetime as dt
@@ -100,6 +102,28 @@ merge_csv = pd.merge(merge_csv, ftse, how='left', on='Date')
 # 데이터 병합하기 위해 사용한 Accident_Index와 Date 컬럼은
 # 이 이후 삭제하여 분류 모델에는 사용하지 않는다
 merge_csv = merge_csv.drop(['Accident_Index','Date'], axis=1)
+
+
+# ============ drop -1 시작 ============
+def deleteValue(arr, value):
+    for cnt in range(0, arr.shape[1]):
+        arr = arr.drop(arr[arr.iloc[:,cnt]== value].index)
+    return arr
+print("before erase -1 / merge_csv.shape:",merge_csv.shape)
+merge_csv = deleteValue(merge_csv, -1)
+print("after erase -1 / merge_csv.shape:",merge_csv.shape)
+# ============ drop -1 끝 ============
+
+
+# ============ drop nan 시작 ============
+print("before erase NAN merge_csv.shape:",merge_csv.shape)
+merge_csv = merge_csv.dropna(axis=0)
+print("after erase NAN merge_csv.shape:",merge_csv.shape)
+# ============ drop nan 끝 ============
+
+
+
+
 print(merge_csv.head())
 print(merge_csv.tail())
 print("merge_csv.shape:",merge_csv.shape)
@@ -109,9 +133,6 @@ print("merge_csv.shape:",merge_csv.columns)
 
 
 
-
-
-'''
 merge_csv_index = merge_csv.columns
 np.save('./project/merge_index.npy',arr=merge_csv_index)
 
@@ -122,22 +143,6 @@ np.save('./project/merge_target.npy',arr=merge_target_npy)
 merge_data_npy = merge_csv.drop(['Casualty_Severity'], axis=1).to_numpy()
 print("merge_data_npy.shape:",merge_data_npy.shape)
 np.save('./project/merge_data.npy',arr=merge_data_npy)
-'''
-
-'''
-# load_npy = np.load('./project/merge_npy.npy', allow_pickle=True)
-# print(load_npy[:5])
-
-
-merge_csv = pd.read_csv('./project/merge_csv.csv', 
-                        header=0, # 첫 번 째 행 = 헤더다
-                        index_col=None, # 컬럼 시작 번호
-                        sep=',' # 구분 기호
-                        )
-
-print(merge_csv.head())
-print("merge_csv.shape:",merge_csv.shape)
-'''
 
 
 
