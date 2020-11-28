@@ -16,7 +16,7 @@ print("npy y.shape:",y.shape)
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 from sklearn.model_selection import train_test_split
 temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=100000)
+    x,y, random_state=44, shuffle=True, test_size=0.01)
 
 print("merge_index:", indexes)
 print("merge_data.shape:",x.shape)
@@ -213,18 +213,7 @@ terminate_time = timeit.default_timer() # 종료 시간 체크
 print("%f초 걸렸습니다." % (terminate_time - start_time)) 
 
 
-from xgboost import XGBClassifier
-from yellowbrick.classifier import ROCAUC
 
-
-xgb_basic = XGBClassifier()
-xgb_basic.fit(x_train, y_train)
-
-visualizer = ROCAUC(xgb_basic, classes=[1, 2, 3], micro=False, macro=True, per_class=False)
-visualizer.fit(x_train, y_train)
-visualizer.fit(x_train, y_train)
-visualizer.show()
- 
 
 
 
