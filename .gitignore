@@ -6,3 +6,5 @@ project/*.npy
 data1/*
 data2/*
 image_classifier/*
+project2/*.csv
+project2/*.npy
