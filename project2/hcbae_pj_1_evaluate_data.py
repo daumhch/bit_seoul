@@ -32,7 +32,7 @@ print("npy y.shape:",y.shape)
 # y = y[:10000]
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=0.5)
+    x,y, random_state=44, shuffle=True, test_size=0.05)
 
 # print("merge_index:", indexes)
 print("merge_data.shape:",x.shape)
@@ -46,7 +46,7 @@ x_train,x_test, y_train,y_test = train_test_split(
 
 parameters_arr = [
     {'anyway__n_jobs':[-1],
-    'anyway__nthread':[-1],
+    #'anyway__nthread':[-1],
     'anyway__n_estimators':np.array(range(100,1000,100)),
     'anyway__max_depth': np.array(range(3,10)), # 트리 최대 깊이 default 6
     'anyway__learning_rate':np.array(np.arange(0.1,0.6,0.1)), # 학습률 default 0.3
@@ -55,8 +55,7 @@ parameters_arr = [
     }
 ]
 kfold = KFold(n_splits=5, shuffle=True)
-xbg = XGBClassifier(objective='multi:softmax', eval_metric='logloss')
-pipe = Pipeline([('scaler', StandardScaler()),('anyway', xbg)])
+pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier() )])
 model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
 score_at_fi = model.score(x_test, y_test)
@@ -70,7 +69,7 @@ model = XGBClassifier(original_params_at_fi)
 model.fit(x_train, y_train)
 score_at_fi_param = model.score(x_test, y_test)
 print("find param R2:", score_at_fi_param)
-print("find f.i:",model.feature_importances_)
+# print("find f.i:",model.feature_importances_)
 
 
 ######## 최적 파라미터로 구한 f.i를 정렬 후, 최대 R2에서 threshold 구하기 
@@ -153,7 +152,7 @@ x = scaler.transform(x)
 pca = PCA()
 pca.fit(x)
 cumsum = np.cumsum(pca.explained_variance_ratio_)
-print("cumsum:\r\n", cumsum)
+# print("cumsum:\r\n", cumsum)
 
 plt.rcParams["figure.figsize"] = (20, 10)
 plt.plot(cumsum, marker='.')
@@ -198,29 +197,47 @@ print("split x_pred.shape:",x_pred.shape)
 # ======== 모델을 위한 train_test_split 끝 ========
 
 
-###### 최적의 파라미터로, 다시 모델 돌리기 -> 모델 평가를 위해서
-model = XGBClassifier(original_params_at_fi)
+model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0, random_state=44)
+model.fit(x_train, y_train)
+score_at_ac = model.score(x_test, y_test)
+print("after cutting R2:", score_at_ac)
+original_params2 = model.best_params_
+print("after cutting 최적의 파라미터:", original_params2)
+# ======== 모델+Pipeline+SearchCV 끝 ========
+
+
+
+# ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 시작 ========
+model = XGBClassifier(original_params2)
 model.fit(x_train, y_train)
 score_at_final_param = model.score(x_test, y_test)
 print("final param R2:", score_at_final_param)
+# ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 끝 ========
+
 
 
 y_predict = model.predict(x_pred)
 print("================================")
 print("original score:", score_at_fi)
 print("find param score:", score_at_fi_param)
-print("final param score:", score)
+print("after cutting score:", score_at_ac)
+print("final param score:", score_at_final_param)
 print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
 print("================================")
+
 
 
 ###### 추가 평가
 from sklearn.metrics import classification_report
 print("classification_report:\r\n",classification_report(y_test, y_predict))
 
+from sklearn.metrics import precision_recall_fscore_support as prf_score
+precision, recall, fscore, support = prf_score(y_test, y_predict)
 
-
-
+print('precision: {}'.format(precision))
+print('recall: {}'.format(recall))
+print('fscore: {}'.format(fscore))
+print('support: {}'.format(support))
 
 
 terminate_time = timeit.default_timer() # 종료 시간 체크  
