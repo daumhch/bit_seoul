@@ -31,8 +31,8 @@ print("npy y.shape:",y.shape)
 # x = x[:10000,:]
 # y = y[:10000]
 # 그냥 자르기 보다는 솎아내는게 낫겠다
-temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=0.01)
+# temp_x,x, temp_y,y = train_test_split(
+#     x,y, random_state=44, shuffle=True, test_size=0.1)
 
 # print("merge_index:", indexes)
 print("data use.shape:",x.shape)
@@ -41,17 +41,21 @@ print("target use.shape:",y.shape)
 
 
 # ======== 피쳐 임포턴스 특성 찾기 시작 ========
+x_train,x_pred, y_train,y_stand = train_test_split(
+    x, y, random_state=44, train_size=0.8, test_size=0.2)
+# print("split shape x_train/x_test:",x_train.shape, x_test.shape)
+# print("split shape y_train/y_test:",y_train.shape, y_test.shape)
+
 x_train,x_test, y_train,y_test = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=0.2)
+    x_train, y_train, random_state=44, train_size=0.75, test_size=0.25)
+print("split x_train.shape:",x_train.shape)
+print("split x_test.shape:",x_test.shape)
+print("split x_pred.shape:",x_pred.shape)
 
 parameters_arr = [
     {'anyway__n_jobs':[-1],
-    #'anyway__nthread':[-1],
-    'anyway__n_estimators':np.array(range(100,1000,100)),
-    'anyway__max_depth': np.array(range(3,10)), # 트리 최대 깊이 default 6
-    'anyway__learning_rate':np.array(np.arange(0.1,0.6,0.1)), # 학습률 default 0.3
-    'anyway__colsample_bytree': np.array(np.arange(0.7,1,0.1)), # 트리생성시 반영비율 default 1
-    'anyway__colsample_bylevel': np.array(np.arange(0.7,1,0.1)) # 레벨생성시 반영비율 default 1
+    'anyway__n_estimators':np.array(range(100,500,100)),
+    'anyway__max_depth': np.array(range(5,15)), # 트리 최대 깊이 default 6
     }
 ]
 kfold = KFold(n_splits=5, shuffle=True)
@@ -59,7 +63,7 @@ pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier() )])
 model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
 score_at_fi = model.score(x_test, y_test)
-print("original R2:", score_at_fi)
+print("original score:", score_at_fi)
 original_params_at_fi = model.best_params_
 print("original 최적의 파라미터:", original_params_at_fi)
 
@@ -72,11 +76,11 @@ print("original 최적의 파라미터:", original_params_at_fi)
 # print("find f.i:",model.feature_importances_)
 best_model = model.best_estimator_
 score_at_fi_param = best_model.score(x_test, y_test)
-print("find param R2:", score_at_fi_param)
+print("find param score:", score_at_fi_param)
 
 g_best_model = model.best_estimator_.named_steps["anyway"]
 g_feature_importance = model.best_estimator_.named_steps["anyway"].feature_importances_
-
+print("g_feature_importance:\r\n",g_feature_importance)
 
 ######## 최적 파라미터로 구한 f.i를 정렬 후, 최대 R2에서 threshold 구하기 
 thresholds = np.sort(g_feature_importance) # default 오름차순
@@ -152,8 +156,6 @@ scaler = StandardScaler()
 scaler.fit(x)
 x = scaler.transform(x)
 
-
-
 # 1.5 PCA
 pca = PCA()
 pca.fit(x)
@@ -174,10 +176,6 @@ print("n_components:",d)
 pca = PCA(n_components=d)
 x = pca.fit_transform(x)
 print("after pca x.shape", x.shape)
-
-import pickle as pk
-pk.dump(pca, open("./project2/pca.pkl","wb"))
-
 # ======== PCA 적용 끝 ========
 
 
@@ -205,24 +203,23 @@ print("split x_pred.shape:",x_pred.shape)
 
 
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 시작 ========
-kfold = KFold(n_splits=5, shuffle=True)
 pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier() )])
 model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
 score_at_final = model.score(x_test, y_test)
-print("final R2:", score_at_final)
+print("final score:", score_at_final)
 
 score_at_final_param = model.best_estimator_.score(x_test, y_test)
-print("final 최적 파라미터 R2:", score_at_final_param)
+print("final param score:", score_at_final_param)
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 끝 ========
 
 
 y_predict = model.best_estimator_.predict(x_pred)
 print("================================")
 print("original score:", score_at_fi)
-print("find 최적 파라미터 score:", score_at_fi_param)
+print("find param score:", score_at_fi_param)
 print("final score:", score_at_final)
-print("final 최적 파라미터 score:", score_at_final_param)
+print("final param score:", score_at_final_param)
 print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
 print("================================")
 
