@@ -21,8 +21,8 @@ start_time = timeit.default_timer() # 시작 시간 체크
 
 # ======== 데이터 불러오기 시작 ========
 indexes = np.load('./project2/csv_index.npy', allow_pickle=True)
-x = np.load('./project2/iv_data.npy', allow_pickle=True)
-y = np.load('./project2/iv_target.npy', allow_pickle=True)
+x = np.load('./project2/merge_data.npy', allow_pickle=True)
+y = np.load('./project2/merge_target.npy', allow_pickle=True)
 # print(x[0])
 print("npy x.shape:",x.shape)
 print("npy y.shape:",y.shape)
@@ -32,11 +32,11 @@ print("npy y.shape:",y.shape)
 # y = y[:10000]
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=0.05)
+    x,y, random_state=44, shuffle=True, test_size=0.01)
 
 # print("merge_index:", indexes)
-print("merge_data.shape:",x.shape)
-print("merge_target.shape:",y.shape)
+print("data use.shape:",x.shape)
+print("target use.shape:",y.shape)
 # ======== 데이터 불러오기 끝 ========
 
 
@@ -65,20 +65,26 @@ print("original 최적의 파라미터:", original_params_at_fi)
 
 
 ###### 최적의 파라미터로, 다시 모델 돌리기 -> 피쳐임포턴스 구하기 위해서
-model = XGBClassifier(original_params_at_fi)
-model.fit(x_train, y_train)
-score_at_fi_param = model.score(x_test, y_test)
-print("find param R2:", score_at_fi_param)
+# model = XGBClassifier(original_params_at_fi)
+# model.fit(x_train, y_train)
+# score_at_fi_param = model.score(x_test, y_test)
+# print("find param R2:", score_at_fi_param)
 # print("find f.i:",model.feature_importances_)
+best_model = model.best_estimator_
+score_at_fi_param = best_model.score(x_test, y_test)
+print("find param R2:", score_at_fi_param)
+
+g_best_model = model.best_estimator_.named_steps["anyway"]
+g_feature_importance = model.best_estimator_.named_steps["anyway"].feature_importances_
 
 
 ######## 최적 파라미터로 구한 f.i를 정렬 후, 최대 R2에서 threshold 구하기 
-thresholds = np.sort(model.feature_importances_) # default 오름차순
+thresholds = np.sort(g_feature_importance) # default 오름차순
 temp_array =[]
 for thresh in thresholds:
-    selection = SelectFromModel(model,threshold=thresh, prefit=True)
+    selection = SelectFromModel(g_best_model, threshold=thresh, prefit=True)
     select_x_train = selection.transform(x_train)
-    selection_model = XGBClassifier(original_params_at_fi)
+    selection_model = XGBClassifier()
     selection_model.fit(select_x_train, y_train)
     select_x_test = selection.transform(x_test)
     y_predict = selection_model.predict(select_x_test)
@@ -103,7 +109,7 @@ print("feature_thresh:",feature_thresh)
 import matplotlib.pyplot as plt
 import numpy as np
 def drawPlt(index, feature_importances, feature_thresh):
-    n_features = len(model.feature_importances_)
+    n_features = len(feature_importances)
     plt.rcParams["figure.figsize"] = (20, 10)
     plt.bar(np.arange(n_features), feature_importances)
     plt.ylabel("Feature Importances(log)")
@@ -116,7 +122,7 @@ def drawPlt(index, feature_importances, feature_thresh):
     plt.savefig('./project2/feature_importances.png', bbox_inches='tight', pad_inches=0)
     plt.close()
 
-drawPlt(indexes, model.feature_importances_, feature_thresh)
+drawPlt(indexes, g_feature_importance, feature_thresh)
 ############ 위에서 구한 최대 R2 기준 Threshold와 F.I 그래프 그리기
 
 
@@ -127,7 +133,7 @@ def earseLowFI_index(fi_arr, low_value, input_arr):
     input_arr = input_arr.T
     temp = []
     for i in range(fi_arr.shape[0]):
-        if fi_arr[i] >= low_value:
+        if fi_arr[i] > low_value:
             temp.append(input_arr[i,:])
     temp = np.array(temp)
     temp = temp.T
@@ -135,7 +141,7 @@ def earseLowFI_index(fi_arr, low_value, input_arr):
 
 
 print("before erase low f.i x.shape:",x.shape)
-x = earseLowFI_index(model.feature_importances_, 0.001, x)
+x = earseLowFI_index(g_feature_importance, 0, x)
 print("after erase low f.i x.shape:",x.shape)
 
 
@@ -197,47 +203,29 @@ print("split x_pred.shape:",x_pred.shape)
 # ======== 모델을 위한 train_test_split 끝 ========
 
 
-model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0, random_state=44)
-model.fit(x_train, y_train)
-score_at_ac = model.score(x_test, y_test)
-print("after cutting R2:", score_at_ac)
-original_params2 = model.best_params_
-print("after cutting 최적의 파라미터:", original_params2)
-# ======== 모델+Pipeline+SearchCV 끝 ========
-
-
 
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 시작 ========
-model = XGBClassifier(original_params2)
+kfold = KFold(n_splits=5, shuffle=True)
+pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier() )])
+model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
-score_at_final_param = model.score(x_test, y_test)
-print("final param R2:", score_at_final_param)
+score_at_final = model.score(x_test, y_test)
+print("final R2:", score_at_final)
+
+score_at_final_param = model.best_estimator_.score(x_test, y_test)
+print("final 최적 파라미터 R2:", score_at_final_param)
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 끝 ========
 
 
-
-y_predict = model.predict(x_pred)
+y_predict = model.best_estimator_.predict(x_pred)
 print("================================")
 print("original score:", score_at_fi)
-print("find param score:", score_at_fi_param)
-print("after cutting score:", score_at_ac)
-print("final param score:", score_at_final_param)
+print("find 최적 파라미터 score:", score_at_fi_param)
+print("final score:", score_at_final)
+print("final 최적 파라미터 score:", score_at_final_param)
 print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
 print("================================")
 
-
-
-###### 추가 평가
-from sklearn.metrics import classification_report
-print("classification_report:\r\n",classification_report(y_test, y_predict))
-
-from sklearn.metrics import precision_recall_fscore_support as prf_score
-precision, recall, fscore, support = prf_score(y_test, y_predict)
-
-print('precision: {}'.format(precision))
-print('recall: {}'.format(recall))
-print('fscore: {}'.format(fscore))
-print('support: {}'.format(support))
 
 
 terminate_time = timeit.default_timer() # 종료 시간 체크  
