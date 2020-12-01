@@ -5,7 +5,8 @@ import numpy as np
 import pandas as pd
 import timeit
 
-from xgboost import XGBClassifier
+#from xgboost import XGBClassifier
+from lightgbm import LGBMClassifier
 
 from sklearn.model_selection import train_test_split
 from sklearn.model_selection import KFold
@@ -31,8 +32,8 @@ print("npy y.shape:",y.shape)
 # x = x[:10000,:]
 # y = y[:10000]
 # 그냥 자르기 보다는 솎아내는게 낫겠다
-temp_x,x, temp_y,y = train_test_split(
-    x,y, random_state=44, shuffle=True, test_size=0.1)
+# temp_x,x, temp_y,y = train_test_split(
+#     x,y, random_state=44, shuffle=True, test_size=0.1)
 
 # print("merge_index:", indexes)
 print("data use.shape:",x.shape)
@@ -55,6 +56,7 @@ print("split x_pred.shape:",x_pred.shape)
 parameters_arr = [
     {'anyway__n_jobs':[-1],
     'anyway__n_estimators':np.array(range(100,500,100)),
+    'anyway__num_leaves': [10],
     'anyway__max_depth': [5,6,7,8], # 트리 최대 깊이 default 6
     }
 ]
@@ -62,13 +64,15 @@ parameters_arr = [
 start_time2 = timeit.default_timer() # 시작 시간 체크
 
 kfold = KFold(n_splits=5, shuffle=True)
-pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier() )])
+pipe = Pipeline([('scaler', StandardScaler()),('anyway', LGBMClassifier() )])
 model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
 score_at_fi = model.score(x_test, y_test)
 print("original score:", score_at_fi)
 original_params_at_fi = model.best_params_
 print("original 최적의 파라미터:", original_params_at_fi)
+
+end_time2 = timeit.default_timer() # 시작 시간 체크
 
 
 ###### 최적의 파라미터로, 다시 모델 돌리기 -> 피쳐임포턴스 구하기 위해서
@@ -81,9 +85,6 @@ best_model = model.best_estimator_
 score_at_fi_param = best_model.score(x_test, y_test)
 print("find param score:", score_at_fi_param)
 
-end_time2 = timeit.default_timer() # 시작 시간 체크
-
-
 g_best_model = model.best_estimator_.named_steps["anyway"]
 g_feature_importance = model.best_estimator_.named_steps["anyway"].feature_importances_
 print("g_feature_importance:\r\n",g_feature_importance)
@@ -94,7 +95,7 @@ temp_array =[]
 for thresh in thresholds:
     selection = SelectFromModel(g_best_model, threshold=thresh, prefit=True)
     select_x_train = selection.transform(x_train)
-    selection_model = XGBClassifier()
+    selection_model = LGBMClassifier()
     selection_model.fit(select_x_train, y_train)
     select_x_test = selection.transform(x_test)
     y_predict = selection_model.predict(select_x_test)
@@ -210,7 +211,7 @@ print("split x_pred.shape:",x_pred.shape)
 start_time3 = timeit.default_timer() # 시작 시간 체크
 
 # ======== 최적 파라미터 적용 모델+Pipeline+SearchCV 시작 ========
-pipe = Pipeline([('scaler', StandardScaler()),('anyway', XGBClassifier() )])
+pipe = Pipeline([('scaler', StandardScaler()),('anyway', LGBMClassifier() )])
 model = RandomizedSearchCV(pipe, parameters_arr, cv=kfold, verbose=0)
 model.fit(x_train, y_train)
 score_at_final = model.score(x_test, y_test)
@@ -233,15 +234,12 @@ print("final param score:", score_at_final_param)
 print('따로 빼낸 pred로 만든 accuracy:',accuracy_score(y_stand, y_predict))
 print("================================")
 
-print("1st 탐색 %f초 걸렸습니다." % (end_time2 - start_time2))
+print("1st 탐색 %f초 걸렸습니다." % (end_time2 - start_time2)) 
 print("2nd 탐색 %f초 걸렸습니다." % (end_time3 - start_time3))
 
 
 terminate_time = timeit.default_timer() # 종료 시간 체크  
 print("%f초 걸렸습니다." % (terminate_time - start_time)) 
-
-
-
 
 
 
