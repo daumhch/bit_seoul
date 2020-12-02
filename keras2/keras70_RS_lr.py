@@ -59,6 +59,7 @@ def build_model(drop=0.5,
                 learning_rate_num=0.001,
                 node_value=64, 
                 layer_num=1):
+
     inputs = Input( shape=(28*28, ) )
     for cnt in range(layer_num):
         x = Dense(node_value, activation='relu', name='hidden1')(inputs)
@@ -78,8 +79,8 @@ def create_hyperparameters():
     batches = [10]
     optimizers = [Adam, RMSprop]
     learning_rate_num = [0.001, 0.01]
-    dropout = [0.2]
-    epochs = [10]
+    dropout = [0.2, 0.5]
+    epochs = [20]
     node_value = [10, 20]
     layer_num = [1, 2]
     
@@ -104,11 +105,11 @@ search = RandomizedSearchCV(wrapper_model, hyperparameters, cv=3) # wrapper를 �
 
 
 early_stopping = EarlyStopping(monitor='loss',
-                        patience=2,
+                        patience=5,
                         mode='auto')
 search.fit(x_train, y_train, 
             callbacks=[early_stopping])
 
-print(search.best_params_)
+print("search.best_params_:\n",search.best_params_)
 acc = search.score(x_test, y_test)
 print("최종 스코어:", acc)
