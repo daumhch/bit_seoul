@@ -1,10 +1,10 @@
 save/*
 model/*
 data/*
-project/*.csv
-project/*.npy
 data1/*
 data2/*
 image_classifier/*
-project2/*.csv
-project2/*.npy
+1st_project/*.csv
+1st_project/*.npy
+0_mini_project/*.csv
+0_mini_project/*.npy
