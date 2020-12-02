@@ -70,9 +70,12 @@ def build_model(drop=0.5,
 
     inputs = Input( shape=(28*28, ) )
     for cnt in range(layer_num):
-        x = Dense(node_value, activation='relu', name='hidden1')(inputs)
-        x = activations(alpha=0.3)(x)
-        x = Dense(node_value, name='hidden2')(inputs)
+        if cnt == 0:
+            x = Dense(node_value, activation='relu')(inputs)
+        else :
+            x = Dense(node_value, activation='relu')(x)
+        x = activations()(x)
+        x = Dense(node_value)(x)
         x = Activation(relu)(x)
         x = Dropout(drop)(x)
     outputs = Dense(10, activation='softmax', name='outputs')(x)
@@ -127,3 +130,9 @@ search.fit(x_train, y_train,
 print("search.best_params_:\n",search.best_params_)
 acc = search.score(x_test, y_test)
 print("최종 스코어:", acc)
+
+
+
+
+
+

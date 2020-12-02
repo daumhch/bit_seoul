@@ -1610,6 +1610,55 @@ https://gomguard.tistory.com/187
 
 
 
+### kernel_regularizer
+연산하면서 가중치같은걸 layer 마다 업데이트 하는데 
+그때마다 나의 목표에 맞춰서 연산할 가중치 또는 bias에 제한을 줌 
+ex) 가중치가 이상해질거같을때 제한을 주어 이상해지지 않게해줌
+
+https://keras.io/ko/regularizers/
+
+Regularizer는 최적화 과정 중에 
+각 층별 파라미터 또는 출력값에 대하여 
+페널티를 적용할 수 있게 해줍니다. 
+이러한 페널티는 네트워크가 최적화 하려는 손실 함수의 일부로 포함됩니다.
+
+Regularization vs Normalization
+제한 vs 정규화
+
+L1 = 가중치 절대값 제한
+L2 = 가중치 제곱 제한
+
+
+
+### kernel_initializer
+연산을 시작할때 가중치 또는 bias 초기값을 설정
+https://keras.io/ko/initializers/
+
+종류:
+he_normal
+
+
+
+
+### BatchNormalization()
+한 layer에서 다음 layer로 넘어갈때 노드에서 연산된 값을 정규화 시켜줌
+평균과 분산을 0과 1로 정규화함
+parameter값에 영향을 크게 안받아서
+learning rate값을 높게 해도 잘 받아줌 -> 학습속도가 빨라짐
+
+주의사항, activation 전에 사용하는 것이 낫다
+
+
+레이어 하나의 층 구성 순서
+Convolution -> BatchNormalization -> activation -> dropout -> pooling 순서로 
+레이어 층을 구현하는게 권장된다
+
+
+
+내일은 전이학습
+learning_rate 하나 더 해야함
+
+
 
 
 

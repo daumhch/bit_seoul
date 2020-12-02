@@ -66,8 +66,10 @@ def build_model(drop=0.5,
 
     inputs = Input( shape=(28*28, ) )
     for cnt in range(layer_num):
-        x = Dense(node_value, activation='relu', name='hidden1')(inputs)
-        x = Dropout(drop)(x)
+        if cnt == 0:
+            x = Dense(node_value, activation='relu')(inputs)
+        else :
+            x = Dense(node_value, activation='relu')(x)
     outputs = Dense(10, activation='softmax', name='outputs')(x)
     model = Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer=optimizer(lr=learning_rate_num), 
