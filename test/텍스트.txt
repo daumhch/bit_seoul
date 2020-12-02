@@ -1582,3 +1582,34 @@ https://velog.io/@decody/%ED%8C%8C%EC%9D%B4%EC%8D%AC-Flask%EB%A1%9C-%EA%B0%84%EB
 
 
 
+=============================================================================
+201202
+
+keras66 다양한 파라미터 적용해서,
+03일 아침까지 메일로 보내기
+
+
+
+
+딥러닝
+y=wx+b
+
+앞으로 하는 건 미세조정
+
+
+learning_rate = 경사하강법 찾을 때 건너뛰는 크기
+
+learning_rate가 크면, 최소 loss에 다다르지 못하고 반복하기 쉬움
+작으면, 최소 loss를 찾아가는 시간이 오래 걸림
+
+optimizer에 learning_rate가 있다
+
+
+발전 과정
+https://gomguard.tistory.com/187
+
+
+
+
+
+
