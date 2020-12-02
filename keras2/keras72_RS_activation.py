@@ -1,14 +1,9 @@
+# activation 추가하기
+
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
-# 1.데이터
-# 1.1 load_data
-# 1.2 train_test_split
-# 1.3 scaler
-# 1.4 reshape
-# 2.모델
-# 3.컴파일 훈련
-# 4.평가 예측
+
 
 
 import numpy as np
@@ -55,37 +50,52 @@ print("reshape x:", x_train.shape, x_test.shape)
 # 2.모델
 from tensorflow.keras.models import Model
 from tensorflow.keras.layers import Input, Dense, Dropout
+from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
 from tensorflow.keras.optimizers import Adam, Adadelta, Adamax, Adagrad
 from tensorflow.keras.optimizers import RMSprop, SGD, Nadam
+
+from tensorflow.keras.layers import Activation
+from tensorflow.keras.activations import relu, selu, elu, softmax, sigmoid
+from tensorflow.keras.layers import LeakyReLU, PReLU
+from tensorflow.keras.layers import ReLU, ELU
 
 def build_model(drop=0.5, 
                 optimizer=Adam, 
                 learning_rate_num=0.001,
                 node_value=64, 
-                layer_num=1):
+                layer_num=1,
+                activations=ReLU):
+                # activations=relu 일 때에는 Activation(relu) 또는 Activation('relu')
+                # activations=ReLU 일 때에는 activation(여러 옵션들)
 
     inputs = Input( shape=(28*28, ) )
     for cnt in range(layer_num):
         x = Dense(node_value, activation='relu', name='hidden1')(inputs)
+        x = activations(alpha=0.3)(x)
+        x = Dense(node_value, name='hidden2')(inputs)
+        x = Activation(relu)(x)
         x = Dropout(drop)(x)
     outputs = Dense(10, activation='softmax', name='outputs')(x)
     model = Model(inputs=inputs, outputs=outputs)
     model.compile(optimizer=optimizer(lr=learning_rate_num), 
                     metrics=['acc'],
                     loss='categorical_crossentropy')
-    print("setting: ",optimizer,"/",learning_rate_num)
-    print("setting: ",node_value,"/",layer_num)
+    print("optimizer: ",optimizer,"/ learning_rate_num:",learning_rate_num)
+    print("node_value:",node_value,"/ layer_num:",layer_num)
+    print("activation: ",activations)
     print(model.summary() )
     return model
 
+
 def create_hyperparameters():
-    batches = [10, 20, 30]
+    batches = [10]
     optimizers = [Adam, RMSprop]
     learning_rate_num = [0.001, 0.01]
     dropout = [0.2, 0.5]
     epochs = [20]
     node_value = [10, 20]
-    layer_num = [1, 2]
+    layer_num = [1, 2, 3]
+    activations = [ReLU, ELU, LeakyReLU]
     
     return_parameter = {"batch_size":batches, 
                         "optimizer":optimizers, 
@@ -93,21 +103,27 @@ def create_hyperparameters():
                         "drop":dropout,
                         "epochs":epochs,
                         "node_value":node_value,
-                        "layer_num":layer_num
+                        "layer_num":layer_num,
+                        "activations":activations
                         }
     return return_parameter
 
 from sklearn.model_selection import GridSearchCV, RandomizedSearchCV
 from tensorflow.keras.wrappers.scikit_learn import KerasClassifier
 
-wrapper_model = KerasClassifier(build_fn=build_model, verbose=1)
+wrapper_model = KerasClassifier(build_fn=build_model, verbose=0)
 hyperparameters = create_hyperparameters()
 # search = GridSearchCV(build_model, hyperparameters, cv=3) # fit에 문제가 생긴다
 # search = GridSearchCV(wrapper_model, hyperparameters, cv=3) # wrapper를 씌워 사이킷런으로 가져온다
 search = RandomizedSearchCV(wrapper_model, hyperparameters, cv=3) # wrapper를 씌워 사이킷런으로 가져온다
 
-search.fit(x_train, y_train)
 
-print(search.best_params_)
+early_stopping = EarlyStopping(monitor='loss',
+                                patience=5,
+                                mode='auto')
+search.fit(x_train, y_train, 
+            callbacks=[early_stopping])
+
+print("search.best_params_:\n",search.best_params_)
 acc = search.score(x_test, y_test)
 print("최종 스코어:", acc)
