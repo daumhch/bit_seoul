@@ -33,7 +33,7 @@ print("npy y.shape:",y.shape)
 # y = y[:10000]
 # 그냥 자르기 보다는 솎아내는게 낫겠다
 # temp_x,x, temp_y,y = train_test_split(
-#     x,y, random_state=44, shuffle=True, test_size=0.1)
+#     x,y, random_state=44, shuffle=True, test_size=0.5)
 
 # print("merge_index:", indexes)
 print("data use.shape:",x.shape)
@@ -54,10 +54,10 @@ print("split x_test.shape:",x_test.shape)
 print("split x_pred.shape:",x_pred.shape)
 
 parameters_arr = [
-    {'anyway__n_jobs':[-1],
-    'anyway__n_estimators':np.array(range(100,500,100)),
+    {'anyway__n_jobs': [-1],
+    'anyway__n_estimators': np.array(range(100,500,100)),
     'anyway__num_leaves': [10],
-    'anyway__max_depth': [5,6,7,8], # 트리 최대 깊이 default 6
+    'anyway__max_depth': [5,6,7,8] # 트리 최대 깊이 default 6
     }
 ]
 
@@ -95,7 +95,7 @@ temp_array =[]
 for thresh in thresholds:
     selection = SelectFromModel(g_best_model, threshold=thresh, prefit=True)
     select_x_train = selection.transform(x_train)
-    selection_model = LGBMClassifier()
+    selection_model = g_best_model
     selection_model.fit(select_x_train, y_train)
     select_x_test = selection.transform(x_test)
     y_predict = selection_model.predict(select_x_test)
