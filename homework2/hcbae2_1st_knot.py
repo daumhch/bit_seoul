@@ -156,3 +156,9 @@ search.fit(x_train, y_train,
 print("search.best_params_:\n",search.best_params_)
 acc = search.score(x_test, y_test)
 print("최종 스코어:", acc)
+
+
+# search.best_params_:
+#  {'optimizer': <class 'tensorflow.python.keras.optimizer_v2.gradient_descent.SGD'>, 'node_value2': 256, 'node_value1': 256, 'learning_rate': 0.001, 'layer_num2': 3, 'layer_num1': 2, 'epochs': 20, 'drop2': 0.2, 'drop1': 0.35, 'activation2': <class 'tensorflow.python.keras.layers.advanced_activations.ELU'>, 'activation1': <function selu at 0x00000215469B3790>}
+# 313/313 [==============================] - 2s 5ms/step - loss: 0.0497 - acc: 0.9859
+# 최종 스코어: 0.9858999848365784
