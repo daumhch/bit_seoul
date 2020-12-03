@@ -21,9 +21,9 @@ from sklearn.metrics import accuracy_score
 start_time = timeit.default_timer() # 시작 시간 체크
 
 # ======== 데이터 불러오기 시작 ========
-indexes = np.load('./project2/csv_index.npy', allow_pickle=True)
-x = np.load('./project2/merge_data.npy', allow_pickle=True)
-y = np.load('./project2/merge_target.npy', allow_pickle=True)
+indexes = np.load('./1st_project/csv_index.npy', allow_pickle=True)
+x = np.load('./1st_project/merge_data.npy', allow_pickle=True)
+y = np.load('./1st_project/merge_target.npy', allow_pickle=True)
 # print(x[0])
 print("npy x.shape:",x.shape)
 print("npy y.shape:",y.shape)
@@ -32,8 +32,8 @@ print("npy y.shape:",y.shape)
 # x = x[:10000,:]
 # y = y[:10000]
 # 그냥 자르기 보다는 솎아내는게 낫겠다
-# temp_x,x, temp_y,y = train_test_split(
-#     x,y, random_state=44, shuffle=True, test_size=0.5)
+temp_x,x, temp_y,y = train_test_split(
+    x,y, random_state=44, shuffle=True, test_size=0.1)
 
 # print("merge_index:", indexes)
 print("data use.shape:",x.shape)

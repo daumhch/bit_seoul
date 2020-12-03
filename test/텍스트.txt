@@ -1659,6 +1659,8 @@ Convolution -> BatchNormalization -> activation -> dropout -> pooling 순서로
 learning_rate 하나 더 해야함
 
 
+============================================
+201203
 
 
 
