@@ -7,6 +7,8 @@ os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
 
 from tensorflow.keras.applications import VGG16
 from tensorflow.keras.layers import Dense, Flatten
+from tensorflow.keras.layers import BatchNormalization
+from tensorflow.keras.layers import Dropout, Activation
 from tensorflow.keras.models import Sequential
 
 # model = VGG16() # parameter = 138,357,544
@@ -33,6 +35,22 @@ print(':', len(vgg16.trainable_weights))
 model = Sequential()
 model.add(vgg16)
 model.add(Flatten())
+model.add(Dense(256))
+# model.add(BatchNormalization()) # 가중치 2 증가한다, 가중치 연산을 한다
+# model.add(Dropout(0.2)) # 가중치가 늘어나지 않는다
+model.add(Activation('relu')) # 가중치가 늘어나지 않는다
+model.add(Dense(256))
 model.add(Dense(10, activation='softmax'))
 model.summary()
+
+print('모델 출력 붙이고 난 후 가중치의 수')
+print(':', len(model.trainable_weights)) 
+
+
+import pandas as pd
+pd.set_option('max_colwidth',None)
+layers = [(layer.name, layer.trainable) for layer in model.layers]
+aaa = pd.DataFrame(layers, columns=['Layer Name', 'Layer Trainable'])
+print(aaa)
+
 
