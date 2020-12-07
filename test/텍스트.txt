@@ -1676,6 +1676,44 @@ learning_rate를 임의로 줄여서 더 개선하는 기능
 
 
 
+===================================
+201207
+
+rmse, mae - 회귀
+accuracy - 분류
+
+https://xgboost.readthedocs.io/en/latest/parameter.html
+
+
+
+
+https://rk1993.tistory.com/entry/%EB%AA%A8%EB%8D%B8-%EC%84%B1%EB%8A%A5-%ED%8F%89%EA%B0%80-%EC%A7%80%ED%91%9C-%ED%9A%8C%EA%B7%80-%EB%AA%A8%EB%8D%B8-%EB%B6%84%EB%A5%98-%EB%AA%A8%EB%8D%B8
+
+# 회귀 지표
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+from sklearn.metrics import mean_squared_log_error, r2_score
+
+r2_score = Coefficient of Determination, 결정계수
+
+
+# 분류 지표
+from sklearn.metrics import accuracy_score, precision_score
+from sklearn.metrics import recall_score, f1_score
+from sklearn.metrics import log_loss, roc_auc_score
+
+accuracy: 정확도, 정답을 맞춘 비율, TP+TN/(TP+FN+FP+TN)
+
+이 아래부턴 이진분류 전용
+precision: 정밀도, True중에 True비율, TP/(TP+FP)
+recall: 재현율, 실제 True중에 True비율, TP/(TP+FN)
+f1_score: precision과 recall의 조화평균, 높아야 성능이 좋은 것
+log_loss: 모델이 예측한 확률 값을 직접적으로 반영하여 평가한 것
+roc_auc_score: Binary Classifier System(이진 분류 시스템)에 대한 성능 평가 기법
+
+
+
+
+
 
 
 
