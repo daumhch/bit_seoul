@@ -1,5 +1,6 @@
 import os
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
+os.environ["CUDA_VISIBLE_DEVICES"] = '1'
 
 
 
@@ -68,10 +69,11 @@ print(x_train.shape)
 # 모델
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Embedding, Flatten
-from tensorflow.keras.layers import LSTM
+from tensorflow.keras.layers import LSTM, Bidirectional
 model = Sequential()
 model.add(Embedding(num_words, 64))
-model.add(LSTM(64))
+# model.add(LSTM(64))
+model.add(Bidirectional(LSTM(64)))
 model.add(Dense(1, activation='sigmoid'))
 model.summary()
 
