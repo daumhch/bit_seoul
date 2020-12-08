@@ -45,9 +45,7 @@ for thresh in thresholds:
     score = accuracy_score(y_test, y_predict)
     if best_score<score:
         best_score = score
-        # selection_model.save_model('./save/xgb_save/m37_3_best_model.xgb.dat')
-        bst = selection_model.get_booster()
-        selection_model.dump_model('./save/xgb_save/m37_3_best_model.xgb.dat','./save/xgb_save/m37_3_best_feature.xgb.dat')
+        selection_model.save_model('./save/xgb_save/m37_3_best_model.xgb.dat')
     print('Thresh=%.6f, n=%d, R2:%.4f' 
             %(thresh, select_x_train.shape[1], score*100.0))
 
@@ -57,9 +55,12 @@ print('best_score:',best_score)
 model4 = XGBClassifier(n_jobs=6)
 model4.load_model('./save/xgb_save/m37_3_best_model.xgb.dat')
 
-# model4.fit(x_train, y_train)
+model4.fit(x_train, y_train)
 
 y_predict4 = model4.predict(x_test)
 score4 = accuracy_score(y_test, y_predict4)
 print("score4:", score4)
+
+
+
 
