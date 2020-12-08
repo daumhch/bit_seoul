@@ -33,7 +33,7 @@ print('a.shape:',a.shape)
 ### 숙제
 ### 위 함수를 수정하여, 행렬에서도 먹힐 수 있게
 
-def outliers(data_out) :
+def outliers2(data_out) :
     data_out = data_out.T # 뒤집어서 빼기 편하게
     del_index = np.array([],dtype=np.int)
     for cnt in range(data_out.shape[1]):
@@ -49,7 +49,7 @@ def outliers(data_out) :
     return data_out
 
 
-b = outliers(a)
+b = outliers2(a)
 print(b)
 
 

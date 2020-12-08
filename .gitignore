@@ -8,3 +8,4 @@ image_classifier/*
 1st_project/*.npy
 0_mini_project/*.csv
 0_mini_project/*.npy
+*.pyc
