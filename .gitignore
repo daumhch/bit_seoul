@@ -9,3 +9,8 @@ image_classifier/*
 0_mini_project/*.csv
 0_mini_project/*.npy
 *.pyc
+*.h5
+*.zip
+*.csv
+tmp/*
+tf_cert_practice/*
