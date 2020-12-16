@@ -18,8 +18,8 @@ x_train = x_train.astype('float32')/255.
 x_test = x_test/255. # 윗 줄과 같은 표현
 
 
-x_train_noised = x_train + np.random.normal(0, 0.1, size=x_train.shape)
-x_test_noised = x_test + np.random.normal(0, 0.1, size=x_test.shape)
+x_train_noised = x_train + np.random.normal(0, 0.5, size=x_train.shape)
+x_test_noised = x_test + np.random.normal(0, 0.5, size=x_test.shape)
 
 # 노이즈 추가하면 1이 넘는다 추가 스케일링이 필요하다
 x_train_noised = np.clip(x_train_noised, a_min=0, a_max=1)
@@ -44,11 +44,11 @@ def autoencoder(hidden_layer_size):
                     strides=2,
                     padding='same',
                     input_shape=(32,32,3)))
-    model.add(Conv2D(filters=128, 
+    model.add(Conv2D(filters=512, 
                     kernel_size=(2,2), 
                     strides=2,
                     padding='same'))
-    model.add(Conv2D(filters=64, 
+    model.add(Conv2D(filters=256, 
                     kernel_size=(2,2), 
                     strides=2,
                     padding='same'))
@@ -57,7 +57,7 @@ def autoencoder(hidden_layer_size):
     model.add(Dense(units=3072, activation='sigmoid'))
     return model
 
-model = autoencoder(hidden_layer_size=154)
+model = autoencoder(hidden_layer_size=2048)
 
 # model.compile(optimizer='adam', 
 #                 loss='mse',
@@ -68,7 +68,7 @@ model.compile(optimizer='adam',
 
 
 model.fit(x_train_noised, x_train.reshape(50000,3072), 
-            epochs=5, batch_size=128)
+            epochs=10, batch_size=512)
 
 output = model.predict(x_test_noised)
 
