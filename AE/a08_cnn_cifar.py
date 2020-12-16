@@ -1,3 +1,9 @@
+import os
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' # 디버그 메시지 끄기
+
+
+
+
 import numpy as np
 from tensorflow.keras.datasets import mnist
 from tensorflow.keras.datasets import cifar10
@@ -24,8 +30,8 @@ x_test_noised = np.clip(x_test_noised, a_min=0, a_max=1)
 
 from tensorflow.keras.models import Sequential, Model
 from tensorflow.keras.layers import Dense, Input, Conv2D
-from tensorflow.keras.layers import Flatten
-
+from tensorflow.keras.layers import Flatten, Dropout
+from tensorflow.keras.utils import multi_gpu_model
 def autoencoder(hidden_layer_size):
     model = Sequential()
     # model.add(Dense(units=hidden_layer_size, input_shape=(784,),
@@ -34,33 +40,35 @@ def autoencoder(hidden_layer_size):
     # model.add(Dense(units=256, activation='relu'))
     # model.add(Dense(units=128, activation='relu'))
     model.add(Conv2D(filters=hidden_layer_size, 
-                    kernel_size=(3,3), 
+                    kernel_size=(2,2), 
+                    strides=2,
                     padding='same',
                     input_shape=(32,32,3)))
     model.add(Conv2D(filters=128, 
-                    kernel_size=(3,3), 
+                    kernel_size=(2,2), 
+                    strides=2,
                     padding='same'))
     model.add(Conv2D(filters=64, 
-                    kernel_size=(3,3), 
+                    kernel_size=(2,2), 
+                    strides=2,
                     padding='same'))
     model.add(Flatten())
-    model.add(Dense(units=64, activation='relu'))
-    model.add(Dense(units=128, activation='relu'))
+    # Dense를 깊게 하면 이미지가 흐려진다
     model.add(Dense(units=3072, activation='sigmoid'))
     return model
 
-model = autoencoder(hidden_layer_size=154) # PCA 0.95 효과와 같은 컬럼 갯수
+model = autoencoder(hidden_layer_size=154)
 
 # model.compile(optimizer='adam', 
 #                 loss='mse',
 #                 metrics=['accuracy'])
-
 model.compile(optimizer='adam', 
                 loss='binary_crossentropy',
                 metrics=['accuracy'])
 
 
-model.fit(x_train_noised, x_train.reshape(50000,3072), epochs=5, batch_size=512)
+model.fit(x_train_noised, x_train.reshape(50000,3072), 
+            epochs=5, batch_size=128)
 
 output = model.predict(x_test_noised)
 
