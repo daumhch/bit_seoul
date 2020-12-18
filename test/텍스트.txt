@@ -1776,3 +1776,11 @@ https://teddylee777.github.io/pandas/pandas-interpolation
 
 
 
+=============================================
+
+SQL 관련
+
+SQL2019 + SSMS
+
+
+

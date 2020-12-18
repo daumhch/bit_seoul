@@ -65,13 +65,13 @@ model.compile( # 컴파일
 from tensorflow.keras.callbacks import EarlyStopping # 조기 종료
 early_stopping = EarlyStopping(
     monitor='loss',
-    patience=100,
+    patience=10,
     mode='auto',
     verbose=2)
 
 history = model.fit(x_train, y_train, #훈련, 일단 x_train, y_train 입력하고
-    epochs=10000, # 훈련 횟수
-    verbose=1,
+    epochs=1000, # 훈련 횟수
+    verbose=0,
     validation_data=(x_val,y_val),
     callbacks=[early_stopping]) # 0=로그 출력하지 않기, 1=막대그래프, 2=손실 정보
 

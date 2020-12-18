@@ -1,0 +1,38 @@
+ml폴더에 파일을 하나씩 확인하여 정리
+
+# 맛보기
+01: sin함수 그리기
+02: iris 불러와서 LinearSVC 돌려보기, 충격적이게 빠르고 정확하다
+03~04: 머신러닝의 XOR 문제, Dense를 쌓아서 해결할 수 있다 = 딥러닝 발전
+
+# 뒤에 Classifier가 붙으면 분류 / Regressor가 붙으면 회귀
+# 단 Logistic Regressor는 분류
+05~08: iris, diabetes, boston, cancer에 대해
+    SVC, LinearSVC, KNeighbors시리즈, RandomForest시리즈 돌려보기
+09~10: wine 데이터셋, csv를 pandas로 읽어서 groupby하거나, y라벨링 그룹화
+
+# Select Model
+11: 회귀와 분류에 관련된 모든 머신러닝 돌려보기
+
+# KFold
+12: train 내부에서 val을 나눠 사용하는 상황에서, 과연 검증의 대표성이 있나?
+    Cross Validtaion을 하자, 모든 데이터를 사용하여 trian/val을 하자
+    cv=3하면, 1/3씩 잘라서 3번 train/val을 한다 => score 결과가 조금씩 다르다
+13: KFold를 모든 머신러닝에 적용해보기 + cross_val_score 함수
+
+# GridSearchCV, RandomizedSearchCV
+14~15: iris, cancer, diabetes, boston, wine에 SearchCV 돌려보기
+
+# Pipeline
+16: 파이프라인 = 스케일링을 SearchCV에 엮어주는 기능, 스케일러를 붙일 수 있다
+17: boston, wine에 파이프라인 적용
+
+# 나무를 보지 말고 숲을 보자
+18: DecisionTree들이 모인 것 = RandomForest
+    RandomForest + Boosting = XGbooster
+    feature importances를 확인
+
+# PCA = 비지도학습 = 차원축소
+19~22: 주성분분석
+
+

@@ -1,0 +1,116 @@
+keras폴더에 파일을 하나씩 확인하여 정리
+
+# 기초
+01: 기본 모델 구성해봄, loss, batch_size 등등 설정
+02: predict을 바꿔서 동일한 예측이 되는지 확인
+03: Dense 노드 숫자를 엄청 크게하면 터진다 = 메모리 넘침 = 에러
+04: metrics 지정 안 해도 loss는 기본으로 나온다
+
+# train과 test, 회귀에서의 accuracy의 무쓸모
+05~06: train과 test 데이터셋을 나눠봄
+07~08: 회귀 문제에서는 accuracy 대신 RMSE(사용자 함수)나
+        r2_score(sklearn)로 평가할 수 있다
+09: DNN 구성이 의미없게 구조적으로 깊으면 R2 값이 나빠진다
+
+# validation의 적용
+10: train val test 로 데이터셋을 더 나눠봄, validation을 나눈 의미를 알아야 한다
+11: validation_split으로, train 내부 비율을 잘라서도 쓸 수 있다
+    또한 train_test_split(sklearn)으로도 미리 잘라놓을 수도 있다
+
+# 입출력의 다양한 패턴
+12: 입력:출력이 N:1, 1:N, N:N 가능한데, 보통 N:1이다
+13: input_dim과 input_shape
+14: verbose의 역할
+
+# 함수형 모델 vs 시퀀셜 모델
+15: 함수형 모델
+16: 앙상블, Concatenate
+
+# RNN(Recurrent Neural Network)계열
+17: LSTM
+18: simpleRNN
+19: GRU
+20: 함수형 LSTM
+21: EarlyStopping
+22: return_sequences (입력 shape -> 출력 shape 유지)
+23~24: LSTM 앙상블 + EarlyStopping
+
+# 단일 시계열 데이터를 x-y 구분지어 모델 적용하기
+25: 시계열 데이터를 x-y로 나누기, split_x 사용자함수
+26: 시계열 데이터를 split_x 사용하여 LSTM 모델에 train_test_split 적용하기
+27: 시계열 데이터를 split_x 사용하여 DNN 모델에 train_test_split 적용하기
+
+# 모델의 저장, 불러오기
+28: 모델 저장히기, 파이썬의 경로에는 '\' 사용하지 말자
+29: 저장한 모델 불러오기
+30~31: input_shape이 다른 경우, 경고 문구가 뜬다
+
+# 모델 fit의 과정을 그래프와 텐서보드 확인
+32: 모델 fit은 history를 return 한다, 그래프로도 그릴 수 있다
+33: 텐서보드 사용해보기
+
+# 데이터 전처리
+34: MinMaxScaler, 데이터 전처리, scaler의 fit과 transform
+
+# CNN(Convolutional Neural Network) 이미지 분석 모델과 예제 데이터셋
+35: CNN = Convolutional Neural Network
+    보통, Conv2D를 통과시켜 증폭시키다가, DNN으로 압축시킨다
+    CNN은 출력 차원이 줄어들지 않는다 (return_sequences 필요 없다)
+    잘라낸 범위별로 최대값 찾을 때, MaxPooling2D를 쓴다 = 다시 증폭된 이미지를 압축
+
+36: mnist를 imshow 해보고, OneHotEncoding적용하여, CNN 돌려보기
+    다중분류는, y에 OneHotEncoding하여 동일 가중치 라벨링을 하고
+    마지막 Dense의 activation은 softmax,
+    컴파일 loss는 categorical_crossentropy를 사용한다
+37: mnist를 DNN으로 돌려보기
+38: mnist를 LSTM으로 돌려보기 -> 데이터에 정해진 모델은 없다
+39: cifar10를 CNN, DNN, LSTM 돌려보기
+40: fashion_mnist를 CNN, DNN, LSTM 돌려보기
+41: cifar100을 CNN, DNN, LSTM 돌려보기
+
+# Overfitting(과적합) 문제, 답알고 풀면 성적은 좋아도 일반화가 어렵다
+42: train acc가 높고 val acc가 과하게 낮은 경우 = Overfitting(과적합)
+    과적합 방지 방법들:
+    훈련데이터량을 늘리거나, feature수를 줄이거나, Regularization하거나
+    혹은 Dropout을 적용하거나 = 랜덤하게 레이어를 반영하지 않는다
+
+43: boston 데이터셋을 CNN, DNN, LSTM 돌려보기
+44: diabetes 데이터셋을 CNN, DNN, LSTM 돌려보기
+45: iris 데이터셋을 CNN, DNN, LSTM 돌려보기
+46: breast_cancer 데이터셋을 CNN, DNN, LSTM 돌려보기
+
+47: GPU 사용 확인하기
+
+# 동일한 모델 결과를 위한 가중치 저장과 불러오기
+48~49: ModelCheckpoint로 가중치 저장하기
+50: fit 이후 저장한 모델은 fit이 필요 없다(가중치 까지 저장=동일 결과 가능)
+51: 가중치만 저장후 불러오기
+52: ModelCheckpoint는 가중치까지 저장하기 때문에, 저장된 모델과 결과가 다르다
+53: 8개의 예제 데이터셋의 ModelCheckpoint 저장 후 불러와서 돌려보기
+
+# npy 저장
+54: 빠른 데이터셋 접근을 위해 npy 저장, 보통은 전처리 전에 npy 저장
+55~57: 8개의 데이터셋을 npy 저장하고 불러와서 모델 돌려보기
+
+# pandas
+58: 판다스, 파이썬 데이터분석 라이브러리, csv를 읽어서 판다스로 확인하기
+59: csv를 판다스로 불러와서 판다스로 csv로 저장하기
+
+# Conv1D
+60: LSTM성능을 1이라 한다면, Conv1D는 0.998쯤, 그런데 속도는 훨씬 빠르다
+61: 8개의 데이터셋을 Conv1D로 돌려보기
+62: split_x 사용자 함수 개선, 2차원으로 잘라내기
+
+# 이미지 많을 때
+63: ImageDataGenerator로 읽어오기, npy로 저장하기
+64: 남자/여자 이미지 분류문제
+
+# 최신기술
+65: AutoKeras
+
+
+
+
+
+
+
