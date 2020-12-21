@@ -8,7 +8,8 @@ conn = ms.connect(server='127.0.0.1', user='bit2', password='1234', database='bi
 
 cursor = conn.cursor()
 
-cursor.execute('SELECT * FROM iris2;')
+cursor.execute('SELECT * FROM ADDRESS;')
+# cursor.execute('SELECT * FROM iris2;')
 # cursor.execute('SELECT * FROM iris_ys;')
 
 
