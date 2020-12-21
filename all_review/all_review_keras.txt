@@ -108,6 +108,70 @@ keras폴더에 파일을 하나씩 확인하여 정리
 # 최신기술
 65: AutoKeras
 
+================================================
+
+# hyperparameter 튜닝
+66: 하이퍼파리미터 튜닝, DNN, CNN, RNN
+67: lambda 함수, gradient 의미
+
+# optimizer
+68: optimizer: 최소 loss를 찾기 위한 여러 최적화 함수
+    Adam, Adadelta, Adamax, Adagrad
+    RMSprop, SGD, Nadam
+69~70: learning_rate: optimizer가 loss를 찾을 때 찾아가는 스텝 크기
+
+# Activation
+71: sigmoid, hanh, relu, softmax 출력 모양
+72: Activation 함수들
+
+# 딥러닝의 일반적 문제: 
+https://m.blog.naver.com/laonple/220808903260
+gradient vanishing / exploding
+-> 2011년 ReLU Activation으로 완화
+-> Dropout, regulation등 또한 완화 방식
+-> 2015년에 BatchNormalization 등장
+
+https://shuuki4.wordpress.com/2016/01/13/batch-normalization-%EC%84%A4%EB%AA%85-%EB%B0%8F-%EA%B5%AC%ED%98%84/
+BatchNormalization의 장점
+-> learning_rate를 높게 가져갈 수 있다 = 학습이 빠르다
+-> 자체 regulation 효과가 있다 = Dropout과 효과가 같다
+
+https://buomsoo-kim.github.io/keras/2018/04/22/Easy-deep-learning-with-Keras-4.md/
+kernel_initializer + Activation + optimizer 적용시 성능 향상 관찰
+
+https://wdprogrammer.tistory.com/33
+딥러닝의 일반적인 흐름 정리
+
+# BatchNormalization, kernel_initializer, kernel_regularizer
+73: BatchNormalization: 입력을 normalize하는 방식
+    kernel_initializer = 가중치 초기화
+    kernel_regularizer = 가중치 규제
+
+# ReduceLROnPlateau
+74: ReduceLROnPlateau: local minima 문제 해결을 위해 lr을 자동적으로 줄인다
+
+
+# 전이학습 = 다른 사람이 만든거, 가중치까지 빼서 가져다 쓴다
+75~76: VGG16가져다 쓰기, 가중치 적용 유/무에 따라 파라미터가 다르다
+77: cifar10으로 여러 모델을 불러와서 전이학습 하기
+78: 개와 고양이 사진 분류
+
+# NLP 자연어
+79: Tokenizer, 많이 나오는 단어는 앞에, 자연어는 OneHotEncoding 하기엔 너무 데이터 낭비가 심하다
+    pad_sequences = OneHotEncoding 대신에, 단어를 벡터화 하자
+    NLP의 입력레이어는 Embedding
+    Embedding은 다양한 설정생략이 가능하지만, 자세히 설정하는 게 낫다
+80: 당연히, Embedding 대신에 LSTM, Conv1D로도 구성이 가능하다
+81: reuters 데이터셋에 NLP 구현
+82: imdb 데이터셋에 NLP 구현
+
+83: Bidirectional: 양방향 
+
+
+
+
+
+
 
 
 
