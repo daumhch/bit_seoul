@@ -35,4 +35,47 @@ ml폴더에 파일을 하나씩 확인하여 정리
 # PCA = 비지도학습 = 차원축소
 19~22: 주성분분석
 
+# feature importances 평가하기
+23: iris, diabetes, boston, cancer, wine에 FI평가
+
+# 과적합 방지
+# 1. 훈련데이터량을 늘린다
+# 2. 피쳐수를 줄인다
+# 3. reguraization
+
+# XGbooster
+24: XGB 파라미터들
+25: GridSearchCV, RandomizedSearchCV, cv를 위한 Pipeline
+26: iris, diabetes, boston, wine에 대한 25번 수행
+
+# SelectFromModel
+27: feature_importances_의 갯수만큼 실행하여,
+    Threshold와 feature갯수에 따른 score를 비교할 수 있다
+
+# ML에서 fit 과정 표시
+28~29: fit함수에서 verbose=True, eval_metric, eval_set을 지정하여 표시할 수 있다
+    회귀/분류에 따라 다양한 평가 지표를 적용할 수 있다
+30: ML에도 early_stopping_rounds가 있다
+31: evals_result를 통해서 ML 동작 과정의 진행상태를 확인할 수 있다
+
+# 결측치, 이상치 제거하는 여러 방법(https://pubdata.tistory.com/52)
+32: outliers 사용자함수를 만들어서, 이상치를 제거해봄
+
+33: import time
+
+# ML 모델 저장하기
+34: pickle
+35: joblib
+36: save_model
+37: SelectFromModel을 돌려서 가장 좋은 모델을 저장하기
+
+
+
+
+
+
+
+
+
+
 
